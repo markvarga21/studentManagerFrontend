@@ -3,15 +3,21 @@ import SimpleTextInput from "./SimpleTextInput";
 import NationalityList from "./NationalityList";
 import GenderSelector from "./GenderSelector";
 import AddressInput from "./AddressInput";
+import FileInput from "./FileInput";
 
-function UserFormModal({ closeModal }) {
+function UserFormModal({
+  closeModal,
+  handleFormChange,
+  handleFormSubmit,
+  verifyIdentity,
+}) {
   return (
     <div
       tabIndex="-1"
       aria-hidden="true"
       className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75"
     >
-      <div className="bg-white rounded-lg shadow dark:bg-gray-700 w-1/3">
+      <div className="bg-white rounded-lg shadow dark:bg-gray-700 w-200 flex items-center">
         <div className="p-6 lg:p-8">
           <div className="flex">
             <h3 className="mb-10 text-xl font-light text-gray-900 dark:text-white">
@@ -40,7 +46,11 @@ function UserFormModal({ closeModal }) {
             </button>
           </div>
 
-          <form className="space-y-6" action="#">
+          <form
+            className="space-y-6"
+            onChange={handleFormChange}
+            onSubmit={handleFormSubmit}
+          >
             <div className="flex space-x-5">
               <SimpleTextInput
                 type={"text"}
@@ -94,6 +104,17 @@ function UserFormModal({ closeModal }) {
               Save
             </button>
           </form>
+        </div>
+        <div className="flex align-middle items-center flex-col p-2 space-y-5">
+          <FileInput labelText={"ID photo"} id={"idPhoto"} />
+          <FileInput labelText={"Selfie"} id={"selfiePhoto"} />
+          <button
+            type="submit"
+            className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            onClick={verifyIdentity}
+          >
+            Verify
+          </button>
         </div>
       </div>
     </div>

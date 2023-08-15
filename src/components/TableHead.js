@@ -8,13 +8,25 @@ const TableHead = () => {
           Name
         </th>
         <th scope="col" className="px-6 py-3">
-          Position
+          Birthdate
         </th>
         <th scope="col" className="px-6 py-3">
-          Status
+          Place of birth
         </th>
         <th scope="col" className="px-6 py-3">
-          Action
+          Nationality
+        </th>
+        <th scope="col" className="px-6 py-3">
+          Gender
+        </th>
+        <th scope="col" className="px-6 py-3">
+          Address
+        </th>
+        <th scope="col" className="px-6 py-3">
+          Phone number
+        </th>
+        <th scope="col" className="px-6 py-3">
+          Operation
         </th>
       </tr>
     </thead>

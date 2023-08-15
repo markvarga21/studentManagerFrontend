@@ -1,5 +1,5 @@
 import React from "react";
-import CountryList from "./CountryList";
+import CityList from "./CityList";
 
 const AddressInput = ({ addressType }) => {
   return (
@@ -11,7 +11,7 @@ const AddressInput = ({ addressType }) => {
         {addressType}
       </label>
       <div className="flex items-center space-x-2">
-        <CountryList addressType={addressType} />
+        <CityList addressType={addressType} />
         <div className="flex-1 flex items-center space-x-2">
           <input
             type="text"
