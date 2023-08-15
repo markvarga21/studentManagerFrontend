@@ -1,15 +1,17 @@
 import React from "react";
 import SimpleTextInput from "./SimpleTextInput";
+import NationalityList from "./NationalityList";
+import GenderSelector from "./GenderSelector";
+import AddressInput from "./AddressInput";
 
 function UserFormModal({ closeModal }) {
   return (
     <div
-      id="authentication-modal"
       tabIndex="-1"
       aria-hidden="true"
       className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75"
     >
-      <div className="bg-white rounded-lg shadow dark:bg-gray-700 w-1/4">
+      <div className="bg-white rounded-lg shadow dark:bg-gray-700 w-1/3">
         <div className="p-6 lg:p-8">
           <div className="flex">
             <h3 className="mb-10 text-xl font-light text-gray-900 dark:text-white">
@@ -72,6 +74,18 @@ function UserFormModal({ closeModal }) {
               name={"birthDate"}
               id={"birthDate"}
               placeholder={"2005-05-15"}
+            />
+            <AddressInput addressType={"Birthplace"} />
+            <NationalityList />
+            <GenderSelector />
+            <AddressInput addressType={"Address"} />
+            <SimpleTextInput
+              type={"tel"}
+              htmlFor={"phoneNumber"}
+              labelText={"Phone number"}
+              placeholder={"20 123 4567"}
+              id={"phoneNumber"}
+              name={"phoneNumber"}
             />
             <button
               type="submit"
