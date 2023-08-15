@@ -4,10 +4,11 @@ import TableRow from "./components/TableRow";
 import SearchBar from "./components/SearchBar";
 import TableHead from "./components/TableHead";
 import UserFormModal from "./components/UserFormModal";
-import FileInput from "./components/FileInput";
 
 function App() {
   const [isFormActive, setIsFormActive] = useState(false);
+  const [idPhoto, setIdPhoto] = useState(null);
+  const [selfiePhoto, setSelfiePhoto] = useState(null);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -88,8 +89,23 @@ function App() {
     setIsFormActive(!isFormActive);
   };
 
+  const handleIdPhotoChange = (event) => {
+    console.log("ID photo changed!");
+    event.preventDefault();
+    const file = event.target.files[0];
+    setIdPhoto(file);
+  };
+
+  const handleSelfiePhotoChange = (event) => {
+    console.log("Selfie photo changed!");
+    event.preventDefault();
+    const file = event.target.files[0];
+    setSelfiePhoto(file);
+  };
+
   const verifyIdentity = (event) => {
     event.preventDefault();
+
     console.log("verifying identity!");
   };
 
@@ -112,6 +128,8 @@ function App() {
             handleFormChange={handleFormChange}
             handleFormSubmit={handleFormSubmit}
             verifyIdentity={verifyIdentity}
+            handleIdPhotoChange={handleIdPhotoChange}
+            handleSelfiePhotoChange={handleSelfiePhotoChange}
           />
         )}
 
