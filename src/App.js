@@ -4,17 +4,15 @@ import TableRow from "./components/TableRow";
 import SearchBar from "./components/SearchBar";
 import TableHead from "./components/TableHead";
 import UserFormModal from "./components/UserFormModal";
+import axios from "axios";
 
 function App() {
-  const [isFormActive, setIsFormActive] = useState(false);
-  const [formResult, setFormResult] = useState("");
-  const [idPhoto, setIdPhoto] = useState(null);
-  const [selfiePhoto, setSelfiePhoto] = useState(null);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     birthDate: "",
     placeOfBirth: {
+      country: "",
       city: "",
       street: "",
       number: 0,
@@ -22,6 +20,7 @@ function App() {
     nationality: "",
     gender: "",
     address: {
+      country: "",
       city: "",
       street: "",
       number: 0,
@@ -29,10 +28,15 @@ function App() {
     email: "",
     phoneNumber: "",
   });
-
-  const apiKey = "59ea1d402c8c4143be331b3783d7dafc";
-  const endpoint =
-    "https://usermanagerformservice.cognitiveservices.azure.com/";
+  const [isSaving, setIsSaving] = useState(false);
+  const [isErrorPresent, setIsErrorPresent] = useState(false);
+  const [errorMessage, setErrorMessage] = useState({
+    title: "",
+    details: "",
+  });
+  const [isFormActive, setIsFormActive] = useState(false);
+  const [idPhoto, setIdPhoto] = useState(null);
+  const [selfiePhoto, setSelfiePhoto] = useState(null);
 
   const staticImageUrl =
     "https://st.depositphotos.com/2309453/4503/i/450/depositphotos_45030333-stock-photo-young-man-concentrating-as-he.jpg";
@@ -78,8 +82,48 @@ function App() {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
+    if (idPhoto === null || selfiePhoto === null) {
+      if (idPhoto == null) {
+        alert("Upload the ID/passport!");
+      } else {
+        alert("Upload the selfie!");
+      }
+    } else {
+      setIsSaving(true);
+      const userJson = JSON.stringify(formData);
+      console.log(`Saving ${logObject(userJson)}`);
 
-    console.log(`Saving ${logObject(formData)}`);
+      const formToSend = new FormData();
+      formToSend.append("idDocument", idPhoto);
+      formToSend.append("selfiePhoto", selfiePhoto);
+      formToSend.append("appUserJson", userJson);
+      formToSend.append("identification", "idCard");
+
+      axios
+        .post("http://localhost:8080/api/v1/users", formToSend, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          setIsErrorPresent(false);
+          setIsSaving(false);
+          setIsFormActive(false);
+        })
+        .catch((err) => {
+          setIsSaving(false);
+          console.error(err);
+          if (err.response != null) {
+            const errorMessage = err.response.data.message;
+            const errorOperationType = err.response.data.operationType;
+            setErrorMessage({
+              title: `${errorOperationType} ERROR`,
+              details: errorMessage,
+            });
+            setIsErrorPresent(true);
+          }
+        });
+    }
   };
 
   const logObject = (obj) => {
@@ -136,6 +180,9 @@ function App() {
             verifyIdentity={verifyIdentity}
             handleIdPhotoChange={handleIdPhotoChange}
             handleSelfiePhotoChange={handleSelfiePhotoChange}
+            isSaving={isSaving}
+            isErrorPresent={isErrorPresent}
+            errorMessage={errorMessage}
           />
         )}
 
