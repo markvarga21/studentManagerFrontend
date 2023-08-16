@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import TableRow from "./components/TableRow";
 import SearchBar from "./components/SearchBar";
@@ -28,6 +28,7 @@ function App() {
     email: "",
     phoneNumber: "",
   });
+  const [userList, setUserList] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
   const [isErrorPresent, setIsErrorPresent] = useState(false);
   const [errorMessage, setErrorMessage] = useState({
@@ -126,6 +127,17 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/api/v1/users")
+      .then((res) => {
+        setUserList(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [formData, isSaving]);
+
   const logObject = (obj) => {
     let formObj = JSON.stringify(obj);
     formObj = JSON.stringify(obj, null, 4);
@@ -159,6 +171,10 @@ function App() {
     console.log("verifying identity!");
   };
 
+  const formatAddress = (address) => {
+    return `${address.country}, ${address.city}, ${address.street} ${address.number}`;
+  };
+
   return (
     <div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
@@ -189,32 +205,22 @@ function App() {
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <TableHead />
           <tbody>
-            <TableRow
-              id={1}
-              userImageUrl={staticImageUrl}
-              email={"asd@gmail.com"}
-              name={"John Doe"}
-              birthDate={"2001-01-01"}
-              placeOfBirth={"Debrecen, Csapo 88"}
-              nationality={"Hungarian"}
-              gender={"male"}
-              address={"Debrecen, Csapo 88"}
-              phoneNumber={"20 970 1234"}
-              handleEditUser={handleEditUser}
-            />
-            <TableRow
-              id={2}
-              userImageUrl={staticImageUrl}
-              email={"asd@gmail.com"}
-              name={"John Doe"}
-              birthDate={"2001-01-01"}
-              placeOfBirth={"Debrecen, Csapo 88"}
-              nationality={"Hungarian"}
-              gender={"male"}
-              address={"Debrecen, Csapo 88"}
-              phoneNumber={"20 970 1234"}
-              handleEditUser={handleEditUser}
-            />
+            {userList.map((user) => (
+              <TableRow
+                key={user.id}
+                id={user.id}
+                userImageUrl={staticImageUrl}
+                email={user.email}
+                name={`${user.firstName} ${user.lastName}`}
+                birthDate={user.birthDate}
+                placeOfBirth={formatAddress(user.placeOfBirth)}
+                nationality={user.nationality}
+                gender={user.gender}
+                address={formatAddress(user.address)}
+                phoneNumber={user.phoneNumber}
+                handleEditUser={handleEditUser}
+              />
+            ))}
           </tbody>
         </table>
       </div>
