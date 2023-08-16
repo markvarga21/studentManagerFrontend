@@ -7,6 +7,7 @@ import UserFormModal from "./components/UserFormModal";
 
 function App() {
   const [isFormActive, setIsFormActive] = useState(false);
+  const [formResult, setFormResult] = useState("");
   const [idPhoto, setIdPhoto] = useState(null);
   const [selfiePhoto, setSelfiePhoto] = useState(null);
   const [formData, setFormData] = useState({
@@ -28,6 +29,11 @@ function App() {
     email: "",
     phoneNumber: "",
   });
+
+  const apiKey = "59ea1d402c8c4143be331b3783d7dafc";
+  const endpoint =
+    "https://usermanagerformservice.cognitiveservices.azure.com/";
+
   const staticImageUrl =
     "https://st.depositphotos.com/2309453/4503/i/450/depositphotos_45030333-stock-photo-young-man-concentrating-as-he.jpg";
 
