@@ -41,6 +41,7 @@ function App() {
   const [isEditFormActive, setIsEditFormActive] = useState(false);
   const [idPhoto, setIdPhoto] = useState(null);
   const [selfiePhoto, setSelfiePhoto] = useState(null);
+  const [userWasDeleted, setUserWasDeleted] = useState(-1);
 
   const staticImageUrl =
     "https://st.depositphotos.com/2309453/4503/i/450/depositphotos_45030333-stock-photo-young-man-concentrating-as-he.jpg";
@@ -236,7 +237,7 @@ function App() {
       .catch((err) => {
         console.error(err);
       });
-  }, [formData, isSaving]);
+  }, [formData, isSaving, userWasDeleted]);
 
   const logObject = (obj) => {
     let formObj = JSON.stringify(obj);
@@ -266,6 +267,25 @@ function App() {
     event.preventDefault();
     const file = event.target.files[0];
     setSelfiePhoto(file);
+  };
+
+  const handleDeleteUser = (event) => {
+    const userToDeleteId = event.target.id;
+    console.log(`Deleting user with id: ${userToDeleteId}`);
+
+    axios
+      .delete(`http://localhost:8080/api/v1/users/${userToDeleteId}`)
+      .then((res) => {
+        setUserWasDeleted(-1 * userWasDeleted);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        if (err.response != null) {
+          const errorMessage = err.response.data.message;
+          console.error(err);
+          alert(errorMessage);
+        }
+      });
   };
 
   const formatAddress = (address) => {
@@ -331,6 +351,7 @@ function App() {
                 address={formatAddress(user.address)}
                 phoneNumber={user.phoneNumber}
                 handleEditUser={handleEditUser}
+                handleDeleteUser={handleDeleteUser}
               />
             ))}
           </tbody>
