@@ -5,17 +5,17 @@ import GenderSelector from "./GenderSelector";
 import AddressInput from "./AddressInput";
 import ErrorPanel from "./ErrorPanel";
 
-function UserFormModal({
+function UserEditFormModal({
   title,
   closeModal,
   handleFormChange,
   handleFormSubmit,
-  verifyIdentity,
   handleIdPhotoChange,
   handleSelfiePhotoChange,
   isSaving,
   isErrorPresent,
   errorMessage,
+  editUserInfo,
 }) {
   return (
     <div
@@ -65,6 +65,7 @@ function UserFormModal({
                 name={"firstName"}
                 id={"firstName"}
                 placeholder={"John"}
+                customValue={editUserInfo.firstName}
               />
               <SimpleTextInput
                 type={"text"}
@@ -73,6 +74,7 @@ function UserFormModal({
                 name={"lastName"}
                 id={"lastName"}
                 placeholder={"Doe"}
+                customValue={editUserInfo.lastName}
               />
             </div>
             <SimpleTextInput
@@ -82,6 +84,7 @@ function UserFormModal({
               name={"email"}
               id={"email"}
               placeholder={"name@company.com"}
+              customValue={editUserInfo.email}
             />
             <SimpleTextInput
               type={"text"}
@@ -90,11 +93,18 @@ function UserFormModal({
               name={"birthDate"}
               id={"birthDate"}
               placeholder={"2005-05-15"}
+              customValue={editUserInfo.birthDate}
             />
-            <AddressInput addressType={"Birthplace"} />
-            <NationalityList />
-            <GenderSelector />
-            <AddressInput addressType={"Address"} />
+            <AddressInput
+              addressType={"Birthplace"}
+              customAddress={editUserInfo.placeOfBirth}
+            />
+            <NationalityList customValue={editUserInfo.nationality} />
+            <GenderSelector customValue={editUserInfo.gender} />
+            <AddressInput
+              addressType={"Address"}
+              customAddress={editUserInfo.address}
+            />
             <SimpleTextInput
               type={"tel"}
               htmlFor={"phoneNumber"}
@@ -102,6 +112,7 @@ function UserFormModal({
               placeholder={"20 123 4567"}
               id={"phoneNumber"}
               name={"phoneNumber"}
+              customValue={editUserInfo.phoneNumber}
             />
             {isSaving ? (
               <button
@@ -173,17 +184,10 @@ function UserFormModal({
               />
             </div>
           </div>
-          <button
-            type="submit"
-            className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            onClick={verifyIdentity}
-          >
-            Verify
-          </button>
         </div>
       </div>
     </div>
   );
 }
 
-export default UserFormModal;
+export default UserEditFormModal;

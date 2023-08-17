@@ -1,6 +1,6 @@
 import React from "react";
 
-const GenderSelector = () => {
+const GenderSelector = ({ customValue }) => {
   return (
     <div>
       <label
@@ -17,6 +17,7 @@ const GenderSelector = () => {
         focus:ring-blue-500 focus:border-blue-500 block p-2.5
         dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white
       "
+        value={customValue}
       >
         <option value="">-- select one --</option>
         <option value="MALE">Male</option>

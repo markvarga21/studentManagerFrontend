@@ -5,6 +5,7 @@ import SearchBar from "./components/SearchBar";
 import TableHead from "./components/TableHead";
 import UserFormModal from "./components/UserFormModal";
 import axios from "axios";
+import UserEditFormModal from "./components/UserEditFormModal";
 
 function App() {
   const [formData, setFormData] = useState({
@@ -29,6 +30,7 @@ function App() {
     phoneNumber: "",
   });
   const [userList, setUserList] = useState([]);
+  const [userToEdit, setUserToEdit] = useState({});
   const [isSaving, setIsSaving] = useState(false);
   const [isErrorPresent, setIsErrorPresent] = useState(false);
   const [errorMessage, setErrorMessage] = useState({
@@ -36,6 +38,7 @@ function App() {
     details: "",
   });
   const [isFormActive, setIsFormActive] = useState(false);
+  const [isEditFormActive, setIsEditFormActive] = useState(false);
   const [idPhoto, setIdPhoto] = useState(null);
   const [selfiePhoto, setSelfiePhoto] = useState(null);
 
@@ -44,11 +47,22 @@ function App() {
 
   const displayForm = () => {
     console.log("Displaying form!");
+    setUserToEdit({});
     setIsFormActive(!isFormActive);
   };
 
   const closeModal = () => {
+    setErrorMessage({});
+    setUserToEdit({});
+    setIsErrorPresent(false);
     setIsFormActive(!isFormActive);
+  };
+
+  const closeEditModal = () => {
+    setErrorMessage({});
+    setUserToEdit({});
+    setIsErrorPresent(false);
+    setIsEditFormActive(false);
   };
 
   const handleFormChange = (event) => {
@@ -81,6 +95,36 @@ function App() {
     }
   };
 
+  const handleEditFormChange = (event) => {
+    event.preventDefault();
+
+    const fieldName = event.target.getAttribute("name");
+    const fieldValue = event.target.value;
+
+    const newFormData = {
+      ...userToEdit,
+    };
+
+    const addressType = String(fieldName).split("_")[0];
+    if (addressType === "Birthplace" || addressType === "Address") {
+      if (addressType === "Birthplace") {
+        newFormData["placeOfBirth"][String(fieldName).split("_")[1]] =
+          fieldValue;
+        setUserToEdit(newFormData);
+      } else if (addressType === "Address") {
+        newFormData["address"][String(fieldName).split("_")[1]] = fieldValue;
+        setUserToEdit(newFormData);
+      } else {
+        alert("Invalid address!");
+      }
+    } else {
+      newFormData[fieldName] = fieldValue;
+      console.log(newFormData[fieldName]);
+
+      setUserToEdit(newFormData);
+    }
+  };
+
   const handleFormSubmit = (event) => {
     event.preventDefault();
     if (idPhoto === null || selfiePhoto === null) {
@@ -110,6 +154,62 @@ function App() {
           setIsErrorPresent(false);
           setIsSaving(false);
           setIsFormActive(false);
+          setUserToEdit({});
+          setIdPhoto(null);
+          setSelfiePhoto(null);
+        })
+        .catch((err) => {
+          setIsSaving(false);
+          console.error(err);
+          if (err.response != null) {
+            const errorMessage = err.response.data.message;
+            const errorOperationType = err.response.data.operationType;
+            setErrorMessage({
+              title: `${errorOperationType} ERROR`,
+              details: errorMessage,
+            });
+            setIsErrorPresent(true);
+          }
+        });
+    }
+  };
+
+  const handleEditFormSubmit = (event) => {
+    event.preventDefault();
+    if (idPhoto === null || selfiePhoto === null) {
+      if (idPhoto == null) {
+        alert("Upload the ID/passport!");
+      } else {
+        alert("Upload the selfie!");
+      }
+    } else {
+      setIsSaving(true);
+      const userJson = JSON.stringify(userToEdit);
+      console.log(`Saving ${logObject(userJson)}`);
+
+      const formToSend = new FormData();
+      formToSend.append("idDocument", idPhoto);
+      formToSend.append("selfiePhoto", selfiePhoto);
+      formToSend.append("appUserJson", userJson);
+      formToSend.append("identification", "idCard");
+
+      axios
+        .put(
+          `http://localhost:8080/api/v1/users/${userToEdit.id}`,
+          formToSend,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        )
+        .then((res) => {
+          setIsErrorPresent(false);
+          setIsSaving(false);
+          setIsEditFormActive(false);
+          setUserToEdit({});
+          setIdPhoto(null);
+          setSelfiePhoto(null);
         })
         .catch((err) => {
           setIsSaving(false);
@@ -147,8 +247,11 @@ function App() {
 
   const handleEditUser = (event) => {
     event.preventDefault();
-    console.log(event.target.getAttribute("id"));
-    setIsFormActive(!isFormActive);
+    const editId = Number(event.target.getAttribute("id"));
+    const user = userList.find((user) => user.id === editId);
+    setUserToEdit(user);
+    console.log(user);
+    setIsEditFormActive(true);
   };
 
   const handleIdPhotoChange = (event) => {
@@ -163,12 +266,6 @@ function App() {
     event.preventDefault();
     const file = event.target.files[0];
     setSelfiePhoto(file);
-  };
-
-  const verifyIdentity = (event) => {
-    event.preventDefault();
-
-    console.log("verifying identity!");
   };
 
   const formatAddress = (address) => {
@@ -188,12 +285,27 @@ function App() {
           </button>
         </div>
 
+        {isEditFormActive && (
+          <UserEditFormModal
+            title={"Edit existing data"}
+            closeModal={closeEditModal}
+            handleFormChange={handleEditFormChange}
+            handleFormSubmit={handleEditFormSubmit}
+            handleIdPhotoChange={handleIdPhotoChange}
+            handleSelfiePhotoChange={handleSelfiePhotoChange}
+            isSaving={isSaving}
+            isErrorPresent={isErrorPresent}
+            errorMessage={errorMessage}
+            editUserInfo={userToEdit}
+          />
+        )}
+
         {isFormActive && (
           <UserFormModal
+            title={"Add details of the user to save"}
             closeModal={closeModal}
             handleFormChange={handleFormChange}
             handleFormSubmit={handleFormSubmit}
-            verifyIdentity={verifyIdentity}
             handleIdPhotoChange={handleIdPhotoChange}
             handleSelfiePhotoChange={handleSelfiePhotoChange}
             isSaving={isSaving}
