@@ -18,6 +18,7 @@ import Login from "./components/Login";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
 function App() {
+  const [searchValue, setSearchValue] = useState("");
   const [loginEmail, setLoginEmail] = useState("");
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -406,7 +407,7 @@ function App() {
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
           <div className="flex flex-row items-center justify-between">
             <div className="flex items-center">
-              <SearchBar />
+              <SearchBar setSearchValue={setSearchValue} />
               <button
                 class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 onClick={displayForm}
@@ -469,24 +470,35 @@ function App() {
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <TableHead />
             <tbody>
-              {userList.map((user) => (
-                <TableRow
-                  key={user.id}
-                  id={user.id}
-                  userImageUrl={staticImageUrl}
-                  email={user.email}
-                  name={`${user.firstName} ${user.lastName}`}
-                  birthDate={user.birthDate}
-                  placeOfBirth={formatAddress(user.placeOfBirth)}
-                  nationality={user.nationality}
-                  gender={user.gender}
-                  address={formatAddress(user.address)}
-                  phoneNumber={user.phoneNumber}
-                  handleEditUser={handleEditUser}
-                  handleDeleteUser={handleDeleteUser}
-                  getImageUrlForId={getImageUrlForId}
-                />
-              ))}
+              {userList
+                .filter((user) => {
+                  if (searchValue === "") {
+                    return true;
+                  }
+                  const name = user.firstName + " " + user.lastName;
+                  const normalizedName = name
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "");
+                  return normalizedName.toLowerCase().includes(searchValue);
+                })
+                .map((user) => (
+                  <TableRow
+                    key={user.id}
+                    id={user.id}
+                    userImageUrl={staticImageUrl}
+                    email={user.email}
+                    name={`${user.firstName} ${user.lastName}`}
+                    birthDate={user.birthDate}
+                    placeOfBirth={formatAddress(user.placeOfBirth)}
+                    nationality={user.nationality}
+                    gender={user.gender}
+                    address={formatAddress(user.address)}
+                    phoneNumber={user.phoneNumber}
+                    handleEditUser={handleEditUser}
+                    handleDeleteUser={handleDeleteUser}
+                    getImageUrlForId={getImageUrlForId}
+                  />
+                ))}
             </tbody>
           </table>
         </div>
