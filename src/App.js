@@ -19,6 +19,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 
 function App() {
   const [searchValue, setSearchValue] = useState("");
+  const [sortingCriteria, setSortingCriteria] = useState({});
   const [loginEmail, setLoginEmail] = useState("");
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -74,7 +75,6 @@ function App() {
             id: fileId,
             fileUrl: url,
           };
-          console.log(imageItem);
           setUserSelfies((prev) => [...prev, imageItem]);
         });
       });
@@ -85,7 +85,6 @@ function App() {
     "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg";
   const getImageUrlForId = (userId) => {
     const imageItem = userSelfies.find((item) => item.id === String(userId));
-    console.log(`Image item is ${imageItem}`);
     if (imageItem === undefined) {
       return NOT_FOUND_IMAGE_URL;
     }
@@ -409,7 +408,7 @@ function App() {
             <div className="flex items-center">
               <SearchBar setSearchValue={setSearchValue} />
               <button
-                class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 onClick={displayForm}
               >
                 Add user
@@ -430,7 +429,7 @@ function App() {
                 </div>
               </div>
               <button
-                class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 onClick={handleLogout}
               >
                 Logout
@@ -468,7 +467,7 @@ function App() {
           )}
 
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <TableHead />
+            <TableHead setSortingCriteria={setSortingCriteria} />
             <tbody>
               {userList
                 .filter((user) => {

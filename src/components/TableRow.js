@@ -16,7 +16,6 @@ const TableRow = ({
   getImageUrlForId,
 }) => {
   const extractImageUrl = () => {
-    console.log(getImageUrlForId(id));
     return getImageUrlForId(id);
   };
   return (
