@@ -12,6 +12,7 @@ const TableRow = ({
   address,
   phoneNumber,
   handleEditUser,
+  handleDeleteUser,
 }) => {
   return (
     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -32,13 +33,22 @@ const TableRow = ({
       <td className="px-6 py-4">{address}</td>
       <td className="px-6 py-4">{phoneNumber}</td>
       <td className="px-6 py-4">
-        <a
-          id={id}
-          className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
-          onClick={handleEditUser}
-        >
-          Edit user
-        </a>
+        <div className="flex flex-col space-y-3">
+          <a
+            id={id}
+            className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
+            onClick={handleEditUser}
+          >
+            Edit user
+          </a>
+          <a
+            id={id}
+            className="font-medium text-red-600 dark:red-blue-500 hover:underline cursor-pointer"
+            onClick={handleDeleteUser}
+          >
+            Delete user
+          </a>
+        </div>
       </td>
     </tr>
   );

@@ -5,7 +5,7 @@ import GenderSelector from "./GenderSelector";
 import AddressInput from "./AddressInput";
 import ErrorPanel from "./ErrorPanel";
 
-function UserFormModal({
+function UserEditFormModal({
   title,
   closeModal,
   handleFormChange,
@@ -15,6 +15,7 @@ function UserFormModal({
   isSaving,
   isErrorPresent,
   errorMessage,
+  editUserInfo,
 }) {
   return (
     <div
@@ -64,6 +65,7 @@ function UserFormModal({
                 name={"firstName"}
                 id={"firstName"}
                 placeholder={"John"}
+                customValue={editUserInfo.firstName}
               />
               <SimpleTextInput
                 type={"text"}
@@ -72,6 +74,7 @@ function UserFormModal({
                 name={"lastName"}
                 id={"lastName"}
                 placeholder={"Doe"}
+                customValue={editUserInfo.lastName}
               />
             </div>
             <SimpleTextInput
@@ -81,6 +84,7 @@ function UserFormModal({
               name={"email"}
               id={"email"}
               placeholder={"name@company.com"}
+              customValue={editUserInfo.email}
             />
             <SimpleTextInput
               type={"text"}
@@ -89,11 +93,18 @@ function UserFormModal({
               name={"birthDate"}
               id={"birthDate"}
               placeholder={"2005-05-15"}
+              customValue={editUserInfo.birthDate}
             />
-            <AddressInput addressType={"Birthplace"} />
-            <NationalityList />
-            <GenderSelector />
-            <AddressInput addressType={"Address"} />
+            <AddressInput
+              addressType={"Birthplace"}
+              customAddress={editUserInfo.placeOfBirth}
+            />
+            <NationalityList customValue={editUserInfo.nationality} />
+            <GenderSelector customValue={editUserInfo.gender} />
+            <AddressInput
+              addressType={"Address"}
+              customAddress={editUserInfo.address}
+            />
             <SimpleTextInput
               type={"tel"}
               htmlFor={"phoneNumber"}
@@ -101,6 +112,7 @@ function UserFormModal({
               placeholder={"20 123 4567"}
               id={"phoneNumber"}
               name={"phoneNumber"}
+              customValue={editUserInfo.phoneNumber}
             />
             {isSaving ? (
               <button
@@ -178,4 +190,4 @@ function UserFormModal({
   );
 }
 
-export default UserFormModal;
+export default UserEditFormModal;

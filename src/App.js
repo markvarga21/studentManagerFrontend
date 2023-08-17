@@ -1,18 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import TableRow from "./components/TableRow";
 import SearchBar from "./components/SearchBar";
 import TableHead from "./components/TableHead";
 import UserFormModal from "./components/UserFormModal";
-import FileInput from "./components/FileInput";
+import axios from "axios";
+import UserEditFormModal from "./components/UserEditFormModal";
 
 function App() {
-  const [isFormActive, setIsFormActive] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     birthDate: "",
     placeOfBirth: {
+      country: "",
       city: "",
       street: "",
       number: 0,
@@ -20,6 +21,7 @@ function App() {
     nationality: "",
     gender: "",
     address: {
+      country: "",
       city: "",
       street: "",
       number: 0,
@@ -27,16 +29,41 @@ function App() {
     email: "",
     phoneNumber: "",
   });
+  const [userList, setUserList] = useState([]);
+  const [userToEdit, setUserToEdit] = useState({});
+  const [isSaving, setIsSaving] = useState(false);
+  const [isErrorPresent, setIsErrorPresent] = useState(false);
+  const [errorMessage, setErrorMessage] = useState({
+    title: "",
+    details: "",
+  });
+  const [isFormActive, setIsFormActive] = useState(false);
+  const [isEditFormActive, setIsEditFormActive] = useState(false);
+  const [idPhoto, setIdPhoto] = useState(null);
+  const [selfiePhoto, setSelfiePhoto] = useState(null);
+  const [userWasDeleted, setUserWasDeleted] = useState(-1);
+
   const staticImageUrl =
     "https://st.depositphotos.com/2309453/4503/i/450/depositphotos_45030333-stock-photo-young-man-concentrating-as-he.jpg";
 
   const displayForm = () => {
     console.log("Displaying form!");
+    setUserToEdit({});
     setIsFormActive(!isFormActive);
   };
 
   const closeModal = () => {
+    setErrorMessage({});
+    setUserToEdit({});
+    setIsErrorPresent(false);
     setIsFormActive(!isFormActive);
+  };
+
+  const closeEditModal = () => {
+    setErrorMessage({});
+    setUserToEdit({});
+    setIsErrorPresent(false);
+    setIsEditFormActive(false);
   };
 
   const handleFormChange = (event) => {
@@ -69,11 +96,148 @@ function App() {
     }
   };
 
-  const handleFormSubmit = (event) => {
+  const handleEditFormChange = (event) => {
     event.preventDefault();
 
-    console.log(`Saving ${logObject(formData)}`);
+    const fieldName = event.target.getAttribute("name");
+    const fieldValue = event.target.value;
+
+    const newFormData = {
+      ...userToEdit,
+    };
+
+    const addressType = String(fieldName).split("_")[0];
+    if (addressType === "Birthplace" || addressType === "Address") {
+      if (addressType === "Birthplace") {
+        newFormData["placeOfBirth"][String(fieldName).split("_")[1]] =
+          fieldValue;
+        setUserToEdit(newFormData);
+      } else if (addressType === "Address") {
+        newFormData["address"][String(fieldName).split("_")[1]] = fieldValue;
+        setUserToEdit(newFormData);
+      } else {
+        alert("Invalid address!");
+      }
+    } else {
+      newFormData[fieldName] = fieldValue;
+      console.log(newFormData[fieldName]);
+
+      setUserToEdit(newFormData);
+    }
   };
+
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    if (idPhoto === null || selfiePhoto === null) {
+      if (idPhoto == null) {
+        alert("Upload the ID/passport!");
+      } else {
+        alert("Upload the selfie!");
+      }
+    } else {
+      setIsSaving(true);
+      const userJson = JSON.stringify(formData);
+      console.log(`Saving ${logObject(userJson)}`);
+
+      const formToSend = new FormData();
+      formToSend.append("idDocument", idPhoto);
+      formToSend.append("selfiePhoto", selfiePhoto);
+      formToSend.append("appUserJson", userJson);
+      formToSend.append("identification", "idCard");
+
+      axios
+        .post("http://localhost:8080/api/v1/users", formToSend, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          setIsErrorPresent(false);
+          setIsSaving(false);
+          setIsFormActive(false);
+          setUserToEdit({});
+          setIdPhoto(null);
+          setSelfiePhoto(null);
+        })
+        .catch((err) => {
+          setIsSaving(false);
+          console.error(err);
+          if (err.response != null) {
+            const errorMessage = err.response.data.message;
+            const errorOperationType = err.response.data.operationType;
+            setErrorMessage({
+              title: `${errorOperationType} ERROR`,
+              details: errorMessage,
+            });
+            setIsErrorPresent(true);
+          }
+        });
+    }
+  };
+
+  const handleEditFormSubmit = (event) => {
+    event.preventDefault();
+    if (idPhoto === null || selfiePhoto === null) {
+      if (idPhoto == null) {
+        alert("Upload the ID/passport!");
+      } else {
+        alert("Upload the selfie!");
+      }
+    } else {
+      setIsSaving(true);
+      const userJson = JSON.stringify(userToEdit);
+      console.log(`Saving ${logObject(userJson)}`);
+
+      const formToSend = new FormData();
+      formToSend.append("idDocument", idPhoto);
+      formToSend.append("selfiePhoto", selfiePhoto);
+      formToSend.append("appUserJson", userJson);
+      formToSend.append("identification", "idCard");
+
+      axios
+        .put(
+          `http://localhost:8080/api/v1/users/${userToEdit.id}`,
+          formToSend,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        )
+        .then((res) => {
+          setIsErrorPresent(false);
+          setIsSaving(false);
+          setIsEditFormActive(false);
+          setUserToEdit({});
+          setIdPhoto(null);
+          setSelfiePhoto(null);
+        })
+        .catch((err) => {
+          setIsSaving(false);
+          console.error(err);
+          if (err.response != null) {
+            const errorMessage = err.response.data.message;
+            const errorOperationType = err.response.data.operationType;
+            setErrorMessage({
+              title: `${errorOperationType} ERROR`,
+              details: errorMessage,
+            });
+            setIsErrorPresent(true);
+          }
+        });
+    }
+  };
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/api/v1/users")
+      .then((res) => {
+        setUserList(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [formData, isSaving, userWasDeleted]);
 
   const logObject = (obj) => {
     let formObj = JSON.stringify(obj);
@@ -84,13 +248,48 @@ function App() {
 
   const handleEditUser = (event) => {
     event.preventDefault();
-    console.log(event.target.getAttribute("id"));
-    setIsFormActive(!isFormActive);
+    const editId = Number(event.target.getAttribute("id"));
+    const user = userList.find((user) => user.id === editId);
+    setUserToEdit(user);
+    console.log(user);
+    setIsEditFormActive(true);
   };
 
-  const verifyIdentity = (event) => {
+  const handleIdPhotoChange = (event) => {
+    console.log("ID photo changed!");
     event.preventDefault();
-    console.log("verifying identity!");
+    const file = event.target.files[0];
+    setIdPhoto(file);
+  };
+
+  const handleSelfiePhotoChange = (event) => {
+    console.log("Selfie photo changed!");
+    event.preventDefault();
+    const file = event.target.files[0];
+    setSelfiePhoto(file);
+  };
+
+  const handleDeleteUser = (event) => {
+    const userToDeleteId = event.target.id;
+    console.log(`Deleting user with id: ${userToDeleteId}`);
+
+    axios
+      .delete(`http://localhost:8080/api/v1/users/${userToDeleteId}`)
+      .then((res) => {
+        setUserWasDeleted(-1 * userWasDeleted);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        if (err.response != null) {
+          const errorMessage = err.response.data.message;
+          console.error(err);
+          alert(errorMessage);
+        }
+      });
+  };
+
+  const formatAddress = (address) => {
+    return `${address.country}, ${address.city}, ${address.street} ${address.number}`;
   };
 
   return (
@@ -106,44 +305,55 @@ function App() {
           </button>
         </div>
 
+        {isEditFormActive && (
+          <UserEditFormModal
+            title={"Edit existing data"}
+            closeModal={closeEditModal}
+            handleFormChange={handleEditFormChange}
+            handleFormSubmit={handleEditFormSubmit}
+            handleIdPhotoChange={handleIdPhotoChange}
+            handleSelfiePhotoChange={handleSelfiePhotoChange}
+            isSaving={isSaving}
+            isErrorPresent={isErrorPresent}
+            errorMessage={errorMessage}
+            editUserInfo={userToEdit}
+          />
+        )}
+
         {isFormActive && (
           <UserFormModal
+            title={"Add details of the user to save"}
             closeModal={closeModal}
             handleFormChange={handleFormChange}
             handleFormSubmit={handleFormSubmit}
-            verifyIdentity={verifyIdentity}
+            handleIdPhotoChange={handleIdPhotoChange}
+            handleSelfiePhotoChange={handleSelfiePhotoChange}
+            isSaving={isSaving}
+            isErrorPresent={isErrorPresent}
+            errorMessage={errorMessage}
           />
         )}
 
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <TableHead />
           <tbody>
-            <TableRow
-              id={1}
-              userImageUrl={staticImageUrl}
-              email={"asd@gmail.com"}
-              name={"John Doe"}
-              birthDate={"2001-01-01"}
-              placeOfBirth={"Debrecen, Csapo 88"}
-              nationality={"Hungarian"}
-              gender={"male"}
-              address={"Debrecen, Csapo 88"}
-              phoneNumber={"20 970 1234"}
-              handleEditUser={handleEditUser}
-            />
-            <TableRow
-              id={2}
-              userImageUrl={staticImageUrl}
-              email={"asd@gmail.com"}
-              name={"John Doe"}
-              birthDate={"2001-01-01"}
-              placeOfBirth={"Debrecen, Csapo 88"}
-              nationality={"Hungarian"}
-              gender={"male"}
-              address={"Debrecen, Csapo 88"}
-              phoneNumber={"20 970 1234"}
-              handleEditUser={handleEditUser}
-            />
+            {userList.map((user) => (
+              <TableRow
+                key={user.id}
+                id={user.id}
+                userImageUrl={staticImageUrl}
+                email={user.email}
+                name={`${user.firstName} ${user.lastName}`}
+                birthDate={user.birthDate}
+                placeOfBirth={formatAddress(user.placeOfBirth)}
+                nationality={user.nationality}
+                gender={user.gender}
+                address={formatAddress(user.address)}
+                phoneNumber={user.phoneNumber}
+                handleEditUser={handleEditUser}
+                handleDeleteUser={handleDeleteUser}
+              />
+            ))}
           </tbody>
         </table>
       </div>
