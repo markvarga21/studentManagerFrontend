@@ -6,6 +6,14 @@ import TableHead from "./components/TableHead";
 import UserFormModal from "./components/UserFormModal";
 import axios from "axios";
 import UserEditFormModal from "./components/UserEditFormModal";
+import {
+  ref,
+  uploadBytes,
+  listAll,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
+import { storage } from "./firebase";
 
 function App() {
   const [formData, setFormData] = useState({
@@ -29,6 +37,7 @@ function App() {
     email: "",
     phoneNumber: "",
   });
+  const [userSelfies, setUserSelfies] = useState([]);
   const [userList, setUserList] = useState([]);
   const [userToEdit, setUserToEdit] = useState({});
   const [isSaving, setIsSaving] = useState(false);
@@ -45,6 +54,37 @@ function App() {
 
   const staticImageUrl =
     "https://st.depositphotos.com/2309453/4503/i/450/depositphotos_45030333-stock-photo-young-man-concentrating-as-he.jpg";
+
+  const imageListRef = ref(storage, "images/");
+  useEffect(() => {
+    listAll(imageListRef).then((response) => {
+      response.items.forEach((item) => {
+        getDownloadURL(item).then((url) => {
+          const nameStartIndex = url.indexOf("selfie");
+          const nameEndIndex = url.indexOf(".jpg");
+          const fileName = url.substring(nameStartIndex, nameEndIndex);
+          const fileId = fileName.split("_")[1];
+          const imageItem = {
+            id: fileId,
+            fileUrl: url,
+          };
+          console.log(imageItem);
+          setUserSelfies((prev) => [...prev, imageItem]);
+        });
+      });
+    });
+  }, [formData, isSaving, userWasDeleted, isFormActive]);
+
+  const NOT_FOUND_IMAGE_URL =
+    "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg";
+  const getImageUrlForId = (userId) => {
+    const imageItem = userSelfies.find((item) => item.id === String(userId));
+    console.log(`Image item is ${imageItem}`);
+    if (imageItem === undefined) {
+      return NOT_FOUND_IMAGE_URL;
+    }
+    return imageItem.fileUrl;
+  };
 
   const displayForm = () => {
     console.log("Displaying form!");
@@ -156,6 +196,7 @@ function App() {
           setIsSaving(false);
           setIsFormActive(false);
           setUserToEdit({});
+          saveSelfie(res.data.id);
           setIdPhoto(null);
           setSelfiePhoto(null);
         })
@@ -173,6 +214,13 @@ function App() {
           }
         });
     }
+  };
+
+  const saveSelfie = (selfieId) => {
+    const imageRef = ref(storage, `images/selfie_${selfieId}.jpg`);
+    uploadBytes(imageRef, selfiePhoto).then((res) => {
+      console.log("Image uploaded!");
+    });
   };
 
   const handleEditFormSubmit = (event) => {
@@ -276,8 +324,8 @@ function App() {
     axios
       .delete(`http://localhost:8080/api/v1/users/${userToDeleteId}`)
       .then((res) => {
+        //deleteImageFromFirebaseStorage(userToDeleteId);
         setUserWasDeleted(-1 * userWasDeleted);
-        console.log(res.data);
       })
       .catch((err) => {
         if (err.response != null) {
@@ -286,6 +334,15 @@ function App() {
           alert(errorMessage);
         }
       });
+  };
+
+  const deleteImageFromFirebaseStorage = (id) => {
+    const deleteImageRef = ref(storage, `images/selfie_${id}.jpg`);
+    deleteObject(deleteImageRef)
+      .then(() =>
+        console.log(`Selfie with ID ${id} deleted from Firebase Storage!`)
+      )
+      .catch((err) => console.error(err));
   };
 
   const formatAddress = (address) => {
@@ -352,6 +409,7 @@ function App() {
                 phoneNumber={user.phoneNumber}
                 handleEditUser={handleEditUser}
                 handleDeleteUser={handleDeleteUser}
+                getImageUrlForId={getImageUrlForId}
               />
             ))}
           </tbody>
