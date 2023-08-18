@@ -6,8 +6,22 @@ import TableHead from "./components/TableHead";
 import UserFormModal from "./components/UserFormModal";
 import axios from "axios";
 import UserEditFormModal from "./components/UserEditFormModal";
+import {
+  ref,
+  uploadBytes,
+  listAll,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
+import { auth, storage } from "./firebase";
+import Login from "./components/Login";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
 function App() {
+  const [searchValue, setSearchValue] = useState("");
+  const [sortingCriteria, setSortingCriteria] = useState({});
+  const [loginEmail, setLoginEmail] = useState("");
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -29,6 +43,8 @@ function App() {
     email: "",
     phoneNumber: "",
   });
+  const [isUserLogin, setIsUserLogin] = useState(false);
+  const [userSelfies, setUserSelfies] = useState([]);
   const [userList, setUserList] = useState([]);
   const [userToEdit, setUserToEdit] = useState({});
   const [isSaving, setIsSaving] = useState(false);
@@ -45,6 +61,35 @@ function App() {
 
   const staticImageUrl =
     "https://st.depositphotos.com/2309453/4503/i/450/depositphotos_45030333-stock-photo-young-man-concentrating-as-he.jpg";
+
+  const imageListRef = ref(storage, "images/");
+  useEffect(() => {
+    listAll(imageListRef).then((response) => {
+      response.items.forEach((item) => {
+        getDownloadURL(item).then((url) => {
+          const nameStartIndex = url.indexOf("selfie");
+          const nameEndIndex = url.indexOf(".jpg");
+          const fileName = url.substring(nameStartIndex, nameEndIndex);
+          const fileId = fileName.split("_")[1];
+          const imageItem = {
+            id: fileId,
+            fileUrl: url,
+          };
+          setUserSelfies((prev) => [...prev, imageItem]);
+        });
+      });
+    });
+  }, [formData, isSaving, userWasDeleted, isFormActive]);
+
+  const NOT_FOUND_IMAGE_URL =
+    "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg";
+  const getImageUrlForId = (userId) => {
+    const imageItem = userSelfies.find((item) => item.id === String(userId));
+    if (imageItem === undefined) {
+      return NOT_FOUND_IMAGE_URL;
+    }
+    return imageItem.fileUrl;
+  };
 
   const displayForm = () => {
     console.log("Displaying form!");
@@ -156,6 +201,7 @@ function App() {
           setIsSaving(false);
           setIsFormActive(false);
           setUserToEdit({});
+          saveSelfie(res.data.id);
           setIdPhoto(null);
           setSelfiePhoto(null);
         })
@@ -173,6 +219,13 @@ function App() {
           }
         });
     }
+  };
+
+  const saveSelfie = (selfieId) => {
+    const imageRef = ref(storage, `images/selfie_${selfieId}.jpg`);
+    uploadBytes(imageRef, selfiePhoto).then((res) => {
+      console.log("Image uploaded!");
+    });
   };
 
   const handleEditFormSubmit = (event) => {
@@ -239,6 +292,20 @@ function App() {
       });
   }, [formData, isSaving, userWasDeleted]);
 
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setLoginEmail(user.email || "");
+      } else {
+        setLoginEmail("");
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   const logObject = (obj) => {
     let formObj = JSON.stringify(obj);
     formObj = JSON.stringify(obj, null, 4);
@@ -276,8 +343,8 @@ function App() {
     axios
       .delete(`http://localhost:8080/api/v1/users/${userToDeleteId}`)
       .then((res) => {
+        //deleteImageFromFirebaseStorage(userToDeleteId);
         setUserWasDeleted(-1 * userWasDeleted);
-        console.log(res.data);
       })
       .catch((err) => {
         if (err.response != null) {
@@ -288,75 +355,159 @@ function App() {
       });
   };
 
+  const deleteImageFromFirebaseStorage = (id) => {
+    const deleteImageRef = ref(storage, `images/selfie_${id}.jpg`);
+    deleteObject(deleteImageRef)
+      .then(() =>
+        console.log(`Selfie with ID ${id} deleted from Firebase Storage!`)
+      )
+      .catch((err) => console.error(err));
+  };
+
   const formatAddress = (address) => {
     return `${address.country}, ${address.city}, ${address.street} ${address.number}`;
   };
 
+  const handleDropdownClick = () => {
+    setDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleLogout = (event) => {
+    event.preventDefault();
+    signOutUser();
+  };
+
+  const signOutUser = () => {
+    signOut(auth)
+      .then(() => {
+        setLoginEmail("");
+        console.log("User loggout out!");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("User is logged in!");
+        setIsUserLogin(true);
+      } else {
+        console.log("User is not logged in!");
+        setIsUserLogin(false);
+      }
+    });
+  }, []);
+
   return (
     <div>
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
-        <div className="flex items-center">
-          <SearchBar />
-          <button
-            class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            onClick={displayForm}
-          >
-            Add user
-          </button>
+      {isUserLogin === true ? (
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
+          <div className="flex flex-row items-center justify-between">
+            <div className="flex items-center">
+              <SearchBar setSearchValue={setSearchValue} />
+              <button
+                className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                onClick={displayForm}
+              >
+                Add user
+              </button>
+            </div>
+            <div className="flex flex-row">
+              <div className="flex flex-col items-end px-5 relative">
+                <p className="text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
+                  Currently logged in as
+                </p>
+                <div
+                  className="hover:underline hover:text-blue-500 cursor-pointer"
+                  onClick={handleDropdownClick}
+                >
+                  <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-3xl dark:text-white">
+                    {loginEmail}
+                  </h1>
+                </div>
+              </div>
+              <button
+                className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+
+          {isEditFormActive && (
+            <UserEditFormModal
+              title={"Edit existing data"}
+              closeModal={closeEditModal}
+              handleFormChange={handleEditFormChange}
+              handleFormSubmit={handleEditFormSubmit}
+              handleIdPhotoChange={handleIdPhotoChange}
+              handleSelfiePhotoChange={handleSelfiePhotoChange}
+              isSaving={isSaving}
+              isErrorPresent={isErrorPresent}
+              errorMessage={errorMessage}
+              editUserInfo={userToEdit}
+            />
+          )}
+
+          {isFormActive && (
+            <UserFormModal
+              title={"Add details of the user to save"}
+              closeModal={closeModal}
+              handleFormChange={handleFormChange}
+              handleFormSubmit={handleFormSubmit}
+              handleIdPhotoChange={handleIdPhotoChange}
+              handleSelfiePhotoChange={handleSelfiePhotoChange}
+              isSaving={isSaving}
+              isErrorPresent={isErrorPresent}
+              errorMessage={errorMessage}
+            />
+          )}
+
+          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <TableHead setSortingCriteria={setSortingCriteria} />
+            <tbody>
+              {userList
+                .filter((user) => {
+                  if (searchValue === "") {
+                    return true;
+                  }
+                  const name = user.firstName + " " + user.lastName;
+                  const normalizedName = name
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "");
+                  return normalizedName.toLowerCase().includes(searchValue);
+                })
+                .map((user) => (
+                  <TableRow
+                    key={user.id}
+                    id={user.id}
+                    userImageUrl={staticImageUrl}
+                    email={user.email}
+                    name={`${user.firstName} ${user.lastName}`}
+                    birthDate={user.birthDate}
+                    placeOfBirth={formatAddress(user.placeOfBirth)}
+                    nationality={user.nationality}
+                    gender={user.gender}
+                    address={formatAddress(user.address)}
+                    phoneNumber={user.phoneNumber}
+                    handleEditUser={handleEditUser}
+                    handleDeleteUser={handleDeleteUser}
+                    getImageUrlForId={getImageUrlForId}
+                  />
+                ))}
+            </tbody>
+          </table>
         </div>
-
-        {isEditFormActive && (
-          <UserEditFormModal
-            title={"Edit existing data"}
-            closeModal={closeEditModal}
-            handleFormChange={handleEditFormChange}
-            handleFormSubmit={handleEditFormSubmit}
-            handleIdPhotoChange={handleIdPhotoChange}
-            handleSelfiePhotoChange={handleSelfiePhotoChange}
-            isSaving={isSaving}
-            isErrorPresent={isErrorPresent}
-            errorMessage={errorMessage}
-            editUserInfo={userToEdit}
-          />
-        )}
-
-        {isFormActive && (
-          <UserFormModal
-            title={"Add details of the user to save"}
-            closeModal={closeModal}
-            handleFormChange={handleFormChange}
-            handleFormSubmit={handleFormSubmit}
-            handleIdPhotoChange={handleIdPhotoChange}
-            handleSelfiePhotoChange={handleSelfiePhotoChange}
-            isSaving={isSaving}
-            isErrorPresent={isErrorPresent}
-            errorMessage={errorMessage}
-          />
-        )}
-
-        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <TableHead />
-          <tbody>
-            {userList.map((user) => (
-              <TableRow
-                key={user.id}
-                id={user.id}
-                userImageUrl={staticImageUrl}
-                email={user.email}
-                name={`${user.firstName} ${user.lastName}`}
-                birthDate={user.birthDate}
-                placeOfBirth={formatAddress(user.placeOfBirth)}
-                nationality={user.nationality}
-                gender={user.gender}
-                address={formatAddress(user.address)}
-                phoneNumber={user.phoneNumber}
-                handleEditUser={handleEditUser}
-                handleDeleteUser={handleDeleteUser}
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
+      ) : (
+        <Login
+          setIsUserLogin={setIsUserLogin}
+          setLoginEmail={setLoginEmail}
+          setDropdownOpen={setDropdownOpen}
+        />
+      )}
     </div>
   );
 }
