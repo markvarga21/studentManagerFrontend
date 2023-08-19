@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import SimpleTextInput from "./SimpleTextInput";
 import NationalityList from "./NationalityList";
 import GenderSelector from "./GenderSelector";
@@ -16,6 +16,7 @@ function UserFormModal({
   isErrorPresent,
   errorMessage,
 }) {
+  const idRef = useRef();
   return (
     <div
       tabIndex="-1"
@@ -158,6 +159,7 @@ function UserFormModal({
                 onChange={handleIdPhotoChange}
               />
             </div>
+            <img id="idPhotoImage" ref={idRef} src={"../huId.jpg"} />
           </div>
           <div>
             <label className="block mb-2 text-m font-medium text-gray-900 dark:text-white">
