@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import * as faceapi from "face-api.js";
 import "./App.css";
 import TableRow from "./components/TableRow";
 import SearchBar from "./components/SearchBar";
@@ -7,11 +8,11 @@ import UserFormModal from "./components/UserFormModal";
 import axios from "axios";
 import UserEditFormModal from "./components/UserEditFormModal";
 import {
-  ref,
   uploadBytes,
   listAll,
   getDownloadURL,
   deleteObject,
+  ref,
 } from "firebase/storage";
 import { auth, storage } from "./firebase";
 import Login from "./components/Login";
@@ -19,7 +20,6 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 
 function App() {
   const [searchValue, setSearchValue] = useState("");
-  const [sortingCriteria, setSortingCriteria] = useState({});
   const [loginEmail, setLoginEmail] = useState("");
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -62,24 +62,36 @@ function App() {
   const staticImageUrl =
     "https://st.depositphotos.com/2309453/4503/i/450/depositphotos_45030333-stock-photo-young-man-concentrating-as-he.jpg";
 
+  useEffect(() => {
+    (async () => {
+      await faceapi.nets.ssdMobilenetv1.loadFromUri("/models");
+      await faceapi.nets.tinyFaceDetector.loadFromUri("/models");
+      await faceapi.nets.faceLandmark68Net.loadFromUri("/models");
+      await faceapi.nets.faceRecognitionNet.loadFromUri("/models");
+      await faceapi.nets.faceExpressionNet.loadFromUri("/models");
+    })();
+  }, []);
+
   const imageListRef = ref(storage, "images/");
   useEffect(() => {
     listAll(imageListRef).then((response) => {
       response.items.forEach((item) => {
-        getDownloadURL(item).then((url) => {
-          const nameStartIndex = url.indexOf("selfie");
-          const nameEndIndex = url.indexOf(".jpg");
-          const fileName = url.substring(nameStartIndex, nameEndIndex);
-          const fileId = fileName.split("_")[1];
-          const imageItem = {
-            id: fileId,
-            fileUrl: url,
-          };
-          setUserSelfies((prev) => [...prev, imageItem]);
-        });
+        getDownloadURL(item)
+          .then((url) => {
+            const nameStartIndex = url.indexOf("selfie");
+            const nameEndIndex = url.indexOf(".jpg");
+            const fileName = url.substring(nameStartIndex, nameEndIndex);
+            const fileId = fileName.split("_")[1];
+            const imageItem = {
+              id: fileId,
+              fileUrl: url,
+            };
+            setUserSelfies((prev) => [...prev, imageItem]);
+          })
+          .catch((err) => console.error(err));
       });
     });
-  }, [formData, isSaving, userWasDeleted, isFormActive]);
+  }, [formData, isSaving, userWasDeleted, isFormActive, isEditFormActive]);
 
   const NOT_FOUND_IMAGE_URL =
     "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg";
@@ -131,9 +143,15 @@ function App() {
         newFormData["address"][String(fieldName).split("_")[1]] = fieldValue;
         setFormData(newFormData);
       } else {
-        alert("Invalid address!");
+        setErrorMessage({
+          title: "INVALID ADDRESS",
+          details: "The address you've entered is invalid!",
+        });
+        setIsErrorPresent(true);
       }
     } else {
+      setErrorMessage({});
+      setIsErrorPresent(false);
       newFormData[fieldName] = fieldValue;
       console.log(newFormData[fieldName]);
 
@@ -161,9 +179,15 @@ function App() {
         newFormData["address"][String(fieldName).split("_")[1]] = fieldValue;
         setUserToEdit(newFormData);
       } else {
-        alert("Invalid address!");
+        setErrorMessage({
+          title: "INVALID ADDRESS",
+          details: "The address you've entered is invalid!",
+        });
+        setIsErrorPresent(true);
       }
     } else {
+      setErrorMessage({});
+      setIsErrorPresent(false);
       newFormData[fieldName] = fieldValue;
       console.log(newFormData[fieldName]);
 
@@ -175,11 +199,21 @@ function App() {
     event.preventDefault();
     if (idPhoto === null || selfiePhoto === null) {
       if (idPhoto == null) {
-        alert("Upload the ID/passport!");
+        setErrorMessage({
+          title: "MISSING ID DOCUMENT",
+          details: "Upload the ID document!",
+        });
+        setIsErrorPresent(true);
       } else {
-        alert("Upload the selfie!");
+        setErrorMessage({
+          title: "MISSING SELFIE PHOTO",
+          details: "Upload the selfie!",
+        });
+        setIsErrorPresent(true);
       }
     } else {
+      setErrorMessage({});
+      setIsErrorPresent(false);
       setIsSaving(true);
       const userJson = JSON.stringify(formData);
       console.log(`Saving ${logObject(userJson)}`);
@@ -232,11 +266,21 @@ function App() {
     event.preventDefault();
     if (idPhoto === null || selfiePhoto === null) {
       if (idPhoto == null) {
-        alert("Upload the ID/passport!");
+        setErrorMessage({
+          title: "MISSING ID DOCUMENT",
+          details: "Upload the ID document!",
+        });
+        setIsErrorPresent(true);
       } else {
-        alert("Upload the selfie!");
+        setErrorMessage({
+          title: "MISSING SELFIE PHOTO",
+          details: "Upload the selfie!",
+        });
+        setIsErrorPresent(true);
       }
     } else {
+      setErrorMessage({});
+      setIsErrorPresent(false);
       setIsSaving(true);
       const userJson = JSON.stringify(userToEdit);
       console.log(`Saving ${logObject(userJson)}`);
@@ -343,7 +387,7 @@ function App() {
     axios
       .delete(`http://localhost:8080/api/v1/users/${userToDeleteId}`)
       .then((res) => {
-        //deleteImageFromFirebaseStorage(userToDeleteId);
+        deleteImageFromFirebaseStorage(userToDeleteId);
         setUserWasDeleted(-1 * userWasDeleted);
       })
       .catch((err) => {
@@ -467,7 +511,7 @@ function App() {
           )}
 
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <TableHead setSortingCriteria={setSortingCriteria} />
+            <TableHead />
             <tbody>
               {userList
                 .filter((user) => {
