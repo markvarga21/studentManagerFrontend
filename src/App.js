@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import * as faceapi from "face-api.js";
 import "./App.css";
 import TableRow from "./components/TableRow";
@@ -8,21 +8,18 @@ import UserFormModal from "./components/UserFormModal";
 import axios from "axios";
 import UserEditFormModal from "./components/UserEditFormModal";
 import {
-  ref,
   uploadBytes,
   listAll,
   getDownloadURL,
   deleteObject,
+  ref,
 } from "firebase/storage";
 import { auth, storage } from "./firebase";
 import Login from "./components/Login";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
 function App() {
-  const idCardRef = useRef();
-  const selfieRef = useRef();
   const [searchValue, setSearchValue] = useState("");
-  const [sortingCriteria, setSortingCriteria] = useState({});
   const [loginEmail, setLoginEmail] = useState("");
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -144,9 +141,15 @@ function App() {
         newFormData["address"][String(fieldName).split("_")[1]] = fieldValue;
         setFormData(newFormData);
       } else {
-        alert("Invalid address!");
+        setErrorMessage({
+          title: "INVALID ADDRESS",
+          details: "The address you've entered is invalid!",
+        });
+        setIsErrorPresent(true);
       }
     } else {
+      setErrorMessage({});
+      setIsErrorPresent(false);
       newFormData[fieldName] = fieldValue;
       console.log(newFormData[fieldName]);
 
@@ -174,9 +177,15 @@ function App() {
         newFormData["address"][String(fieldName).split("_")[1]] = fieldValue;
         setUserToEdit(newFormData);
       } else {
-        alert("Invalid address!");
+        setErrorMessage({
+          title: "INVALID ADDRESS",
+          details: "The address you've entered is invalid!",
+        });
+        setIsErrorPresent(true);
       }
     } else {
+      setErrorMessage({});
+      setIsErrorPresent(false);
       newFormData[fieldName] = fieldValue;
       console.log(newFormData[fieldName]);
 
@@ -188,11 +197,21 @@ function App() {
     event.preventDefault();
     if (idPhoto === null || selfiePhoto === null) {
       if (idPhoto == null) {
-        alert("Upload the ID/passport!");
+        setErrorMessage({
+          title: "MISSING ID DOCUMENT",
+          details: "Upload the ID document!",
+        });
+        setIsErrorPresent(true);
       } else {
-        alert("Upload the selfie!");
+        setErrorMessage({
+          title: "MISSING SELFIE PHOTO",
+          details: "Upload the selfie!",
+        });
+        setIsErrorPresent(true);
       }
     } else {
+      setErrorMessage({});
+      setIsErrorPresent(false);
       setIsSaving(true);
       const userJson = JSON.stringify(formData);
       console.log(`Saving ${logObject(userJson)}`);
@@ -245,11 +264,21 @@ function App() {
     event.preventDefault();
     if (idPhoto === null || selfiePhoto === null) {
       if (idPhoto == null) {
-        alert("Upload the ID/passport!");
+        setErrorMessage({
+          title: "MISSING ID DOCUMENT",
+          details: "Upload the ID document!",
+        });
+        setIsErrorPresent(true);
       } else {
-        alert("Upload the selfie!");
+        setErrorMessage({
+          title: "MISSING SELFIE PHOTO",
+          details: "Upload the selfie!",
+        });
+        setIsErrorPresent(true);
       }
     } else {
+      setErrorMessage({});
+      setIsErrorPresent(false);
       setIsSaving(true);
       const userJson = JSON.stringify(userToEdit);
       console.log(`Saving ${logObject(userJson)}`);
@@ -480,7 +509,7 @@ function App() {
           )}
 
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <TableHead setSortingCriteria={setSortingCriteria} />
+            <TableHead />
             <tbody>
               {userList
                 .filter((user) => {
