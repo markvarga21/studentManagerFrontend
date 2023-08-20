@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import * as faceapi from "face-api.js";
 import "./App.css";
 import TableRow from "./components/TableRow";
 import SearchBar from "./components/SearchBar";
@@ -61,16 +60,6 @@ function App() {
 
   const staticImageUrl =
     "https://st.depositphotos.com/2309453/4503/i/450/depositphotos_45030333-stock-photo-young-man-concentrating-as-he.jpg";
-
-  useEffect(() => {
-    (async () => {
-      await faceapi.nets.ssdMobilenetv1.loadFromUri("/models");
-      await faceapi.nets.tinyFaceDetector.loadFromUri("/models");
-      await faceapi.nets.faceLandmark68Net.loadFromUri("/models");
-      await faceapi.nets.faceRecognitionNet.loadFromUri("/models");
-      await faceapi.nets.faceExpressionNet.loadFromUri("/models");
-    })();
-  }, []);
 
   const imageListRef = ref(storage, "images/");
   useEffect(() => {
