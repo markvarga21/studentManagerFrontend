@@ -76,20 +76,22 @@ function App() {
   useEffect(() => {
     listAll(imageListRef).then((response) => {
       response.items.forEach((item) => {
-        getDownloadURL(item).then((url) => {
-          const nameStartIndex = url.indexOf("selfie");
-          const nameEndIndex = url.indexOf(".jpg");
-          const fileName = url.substring(nameStartIndex, nameEndIndex);
-          const fileId = fileName.split("_")[1];
-          const imageItem = {
-            id: fileId,
-            fileUrl: url,
-          };
-          setUserSelfies((prev) => [...prev, imageItem]);
-        });
+        getDownloadURL(item)
+          .then((url) => {
+            const nameStartIndex = url.indexOf("selfie");
+            const nameEndIndex = url.indexOf(".jpg");
+            const fileName = url.substring(nameStartIndex, nameEndIndex);
+            const fileId = fileName.split("_")[1];
+            const imageItem = {
+              id: fileId,
+              fileUrl: url,
+            };
+            setUserSelfies((prev) => [...prev, imageItem]);
+          })
+          .catch((err) => console.error(err));
       });
     });
-  }, [formData, isSaving, userWasDeleted, isFormActive]);
+  }, [formData, isSaving, userWasDeleted, isFormActive, isEditFormActive]);
 
   const NOT_FOUND_IMAGE_URL =
     "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg";
@@ -385,7 +387,7 @@ function App() {
     axios
       .delete(`http://localhost:8080/api/v1/users/${userToDeleteId}`)
       .then((res) => {
-        //deleteImageFromFirebaseStorage(userToDeleteId);
+        deleteImageFromFirebaseStorage(userToDeleteId);
         setUserWasDeleted(-1 * userWasDeleted);
       })
       .catch((err) => {
