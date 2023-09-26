@@ -20,11 +20,23 @@ function UserEditFormModal({
 }) {
   const staticPhotoUrl =
     "https://www.gravatar.com/avatar/447eccb3e9777173f1efc80d8e100e96.jpg?size=240&d=https%3A%2F%2Fwww.artstation.com%2Fassets%2Fdefault_avatar.jpg";
-  const [photoToShowUrl, setPhotoToShowUrl] = useState(null);
+  const [photoToShowUrl, setPhotoToShowUrl] = useState(
+    selfiePhoto === null ? staticPhotoUrl : URL.createObjectURL(selfiePhoto)
+  );
   const showPassport = (event) => {
     event.preventDefault();
     setPhotoToShowUrl(URL.createObjectURL(idPhoto));
   };
+
+  const showSelfie = (event) => {
+    event.preventDefault();
+    if (selfiePhoto === null) {
+      alert("No selfie photo uploaded yet.");
+      return;
+    }
+    setPhotoToShowUrl(URL.createObjectURL(selfiePhoto));
+  };
+
   return (
     <div
       tabIndex="-1"
@@ -173,7 +185,7 @@ function UserEditFormModal({
                 </button>
               )}
               <button
-                className="w-15 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="w-15 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
                 onClick={closeModal}
               >
                 Close without saving
@@ -201,10 +213,34 @@ function UserEditFormModal({
                   </label>
                 </div>
               )}
+              {selfiePhoto ? (
+                <></>
+              ) : (
+                <div>
+                  <input
+                    className="hidden"
+                    type="file"
+                    id="selfiePhoto"
+                    onChange={handleSelfiePhotoChange}
+                  />
+                  <label
+                    for="selfiePhoto"
+                    className="w-15 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer"
+                  >
+                    Upload portrait
+                  </label>
+                </div>
+              )}
             </div>
           </form>
         </div>
         <div className="flex-col">
+          <label
+            className="block mb-2 text-m text-gray-900 dark:text-white cursor-pointer italic hover:underline"
+            onClick={showSelfie}
+          >
+            Show selfie
+          </label>
           {photoToShowUrl ? (
             <img
               src={photoToShowUrl}

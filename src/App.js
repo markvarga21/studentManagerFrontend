@@ -101,6 +101,7 @@ function App() {
     setIsErrorPresent(false);
     setIsFormActive(!isFormActive);
     setIdPhoto(null);
+    setSelfiePhoto(null);
   };
 
   const closeEditModal = () => {
@@ -109,6 +110,7 @@ function App() {
     setIsErrorPresent(false);
     setIsEditFormActive(false);
     setIdPhoto(null);
+    setSelfiePhoto(null);
   };
 
   const handleFormChange = (event) => {
