@@ -31,16 +31,13 @@ function App() {
       street: "",
       number: 0,
     },
-    nationality: "",
+    countryOfCitizenship: "",
     gender: "",
-    address: {
-      country: "",
-      city: "",
-      street: "",
-      number: 0,
-    },
     email: "",
     phoneNumber: "",
+    passportNumber: "",
+    passportDateOfExpiry: "",
+    passportDateOfIssue: "",
   });
   const [isUserLogin, setIsUserLogin] = useState(false);
   const [userSelfies, setUserSelfies] = useState([]);
@@ -123,13 +120,10 @@ function App() {
     };
 
     const addressType = String(fieldName).split("_")[0];
-    if (addressType === "Birthplace" || addressType === "Address") {
+    if (addressType === "Birthplace") {
       if (addressType === "Birthplace") {
         newFormData["placeOfBirth"][String(fieldName).split("_")[1]] =
           fieldValue;
-        setFormData(newFormData);
-      } else if (addressType === "Address") {
-        newFormData["address"][String(fieldName).split("_")[1]] = fieldValue;
         setFormData(newFormData);
       } else {
         setErrorMessage({
@@ -159,13 +153,10 @@ function App() {
     };
 
     const addressType = String(fieldName).split("_")[0];
-    if (addressType === "Birthplace" || addressType === "Address") {
+    if (addressType === "Birthplace") {
       if (addressType === "Birthplace") {
         newFormData["placeOfBirth"][String(fieldName).split("_")[1]] =
           fieldValue;
-        setUserToEdit(newFormData);
-      } else if (addressType === "Address") {
-        newFormData["address"][String(fieldName).split("_")[1]] = fieldValue;
         setUserToEdit(newFormData);
       } else {
         setErrorMessage({
@@ -211,7 +202,6 @@ function App() {
       formToSend.append("idDocument", idPhoto);
       formToSend.append("selfiePhoto", selfiePhoto);
       formToSend.append("appUserJson", userJson);
-      formToSend.append("identification", "idCard");
 
       axios
         .post("http://localhost:8080/api/v1/users", formToSend, {
@@ -278,7 +268,6 @@ function App() {
       formToSend.append("idDocument", idPhoto);
       formToSend.append("selfiePhoto", selfiePhoto);
       formToSend.append("appUserJson", userJson);
-      formToSend.append("identification", "idCard");
 
       axios
         .put(
@@ -507,25 +496,49 @@ function App() {
                   if (searchValue === "") {
                     return true;
                   }
-                  const name = user.firstName + " " + user.lastName;
-                  const normalizedName = name
+                  const normalizedFullNameInternationalFormat =
+                    `${user.firstName} ${user.lastName}`
+                      .normalize("NFD")
+                      .replace(/[\u0300-\u036f]/g, "");
+
+                  const normalizedFullNameHungarianFormat =
+                    `${user.lastName} ${user.firstName}`
+                      .normalize("NFD")
+                      .replace(/[\u0300-\u036f]/g, "");
+
+                  const normalizedFirstName = user.firstName
                     .normalize("NFD")
                     .replace(/[\u0300-\u036f]/g, "");
-                  return normalizedName.toLowerCase().includes(searchValue);
+
+                  const normalizedLastName = user.lastName
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "");
+                  return (
+                    normalizedFirstName.toLowerCase().includes(searchValue) ||
+                    normalizedLastName.toLowerCase().includes(searchValue) ||
+                    normalizedFullNameInternationalFormat
+                      .toLowerCase()
+                      .includes(searchValue) ||
+                    normalizedFullNameHungarianFormat
+                      .toLowerCase()
+                      .includes(searchValue)
+                  );
                 })
                 .map((user) => (
                   <TableRow
                     key={user.id}
                     id={user.id}
                     userImageUrl={staticImageUrl}
-                    email={user.email}
-                    name={`${user.firstName} ${user.lastName}`}
+                    firstName={user.firstName}
+                    lastName={user.lastName}
                     birthDate={user.birthDate}
                     placeOfBirth={formatAddress(user.placeOfBirth)}
-                    nationality={user.nationality}
+                    countryOfCitizenship={user.countryOfCitizenship}
                     gender={user.gender}
-                    address={formatAddress(user.address)}
                     phoneNumber={user.phoneNumber}
+                    passportNumber={user.passportNumber}
+                    passportDateOfExpiry={user.passportDateOfExpiry}
+                    passportDateOfIssue={user.passportDateOfIssue}
                     handleEditUser={handleEditUser}
                     handleDeleteUser={handleDeleteUser}
                     getImageUrlForId={getImageUrlForId}

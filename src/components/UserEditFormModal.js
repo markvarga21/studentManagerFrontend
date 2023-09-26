@@ -1,6 +1,5 @@
 import React from "react";
 import SimpleTextInput from "./SimpleTextInput";
-import NationalityList from "./NationalityList";
 import GenderSelector from "./GenderSelector";
 import AddressInput from "./AddressInput";
 import ErrorPanel from "./ErrorPanel";
@@ -57,63 +56,101 @@ function UserEditFormModal({
             onChange={handleFormChange}
             onSubmit={handleFormSubmit}
           >
-            <div className="flex space-x-5">
+            <div>
+              <div className="flex space-x-5">
+                <SimpleTextInput
+                  type={"text"}
+                  labelText={"First name"}
+                  htmlFor={"firstName"}
+                  name={"firstName"}
+                  id={"firstName"}
+                  placeholder={"John"}
+                  customValue={editUserInfo.firstName}
+                />
+                <SimpleTextInput
+                  type={"text"}
+                  labelText={"Last name"}
+                  htmlFor={"lastName"}
+                  name={"lastName"}
+                  id={"lastName"}
+                  placeholder={"Doe"}
+                  customValue={editUserInfo.lastName}
+                />
+              </div>
               <SimpleTextInput
-                type={"text"}
-                labelText={"First name"}
-                htmlFor={"firstName"}
-                name={"firstName"}
-                id={"firstName"}
-                placeholder={"John"}
-                customValue={editUserInfo.firstName}
+                type={"email"}
+                labelText={"Email"}
+                htmlFor={"email"}
+                name={"email"}
+                id={"email"}
+                placeholder={"name@company.com"}
+                customValue={editUserInfo.email}
+              />
+              <div className="flex space-x-5">
+                <SimpleTextInput
+                  type={"text"}
+                  labelText={"Birthdate"}
+                  htmlFor={"birthDate"}
+                  name={"birthDate"}
+                  id={"birthDate"}
+                  placeholder={"2005-05-15"}
+                  customValue={editUserInfo.birthDate}
+                />
+                <GenderSelector customValue={editUserInfo.gender} />
+              </div>
+              <AddressInput
+                addressType={"Birthplace"}
+                customAddress={editUserInfo.placeOfBirth}
               />
               <SimpleTextInput
                 type={"text"}
-                labelText={"Last name"}
-                htmlFor={"lastName"}
-                name={"lastName"}
-                id={"lastName"}
-                placeholder={"Doe"}
-                customValue={editUserInfo.lastName}
+                htmlFor={"countryOfCitizenship"}
+                labelText={"Country of citizenship"}
+                placeholder={"Hungary"}
+                id={"countryOfCitizenship"}
+                name={"countryOfCitizenship"}
+                customValue={editUserInfo.countryOfCitizenship}
+              />
+
+              <SimpleTextInput
+                type={"tel"}
+                htmlFor={"phoneNumber"}
+                labelText={"Phone number"}
+                placeholder={"20 123 4567"}
+                id={"phoneNumber"}
+                name={"phoneNumber"}
+                customValue={editUserInfo.phoneNumber}
+              />
+              <SimpleTextInput
+                type={"text"}
+                htmlFor={"passportNumber"}
+                labelText={"Passport number"}
+                placeholder={"123456789"}
+                id={"passportNumber"}
+                name={"passportNumber"}
+                customValue={editUserInfo.passportNumber}
+              />
+
+              <SimpleTextInput
+                type={"text"}
+                htmlFor={"passportDateOfExpiry"}
+                labelText={"Passport date of expiry"}
+                placeholder={"1970-01-01"}
+                id={"passportDateOfExpiry"}
+                name={"passportDateOfExpiry"}
+                customValue={editUserInfo.passportDateOfExpiry}
+              />
+              <SimpleTextInput
+                type={"text"}
+                htmlFor={"passportDateOfIssue"}
+                labelText={"Passport date of issue"}
+                placeholder={"1979-01-01"}
+                id={"passportDateOfIssue"}
+                name={"passportDateOfIssue"}
+                customValue={editUserInfo.passportDateOfIssue}
               />
             </div>
-            <SimpleTextInput
-              type={"email"}
-              labelText={"Email"}
-              htmlFor={"email"}
-              name={"email"}
-              id={"email"}
-              placeholder={"name@company.com"}
-              customValue={editUserInfo.email}
-            />
-            <SimpleTextInput
-              type={"text"}
-              labelText={"Birthdate"}
-              htmlFor={"birthDate"}
-              name={"birthDate"}
-              id={"birthDate"}
-              placeholder={"2005-05-15"}
-              customValue={editUserInfo.birthDate}
-            />
-            <AddressInput
-              addressType={"Birthplace"}
-              customAddress={editUserInfo.placeOfBirth}
-            />
-            <NationalityList customValue={editUserInfo.nationality} />
-            <GenderSelector customValue={editUserInfo.gender} />
-            <AddressInput
-              addressType={"Address"}
-              customAddress={editUserInfo.address}
-            />
-            <SimpleTextInput
-              type={"tel"}
-              htmlFor={"phoneNumber"}
-              labelText={"Phone number"}
-              placeholder={"20 123 4567"}
-              id={"phoneNumber"}
-              name={"phoneNumber"}
-              customValue={editUserInfo.phoneNumber}
-            />
+
             {isSaving ? (
               <button
                 disabled
