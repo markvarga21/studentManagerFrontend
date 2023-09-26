@@ -100,6 +100,7 @@ function App() {
     setUserToEdit({});
     setIsErrorPresent(false);
     setIsFormActive(!isFormActive);
+    setIdPhoto(null);
   };
 
   const closeEditModal = () => {
@@ -107,6 +108,7 @@ function App() {
     setUserToEdit({});
     setIsErrorPresent(false);
     setIsEditFormActive(false);
+    setIdPhoto(null);
   };
 
   const handleFormChange = (event) => {
@@ -471,6 +473,8 @@ function App() {
               isErrorPresent={isErrorPresent}
               errorMessage={errorMessage}
               editUserInfo={userToEdit}
+              idPhoto={idPhoto}
+              selfiePhoto={selfiePhoto}
             />
           )}
 
@@ -485,6 +489,8 @@ function App() {
               isSaving={isSaving}
               isErrorPresent={isErrorPresent}
               errorMessage={errorMessage}
+              idPhoto={idPhoto}
+              selfiePhoto={selfiePhoto}
             />
           )}
 
