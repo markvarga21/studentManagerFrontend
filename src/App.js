@@ -54,6 +54,20 @@ function App() {
   const [idPhoto, setIdPhoto] = useState(null);
   const [selfiePhoto, setSelfiePhoto] = useState(null);
   const [userWasDeleted, setUserWasDeleted] = useState(-1);
+  const [sortByCriteria, setSortByCriteria] = useState("nosort");
+  const [sortingOrder, setSortingOrder] = useState({
+    firstName: 1,
+    lastName: 1,
+    birthDate: 1,
+    placeOfBirth: 1,
+    countryOfCitizenship: 1,
+    gender: 1,
+    email: 1,
+    phoneNumber: 1,
+    passportNumber: 1,
+    passportDateOfExpiry: 1,
+    passportDateOfIssue: 1,
+  });
 
   const staticImageUrl =
     "https://st.depositphotos.com/2309453/4503/i/450/depositphotos_45030333-stock-photo-young-man-concentrating-as-he.jpg";
@@ -414,6 +428,35 @@ function App() {
       });
   };
 
+  const sortItems = (criteria, order) => {
+    try {
+      const newSortedList = [...userList].sort((a, b) => {
+        if (criteria === "placeOfBirth") {
+          console.log("Sorting by place of birth " + order);
+          const aPlace = [
+            a.placeOfBirth.country,
+            a.placeOfBirth.city,
+            a.placeOfBirth.street,
+            a.placeOfBirth.number,
+          ].join(",");
+
+          const bPlace = [
+            b.placeOfBirth.country,
+            b.placeOfBirth.city,
+            b.placeOfBirth.street,
+            b.placeOfBirth.number,
+          ].join(",");
+
+          return aPlace.localeCompare(bPlace) * order;
+        }
+        return a[criteria].localeCompare(b[criteria]) * order;
+      });
+      setUserList(newSortedList);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -497,7 +540,13 @@ function App() {
           )}
 
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <TableHead />
+            <TableHead
+              sortingCriteria={sortByCriteria}
+              setSortByCriteria={setSortByCriteria}
+              sortingOrder={sortingOrder}
+              setSortingOrder={setSortingOrder}
+              sortItems={sortItems}
+            />
             <tbody>
               {userList
                 .filter((user) => {
