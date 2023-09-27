@@ -3,6 +3,7 @@ import SimpleTextInput from "./SimpleTextInput";
 import GenderSelector from "./GenderSelector";
 import AddressInput from "./AddressInput";
 import ErrorPanel from "./ErrorPanel";
+import axios from "axios";
 
 function UserFormModal({
   title,
@@ -16,6 +17,7 @@ function UserFormModal({
   errorMessage,
   idPhoto,
   selfiePhoto,
+  handleFillFormData,
 }) {
   const staticPhotoUrl =
     "https://www.gravatar.com/avatar/447eccb3e9777173f1efc80d8e100e96.jpg?size=240&d=https%3A%2F%2Fwww.artstation.com%2Fassets%2Fdefault_avatar.jpg";
@@ -219,6 +221,21 @@ function UserFormModal({
                     Upload portrait
                   </label>
                 </div>
+              )}
+              {idPhoto ? (
+                <button
+                  onClick={handleFillFormData}
+                  className="w-15 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  Fill data from passport
+                </button>
+              ) : (
+                <button
+                  disabled
+                  className="w-15 text-white bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600  dark:focus:ring-blue-800 disabled:opacity-75 disabled:cursor-not-allowed"
+                >
+                  Fill data from passport
+                </button>
               )}
             </div>
           </form>

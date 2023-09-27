@@ -69,6 +69,52 @@ function App() {
     passportDateOfIssue: 1,
   });
 
+  const handleFillFormData = (event) => {
+    event.preventDefault();
+    console.log("Filling form data!");
+
+    const formToSend = new FormData();
+    formToSend.append("passport", idPhoto);
+
+    axios
+      .post(
+        "http://localhost:8080/api/v1/users/extractDataFromPassport",
+        formToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
+      .then((res) => {
+        const user = res.data;
+        const keys = Object.keys(user);
+        for (const key of keys) {
+          const element = document.getElementById(key);
+          if (key === "placeOfBirth" || key === "id") {
+            const placeOfBirthKeys = Object.keys(user["placeOfBirth"]).filter(
+              (k) => k !== "id"
+            );
+            for (const placeOfBirthKey of placeOfBirthKeys) {
+              const placeOfBirthElement = document.getElementById(
+                `Birthplace_${placeOfBirthKey}`
+              );
+              placeOfBirthElement.value = user["placeOfBirth"][placeOfBirthKey];
+            }
+            console.log("Handling place of birth!");
+          } else if (key === "id") {
+            // Id should not be set
+          } else {
+            element.value = user[key];
+          }
+        }
+        setFormData(user);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   const staticImageUrl =
     "https://st.depositphotos.com/2309453/4503/i/450/depositphotos_45030333-stock-photo-young-man-concentrating-as-he.jpg";
 
@@ -536,6 +582,7 @@ function App() {
               errorMessage={errorMessage}
               idPhoto={idPhoto}
               selfiePhoto={selfiePhoto}
+              handleFillFormData={handleFillFormData}
             />
           )}
 
