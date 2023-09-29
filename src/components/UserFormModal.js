@@ -18,7 +18,12 @@ function UserFormModal({
   idPhoto,
   selfiePhoto,
   handleFillFormData,
+  setSelfiePhoto,
 }) {
+  const [validationLabelText, setValidationLabelText] = useState(
+    "Photo is not validated yet"
+  );
+  const [isValidating, setIsValidating] = useState(false);
   const staticPhotoUrl =
     "https://www.gravatar.com/avatar/447eccb3e9777173f1efc80d8e100e96.jpg?size=240&d=https%3A%2F%2Fwww.artstation.com%2Fassets%2Fdefault_avatar.jpg";
   const [photoToShowUrl, setPhotoToShowUrl] = useState(
@@ -36,6 +41,38 @@ function UserFormModal({
       return;
     }
     setPhotoToShowUrl(URL.createObjectURL(selfiePhoto));
+  };
+
+  const handleSelfieValidation = (event) => {
+    event.preventDefault();
+
+    const formToSend = new FormData();
+    formToSend.append("passport", idPhoto);
+    formToSend.append("selfiePhoto", selfiePhoto);
+    setIsValidating(true);
+    axios
+      .post("http://localhost:8080/api/v1/faces/validate", formToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        const message = res.data;
+        if (message.isValid) {
+          setValidationLabelText(
+            `\u2705 Photo is ${Number(message.proba) * 100}% similar`
+          );
+          setIsValidating(false);
+        } else {
+          setValidationLabelText(`\u274C Faces are not similar`);
+          setSelfiePhoto(null);
+          setIsValidating(false);
+        }
+      })
+      .catch((err) => {
+        setValidationLabelText(`\u274C Faces are not similar`);
+        console.error(err);
+      });
   };
 
   return (
@@ -57,9 +94,9 @@ function UserFormModal({
             onChange={handleFormChange}
             onSubmit={handleFormSubmit}
           >
-            <div className="teljes-form flex-row ">
-              <div className="elso-oszlop flex-col">
-                <div className="flex space-x-5">
+            <div className="">
+              <div className="">
+                <div className="flex space-x-5 items-center">
                   <SimpleTextInput
                     type={"text"}
                     labelText={"First name"}
@@ -76,6 +113,21 @@ function UserFormModal({
                     id={"lastName"}
                     placeholder={"Doe"}
                   />
+                  {idPhoto ? (
+                    <button
+                      onClick={handleFillFormData}
+                      className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                      Fill data from passport
+                    </button>
+                  ) : (
+                    <button
+                      disabled
+                      className="text-white bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600  dark:focus:ring-blue-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Fill data from passport
+                    </button>
+                  )}
                 </div>
                 <SimpleTextInput
                   type={"email"}
@@ -222,19 +274,19 @@ function UserFormModal({
                   </label>
                 </div>
               )}
-              {idPhoto ? (
+              {selfiePhoto ? (
                 <button
-                  onClick={handleFillFormData}
+                  onClick={handleSelfieValidation}
                   className="w-15 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
-                  Fill data from passport
+                  Validate portrait
                 </button>
               ) : (
                 <button
                   disabled
                   className="w-15 text-white bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600  dark:focus:ring-blue-800 disabled:opacity-75 disabled:cursor-not-allowed"
                 >
-                  Fill data from passport
+                  Validate portrait
                 </button>
               )}
             </div>
@@ -262,7 +314,7 @@ function UserFormModal({
           )}
 
           <label className="block mb-2 text-m font-medium text-gray-900 dark:text-white">
-            Static label under selfie
+            {validationLabelText}
           </label>
         </div>
         <div className="flex align-middle items-center flex-col p-2 space-y-5">

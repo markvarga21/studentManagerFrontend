@@ -583,6 +583,7 @@ function App() {
               idPhoto={idPhoto}
               selfiePhoto={selfiePhoto}
               handleFillFormData={handleFillFormData}
+              setSelfiePhoto={setSelfiePhoto}
             />
           )}
 
