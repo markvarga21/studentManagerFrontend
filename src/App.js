@@ -144,6 +144,7 @@ function App() {
     setIdPhoto(null);
     setSelfiePhoto(null);
     setFillingWasSuccessful(false);
+    setSelfieIsValid(false);
   };
 
   const closeEditModal = () => {
@@ -367,6 +368,7 @@ function App() {
     setIdPhoto(file);
   };
 
+  const [selfieIsValid, setSelfieIsValid] = useState(false);
   const handleSelfiePhotoChange = (event) => {
     console.log("Selfie photo changed!");
     event.preventDefault();
@@ -435,6 +437,11 @@ function App() {
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const validatePassport = (e) => {
+    e.preventDefault();
+    alert("Validating passport data!");
   };
 
   useEffect(() => {
@@ -520,6 +527,10 @@ function App() {
               setSelfiePhoto={setSelfiePhoto}
               isFillingData={isFillingData}
               fillingWasSuccessful={fillingWasSuccessful}
+              validatePassport={validatePassport}
+              actualUser={formData}
+              setSelfieIsValid={setSelfieIsValid}
+              selfieIsValid={selfieIsValid}
             />
           )}
 

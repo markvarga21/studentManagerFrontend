@@ -20,6 +20,10 @@ function UserFormModal({
   setSelfiePhoto,
   isFillingData,
   fillingWasSuccessful,
+  validatePassport,
+  actualUser,
+  setSelfieIsValid,
+  selfieIsValid,
 }) {
   const [validationLabelText, setValidationLabelText] = useState(
     "Photo is not validated yet"
@@ -50,6 +54,9 @@ function UserFormModal({
     const formToSend = new FormData();
     formToSend.append("passport", idPhoto);
     formToSend.append("selfiePhoto", selfiePhoto);
+    formToSend.append("firstName", actualUser.firstName);
+    formToSend.append("lastName", actualUser.lastName);
+
     setIsValidating(true);
     axios
       .post("http://localhost:8080/api/v1/faces/validate", formToSend, {
@@ -64,6 +71,7 @@ function UserFormModal({
             `\u2705 Photo is ${Number(message.proba) * 100}% similar`
           );
           setIsValidating(false);
+          setSelfieIsValid(true);
         } else {
           setValidationLabelText(`\u274C Faces are not similar`);
           setSelfiePhoto(null);
@@ -267,9 +275,9 @@ function UserFormModal({
               {idPhoto ? (
                 <button
                   className="w-15 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                  onClick={showPassport}
+                  onClick={validatePassport}
                 >
-                  Show passport
+                  Validate passport
                 </button>
               ) : (
                 <div>
@@ -287,25 +295,7 @@ function UserFormModal({
                   </label>
                 </div>
               )}
-              {selfiePhoto ? (
-                <></>
-              ) : (
-                <div>
-                  <input
-                    className="hidden"
-                    type="file"
-                    id="selfiePhoto"
-                    onChange={handleSelfiePhotoChange}
-                  />
-                  <label
-                    for="selfiePhoto"
-                    className="w-15 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer"
-                  >
-                    Upload portrait
-                  </label>
-                </div>
-              )}
-              {selfiePhoto ? (
+              {selfiePhoto && !selfieIsValid ? (
                 <button
                   onClick={handleSelfieValidation}
                   className="w-15 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -313,23 +303,51 @@ function UserFormModal({
                   Validate portrait
                 </button>
               ) : (
-                <button
-                  disabled
-                  className="w-15 text-white bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600  dark:focus:ring-blue-800 disabled:opacity-75 disabled:cursor-not-allowed"
-                >
-                  Validate portrait
-                </button>
+                <div>
+                  {selfieIsValid ? (
+                    <button
+                      disabled
+                      type="button"
+                      class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-green-900 focus:outline-none bg-white rounded-lg border border-gray-20focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-green-700 dark:bg-green-800 dark:text-green-400 dark:border-green-600"
+                    >
+                      Selfie is valid!
+                    </button>
+                  ) : (
+                    <div>
+                      <input
+                        className="hidden"
+                        type="file"
+                        id="selfiePhoto"
+                        onChange={handleSelfiePhotoChange}
+                      />
+                      <label
+                        for="selfiePhoto"
+                        className="w-15 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer"
+                      >
+                        Upload portrait
+                      </label>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
           </form>
         </div>
         <div className="flex-col">
-          <label
-            className="block mb-2 text-m text-gray-900 dark:text-white cursor-pointer italic hover:underline"
-            onClick={showSelfie}
-          >
-            Show selfie
-          </label>
+          <div className="flex-row">
+            <label
+              className="block mb-2 text-m text-gray-900 dark:text-white cursor-pointer italic hover:underline"
+              onClick={showSelfie}
+            >
+              Show selfie
+            </label>
+            <label
+              className="block mb-2 text-m text-gray-900 dark:text-white cursor-pointer italic hover:underline"
+              onClick={showPassport}
+            >
+              Show passport
+            </label>
+          </div>
           {photoToShowUrl ? (
             <img
               src={photoToShowUrl}
