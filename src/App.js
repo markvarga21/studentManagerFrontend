@@ -145,6 +145,7 @@ function App() {
     setSelfiePhoto(null);
     setFillingWasSuccessful(false);
     setSelfieIsValid(false);
+    setPassportIsValid(false);
   };
 
   const closeEditModal = () => {
@@ -208,6 +209,12 @@ function App() {
         });
         setIsErrorPresent(true);
       }
+    } else if (!selfieIsValid || !passportIsValid) {
+      if (!selfieIsValid) {
+        alert("Selfie is not valid!");
+      } else {
+        alert("Passport is not valid!");
+      }
     } else {
       setErrorMessage({});
       setIsErrorPresent(false);
@@ -234,6 +241,9 @@ function App() {
           saveSelfie(res.data.id);
           setIdPhoto(null);
           setSelfiePhoto(null);
+          setPassportIsValid(false);
+          setSelfieIsValid(false);
+          setFillingWasSuccessful(false);
         })
         .catch((err) => {
           setIsSaving(false);
@@ -404,10 +414,6 @@ function App() {
       .catch((err) => console.error(err));
   };
 
-  const formatAddress = (address) => {
-    return `${address.country}, ${address.city}, ${address.street} ${address.number}`;
-  };
-
   const handleDropdownClick = () => {
     setDropdownOpen(!isDropdownOpen);
   };
@@ -439,9 +445,46 @@ function App() {
     }
   };
 
+  const handleInvalidPassport = (passportData) => {
+    console.log("Handling invalid passport!");
+    console.log(passportData);
+  };
+
+  const [passportIsValid, setPassportIsValid] = useState(false);
+  const [passportIsValidating, setPassportIsValidating] = useState(false);
   const validatePassport = (e) => {
     e.preventDefault();
-    alert("Validating passport data!");
+
+    setPassportIsValidating(true);
+
+    const formToSend = new FormData();
+    formToSend.append("passport", idPhoto);
+    formToSend.append("appUserJson", JSON.stringify(formData));
+
+    axios
+      .post("http://localhost:8080/api/v1/form/validate", formToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        const response = res.data;
+        if (response.isValid) {
+          setPassportIsValid(true);
+          setPassportIsValidating(true);
+          console.log("Passport is valid!");
+        } else {
+          const passportData = response.appUserDto;
+          handleInvalidPassport(passportData);
+          setPassportIsValid(false);
+          setPassportIsValidating(false);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        setPassportIsValid(false);
+        setPassportIsValidating(false);
+      });
   };
 
   useEffect(() => {
@@ -531,6 +574,8 @@ function App() {
               actualUser={formData}
               setSelfieIsValid={setSelfieIsValid}
               selfieIsValid={selfieIsValid}
+              passportIsValidating={passportIsValidating}
+              passportIsValid={passportIsValid}
             />
           )}
 
@@ -584,7 +629,7 @@ function App() {
                     firstName={user.firstName}
                     lastName={user.lastName}
                     birthDate={user.birthDate}
-                    placeOfBirth={formatAddress(user.placeOfBirth)}
+                    placeOfBirth={user.placeOfBirth}
                     countryOfCitizenship={user.countryOfCitizenship}
                     gender={user.gender}
                     phoneNumber={user.phoneNumber}

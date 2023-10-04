@@ -24,6 +24,8 @@ function UserFormModal({
   actualUser,
   setSelfieIsValid,
   selfieIsValid,
+  passportIsValidating,
+  passportIsValid,
 }) {
   const [validationLabelText, setValidationLabelText] = useState(
     "Photo is not validated yet"
@@ -272,7 +274,7 @@ function UserFormModal({
               >
                 Close without saving
               </button>
-              {idPhoto ? (
+              {idPhoto && !passportIsValid ? (
                 <button
                   className="w-15 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   onClick={validatePassport}
@@ -281,18 +283,30 @@ function UserFormModal({
                 </button>
               ) : (
                 <div>
-                  <input
-                    className="hidden"
-                    type="file"
-                    id="idPhoto"
-                    onChange={handleIdPhotoChange}
-                  />
-                  <label
-                    for="idPhoto"
-                    className="w-15 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer"
-                  >
-                    Upload passport
-                  </label>
+                  {passportIsValid ? (
+                    <button
+                      disabled
+                      type="button"
+                      class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-green-900 focus:outline-none bg-white rounded-lg border border-gray-20focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-green-700 dark:bg-green-800 dark:text-green-400 dark:border-green-600"
+                    >
+                      Passport is valid!
+                    </button>
+                  ) : (
+                    <div>
+                      <input
+                        className="hidden"
+                        type="file"
+                        id="idPhoto"
+                        onChange={handleIdPhotoChange}
+                      />
+                      <label
+                        for="idPhoto"
+                        className="w-15 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer"
+                      >
+                        Upload passport
+                      </label>
+                    </div>
+                  )}
                 </div>
               )}
               {selfiePhoto && !selfieIsValid ? (
