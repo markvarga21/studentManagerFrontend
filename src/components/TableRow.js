@@ -29,7 +29,6 @@ const TableRow = ({
       <td className="px-6 py-4">{placeOfBirth}</td>
       <td className="px-6 py-4">{countryOfCitizenship}</td>
       <td className="px-6 py-4">{String(gender).toLowerCase()}</td>
-      <td className="px-6 py-4">{phoneNumber}</td>
       <td className="px-6 py-4">{passportNumber}</td>
       <td className="px-6 py-4">{passportDateOfExpiry}</td>
       <td className="px-6 py-4">{passportDateOfIssue}</td>

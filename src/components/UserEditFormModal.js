@@ -77,15 +77,6 @@ function UserEditFormModal({
                   customValue={editUserInfo.lastName}
                 />
               </div>
-              <SimpleTextInput
-                type={"email"}
-                labelText={"Email"}
-                htmlFor={"email"}
-                name={"email"}
-                id={"email"}
-                placeholder={"name@company.com"}
-                customValue={editUserInfo.email}
-              />
               <div className="flex space-x-5">
                 <SimpleTextInput
                   type={"text"}
@@ -98,9 +89,14 @@ function UserEditFormModal({
                 />
                 <GenderSelector customValue={editUserInfo.gender} />
               </div>
-              <AddressInput
-                addressType={"Birthplace"}
-                customAddress={editUserInfo.placeOfBirth}
+              <SimpleTextInput
+                type={"text"}
+                htmlFor={"placeOfBirth"}
+                labelText={"Place of birth"}
+                placeholder={"Hungary"}
+                id={"placeOfBirth"}
+                name={"placeOfBirth"}
+                customValue={editUserInfo.placeOfBirth}
               />
               <SimpleTextInput
                 type={"text"}
@@ -110,16 +106,6 @@ function UserEditFormModal({
                 id={"countryOfCitizenship"}
                 name={"countryOfCitizenship"}
                 customValue={editUserInfo.countryOfCitizenship}
-              />
-
-              <SimpleTextInput
-                type={"tel"}
-                htmlFor={"phoneNumber"}
-                labelText={"Phone number"}
-                placeholder={"20 123 4567"}
-                id={"phoneNumber"}
-                name={"phoneNumber"}
-                customValue={editUserInfo.phoneNumber}
               />
               <SimpleTextInput
                 type={"text"}

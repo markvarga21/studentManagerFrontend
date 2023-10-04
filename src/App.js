@@ -25,16 +25,9 @@ function App() {
     firstName: "",
     lastName: "",
     birthDate: "",
-    placeOfBirth: {
-      country: "",
-      city: "",
-      street: "",
-      number: 0,
-    },
+    placeOfBirth: "",
     countryOfCitizenship: "",
     gender: "",
-    email: "",
-    phoneNumber: "",
     passportNumber: "",
     passportDateOfExpiry: "",
     passportDateOfIssue: "",
@@ -62,48 +55,36 @@ function App() {
     placeOfBirth: 1,
     countryOfCitizenship: 1,
     gender: 1,
-    email: 1,
-    phoneNumber: 1,
     passportNumber: 1,
     passportDateOfExpiry: 1,
     passportDateOfIssue: 1,
   });
 
+  const [isFillingData, setIsFillingData] = useState(false);
+  const [fillingWasSuccessful, setFillingWasSuccessful] = useState(false);
   const handleFillFormData = (event) => {
     event.preventDefault();
+    setIsFillingData(true);
     console.log("Filling form data!");
 
     const formToSend = new FormData();
     formToSend.append("passport", idPhoto);
 
     axios
-      .post(
-        "http://localhost:8080/api/v1/users/extractDataFromPassport",
-        formToSend,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      )
+      .post("http://localhost:8080/api/v1/form/extractData", formToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((res) => {
+        setIsFillingData(false);
+        setFillingWasSuccessful(true);
         const user = res.data;
         const keys = Object.keys(user);
         for (const key of keys) {
           const element = document.getElementById(key);
-          if (key === "placeOfBirth" || key === "id") {
-            const placeOfBirthKeys = Object.keys(user["placeOfBirth"]).filter(
-              (k) => k !== "id"
-            );
-            for (const placeOfBirthKey of placeOfBirthKeys) {
-              const placeOfBirthElement = document.getElementById(
-                `Birthplace_${placeOfBirthKey}`
-              );
-              placeOfBirthElement.value = user["placeOfBirth"][placeOfBirthKey];
-            }
-            console.log("Handling place of birth!");
-          } else if (key === "id") {
-            // Id should not be set
+          if (key === "id") {
+            // Id should not be set in the form
           } else {
             element.value = user[key];
           }
@@ -162,6 +143,7 @@ function App() {
     setIsFormActive(!isFormActive);
     setIdPhoto(null);
     setSelfiePhoto(null);
+    setFillingWasSuccessful(false);
   };
 
   const closeEditModal = () => {
@@ -183,27 +165,12 @@ function App() {
       ...formData,
     };
 
-    const addressType = String(fieldName).split("_")[0];
-    if (addressType === "Birthplace") {
-      if (addressType === "Birthplace") {
-        newFormData["placeOfBirth"][String(fieldName).split("_")[1]] =
-          fieldValue;
-        setFormData(newFormData);
-      } else {
-        setErrorMessage({
-          title: "INVALID ADDRESS",
-          details: "The address you've entered is invalid!",
-        });
-        setIsErrorPresent(true);
-      }
-    } else {
-      setErrorMessage({});
-      setIsErrorPresent(false);
-      newFormData[fieldName] = fieldValue;
-      console.log(newFormData[fieldName]);
+    setErrorMessage({});
+    setIsErrorPresent(false);
+    newFormData[fieldName] = fieldValue;
+    console.log(newFormData[fieldName]);
 
-      setFormData(newFormData);
-    }
+    setFormData(newFormData);
   };
 
   const handleEditFormChange = (event) => {
@@ -216,27 +183,12 @@ function App() {
       ...userToEdit,
     };
 
-    const addressType = String(fieldName).split("_")[0];
-    if (addressType === "Birthplace") {
-      if (addressType === "Birthplace") {
-        newFormData["placeOfBirth"][String(fieldName).split("_")[1]] =
-          fieldValue;
-        setUserToEdit(newFormData);
-      } else {
-        setErrorMessage({
-          title: "INVALID ADDRESS",
-          details: "The address you've entered is invalid!",
-        });
-        setIsErrorPresent(true);
-      }
-    } else {
-      setErrorMessage({});
-      setIsErrorPresent(false);
-      newFormData[fieldName] = fieldValue;
-      console.log(newFormData[fieldName]);
+    setErrorMessage({});
+    setIsErrorPresent(false);
+    newFormData[fieldName] = fieldValue;
+    console.log(newFormData[fieldName]);
 
-      setUserToEdit(newFormData);
-    }
+    setUserToEdit(newFormData);
   };
 
   const handleFormSubmit = (event) => {
@@ -477,24 +429,6 @@ function App() {
   const sortItems = (criteria, order) => {
     try {
       const newSortedList = [...userList].sort((a, b) => {
-        if (criteria === "placeOfBirth") {
-          console.log("Sorting by place of birth " + order);
-          const aPlace = [
-            a.placeOfBirth.country,
-            a.placeOfBirth.city,
-            a.placeOfBirth.street,
-            a.placeOfBirth.number,
-          ].join(",");
-
-          const bPlace = [
-            b.placeOfBirth.country,
-            b.placeOfBirth.city,
-            b.placeOfBirth.street,
-            b.placeOfBirth.number,
-          ].join(",");
-
-          return aPlace.localeCompare(bPlace) * order;
-        }
         return a[criteria].localeCompare(b[criteria]) * order;
       });
       setUserList(newSortedList);
@@ -584,6 +518,8 @@ function App() {
               selfiePhoto={selfiePhoto}
               handleFillFormData={handleFillFormData}
               setSelfiePhoto={setSelfiePhoto}
+              isFillingData={isFillingData}
+              fillingWasSuccessful={fillingWasSuccessful}
             />
           )}
 

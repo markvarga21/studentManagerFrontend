@@ -73,13 +73,6 @@ const TableHead = ({
           handleSortByCriteria={handleSortByCriteria}
         />
         <TableHeadColumn
-          crit={"_phoneNumber"}
-          sortingCriteria={sortingCriteria}
-          columnName={"Phone Number"}
-          sortingOrder={sortingOrder.phoneNumber}
-          handleSortByCriteria={handleSortByCriteria}
-        />
-        <TableHeadColumn
           crit={"_passportNumber"}
           sortingCriteria={sortingCriteria}
           columnName={"Passport Number"}
