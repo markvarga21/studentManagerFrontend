@@ -1,31 +1,47 @@
 import React from "react";
+import { Input } from "@material-tailwind/react";
 
 const SimpleTextInput = ({
-  type,
   labelText,
-  htmlFor,
   name,
   id,
-  placeholder,
+  placeholderValue,
   customValue,
+  isThereError,
 }) => {
+  const width = 36;
+  const containerStyle = width ? `w-${width}` : `w-36`;
   return (
-    <div>
-      <label
-        htmlFor={htmlFor}
-        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-      >
-        {labelText}
-      </label>
-      <input
-        type={type}
-        name={name}
-        id={id}
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-        placeholder={placeholder}
-        required
-        value={customValue}
-      />
+    <div className={containerStyle}>
+      {isThereError === true ? (
+        <div className="flex space-x">
+          <Input
+            id={id}
+            name={name}
+            variant="static"
+            label={labelText}
+            placeholder={placeholderValue}
+            color="teal"
+            error
+            required
+            value={customValue}
+          />
+          <div>
+            <button className="underline">Accept</button>
+          </div>
+        </div>
+      ) : (
+        <Input
+          id={id}
+          name={name}
+          variant="static"
+          label={labelText}
+          placeholder={placeholderValue}
+          color="teal"
+          required
+          value={customValue}
+        />
+      )}
     </div>
   );
 };

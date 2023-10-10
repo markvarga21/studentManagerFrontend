@@ -1,7 +1,6 @@
 import { React, useState } from "react";
 import SimpleTextInput from "./SimpleTextInput";
 import GenderSelector from "./GenderSelector";
-import AddressInput from "./AddressInput";
 import ErrorPanel from "./ErrorPanel";
 
 function UserEditFormModal({

@@ -109,20 +109,18 @@ function UserFormModal({
               <div className="">
                 <div className="flex space-x-5 items-center">
                   <SimpleTextInput
-                    type={"text"}
                     labelText={"First name"}
-                    htmlFor={"firstName"}
                     name={"firstName"}
                     id={"firstName"}
-                    placeholder={"John"}
+                    placeholderValue={"John"}
+                    isThereError={false}
                   />
                   <SimpleTextInput
-                    type={"text"}
                     labelText={"Last name"}
-                    htmlFor={"lastName"}
                     name={"lastName"}
                     id={"lastName"}
-                    placeholder={"Doe"}
+                    placeholderValue={"Doe"}
+                    isThereError={false}
                   />
                   {idPhoto && !fillingWasSuccessful ? (
                     <div>
@@ -181,56 +179,50 @@ function UserFormModal({
                 </div>
                 <div className="flex space-x-5">
                   <SimpleTextInput
-                    type={"text"}
                     labelText={"Birthdate"}
-                    htmlFor={"birthDate"}
                     name={"birthDate"}
                     id={"birthDate"}
-                    placeholder={"2005-05-15"}
+                    placeholderValue={"2005-05-15"}
+                    isThereError={false}
                   />
                   <GenderSelector />
                 </div>
                 <SimpleTextInput
-                  type={"text"}
-                  htmlFor={"placeOfBirth"}
                   labelText={"Place of birth"}
-                  placeholder={"Hungary"}
+                  placeholderValue={"Hungary"}
                   id={"placeOfBirth"}
                   name={"placeOfBirth"}
+                  isThereError={false}
                 />
                 <SimpleTextInput
-                  type={"text"}
-                  htmlFor={"countryOfCitizenship"}
                   labelText={"Country of citizenship"}
-                  placeholder={"Hungary"}
+                  placeholderValue={"Hungary"}
                   id={"countryOfCitizenship"}
                   name={"countryOfCitizenship"}
+                  isThereError={false}
                 />
               </div>
               <div className="masodik-oszlop flex-col">
                 <SimpleTextInput
-                  type={"text"}
-                  htmlFor={"passportNumber"}
                   labelText={"Passport number"}
-                  placeholder={"123456789"}
+                  placeholderValue={"123456789"}
                   id={"passportNumber"}
                   name={"passportNumber"}
+                  isErrorPresent={false}
                 />
                 <SimpleTextInput
-                  type={"text"}
-                  htmlFor={"passportDateOfExpiry"}
                   labelText={"Passport date of expiry"}
-                  placeholder={"1979-12-31"}
+                  placeholderValue={"1979-12-31"}
                   id={"passportDateOfExpiry"}
                   name={"passportDateOfExpiry"}
+                  isErrorPresent={false}
                 />
                 <SimpleTextInput
-                  type={"text"}
-                  htmlFor={"passportDateOfIssue"}
                   labelText={"Passport date of issue"}
-                  placeholder={"1979-12-31"}
+                  placeholderValue={"1979-12-31"}
                   id={"passportDateOfIssue"}
                   name={"passportDateOfIssue"}
+                  isErrorPresent={false}
                 />
               </div>
             </div>
