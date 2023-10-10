@@ -12,7 +12,7 @@ const Arrow = ({ arrowDirection }) => {
       >
         <path
           d="M12 4V20M12 4L8 8M12 4L16 8"
-          stroke="#9CA3AF"
+          stroke="#FFFFFF"
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
@@ -30,7 +30,7 @@ const Arrow = ({ arrowDirection }) => {
       >
         <path
           d="M12 4V20M12 20L8 16M12 20L16 16"
-          stroke="#9CA3AF"
+          stroke="#FFFFFF"
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"

@@ -21,7 +21,7 @@ const TableRow = ({
   };
 
   return (
-    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+    <tr className="bg-white text-black border-solid border-b-1 border-black hover:bg-lightUniGreen">
       <td className="px-6 py-4">{id}</td>
       <td className="px-6 py-4">{firstName}</td>
       <td className="px-6 py-4">{lastName}</td>
