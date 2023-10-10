@@ -185,7 +185,7 @@ function UserFormModal({
                     placeholderValue={"2005-05-15"}
                     isThereError={false}
                   />
-                  <GenderSelector />
+                  <GenderSelector isErrorPresent={false} />
                 </div>
                 <SimpleTextInput
                   labelText={"Place of birth"}
