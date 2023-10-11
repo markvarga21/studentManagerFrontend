@@ -231,12 +231,10 @@ function App() {
       console.log(`Saving ${logObject(userJson)}`);
 
       const formToSend = new FormData();
-      formToSend.append("idDocument", idPhoto);
-      formToSend.append("selfiePhoto", selfiePhoto);
-      formToSend.append("appUserJson", userJson);
+      formToSend.append("studentJson", userJson);
 
       axios
-        .post("http://localhost:8080/api/v1/users", formToSend, {
+        .post("http://localhost:8080/api/v1/students", formToSend, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -296,13 +294,11 @@ function App() {
       console.log(`Saving ${logObject(userJson)}`);
 
       const formToSend = new FormData();
-      formToSend.append("idDocument", idPhoto);
-      formToSend.append("selfiePhoto", selfiePhoto);
-      formToSend.append("appUserJson", userJson);
+      formToSend.append("studentJson", userJson);
 
       axios
         .put(
-          `http://localhost:8080/api/v1/users/${userToEdit.id}`,
+          `http://localhost:8080/api/v1/students/${userToEdit.id}`,
           formToSend,
           {
             headers: {
@@ -336,7 +332,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/v1/users")
+      .get("http://localhost:8080/api/v1/students")
       .then((res) => {
         setUserList(res.data);
       })
@@ -395,7 +391,7 @@ function App() {
     console.log(`Deleting user with id: ${userToDeleteId}`);
 
     axios
-      .delete(`http://localhost:8080/api/v1/users/${userToDeleteId}`)
+      .delete(`http://localhost:8080/api/v1/students/${userToDeleteId}`)
       .then((res) => {
         deleteImageFromFirebaseStorage(userToDeleteId);
         setUserWasDeleted(-1 * userWasDeleted);
