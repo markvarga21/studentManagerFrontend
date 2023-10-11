@@ -16,6 +16,7 @@ import {
 import { auth, storage } from "./firebase";
 import Login from "./components/Login";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import toast, { Toaster } from "react-hot-toast";
 
 function App() {
   const [searchValue, setSearchValue] = useState("");
@@ -80,16 +81,16 @@ function App() {
         setIsFillingData(false);
         setFillingWasSuccessful(true);
         const user = res.data;
+        delete user["id"];
         const keys = Object.keys(user);
         for (const key of keys) {
           const element = document.getElementById(key);
-          if (key === "id") {
-            // Id should not be set in the form
-          } else {
+          if (element !== null) {
             element.value = user[key];
           }
         }
         setFormData(user);
+        toast.success("Data filled successfully!");
       })
       .catch((err) => {
         console.error(err);
@@ -146,6 +147,18 @@ function App() {
     setFillingWasSuccessful(false);
     setSelfieIsValid(false);
     setPassportIsValid(false);
+    setPassportIsValidating(false);
+    setFormData({
+      firstName: "",
+      lastName: "",
+      birthDate: "",
+      placeOfBirth: "",
+      countryOfCitizenship: "",
+      gender: "",
+      passportNumber: "",
+      passportDateOfExpiry: "",
+      passportDateOfIssue: "",
+    });
   };
 
   const closeEditModal = () => {
@@ -195,30 +208,25 @@ function App() {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
+    console.log("Saving form data!");
     if (idPhoto === null || selfiePhoto === null) {
       if (idPhoto == null) {
-        setErrorMessage({
-          title: "MISSING ID DOCUMENT",
-          details: "Upload the ID document!",
-        });
-        setIsErrorPresent(true);
+        toast.error("Upload the passport!");
       } else {
-        setErrorMessage({
-          title: "MISSING SELFIE PHOTO",
-          details: "Upload the selfie!",
-        });
-        setIsErrorPresent(true);
+        toast.error("Upload the portrait!");
       }
     } else if (!selfieIsValid || !passportIsValid) {
       if (!selfieIsValid) {
-        alert("Selfie is not valid!");
+        toast.error("Selfie is invalid!");
       } else {
-        alert("Passport is not valid!");
+        toast.error("Passport is invalid!");
       }
     } else {
       setErrorMessage({});
       setIsErrorPresent(false);
       setIsSaving(true);
+      const uppercase_gender = String(formData.gender).toUpperCase();
+      formData.gender = uppercase_gender;
       const userJson = JSON.stringify(formData);
       console.log(`Saving ${logObject(userJson)}`);
 
@@ -244,18 +252,14 @@ function App() {
           setPassportIsValid(false);
           setSelfieIsValid(false);
           setFillingWasSuccessful(false);
+          toast.success("User saved successfully!");
         })
         .catch((err) => {
           setIsSaving(false);
           console.error(err);
           if (err.response != null) {
             const errorMessage = err.response.data.message;
-            const errorOperationType = err.response.data.operationType;
-            setErrorMessage({
-              title: `${errorOperationType} ERROR`,
-              details: errorMessage,
-            });
-            setIsErrorPresent(true);
+            toast.error(errorMessage);
           }
         });
     }
@@ -372,15 +376,15 @@ function App() {
   };
 
   const handleIdPhotoChange = (event) => {
-    console.log("ID photo changed!");
     event.preventDefault();
     const file = event.target.files[0];
+    toast.success("Passport uploaded successfully!");
     setIdPhoto(file);
   };
 
   const [selfieIsValid, setSelfieIsValid] = useState(false);
   const handleSelfiePhotoChange = (event) => {
-    console.log("Selfie photo changed!");
+    toast.success("Portrait uploaded successfully!");
     event.preventDefault();
     const file = event.target.files[0];
     setSelfiePhoto(file);
@@ -400,7 +404,7 @@ function App() {
         if (err.response != null) {
           const errorMessage = err.response.data.message;
           console.error(err);
-          alert(errorMessage);
+          toast.error(errorMessage);
         }
       });
   };
@@ -461,6 +465,13 @@ function App() {
     formToSend.append("passport", idPhoto);
     formToSend.append("appUserJson", JSON.stringify(formData));
 
+    const values = Object.values(formData);
+    if (values.includes("")) {
+      setPassportIsValidating(false);
+      toast.error("Please fill all the input fields!");
+      return;
+    }
+
     axios
       .post("http://localhost:8080/api/v1/form/validate", formToSend, {
         headers: {
@@ -471,9 +482,10 @@ function App() {
         const response = res.data;
         if (response.isValid) {
           setPassportIsValid(true);
-          setPassportIsValidating(true);
-          console.log("Passport is valid!");
+          //setPassportIsValidating(false);
+          toast.success("Passport is valid!");
         } else {
+          toast.error("Passport is invalid!");
           const passportData = response.appUserDto;
           handleInvalidPassport(passportData);
           setPassportIsValid(false);
@@ -481,6 +493,7 @@ function App() {
         }
       })
       .catch((err) => {
+        toast.error("An error occured while validating passport!");
         console.error(err);
         setPassportIsValid(false);
         setPassportIsValidating(false);
@@ -643,6 +656,7 @@ function App() {
                 ))}
             </tbody>
           </table>
+          <Toaster />
         </div>
       ) : (
         <Login

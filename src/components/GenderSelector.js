@@ -1,7 +1,7 @@
 import { Option, Select } from "@material-tailwind/react";
 import React from "react";
 
-const GenderSelector = ({ customValue, isErrorPresent }) => {
+const GenderSelector = ({ customValue, isErrorPresent, genderId }) => {
   return (
     <div>
       {isErrorPresent === true ? (
@@ -14,6 +14,7 @@ const GenderSelector = ({ customValue, isErrorPresent }) => {
         </div>
       ) : (
         <Select
+          id={genderId}
           variant="static"
           label="Gender"
           color="tail"
