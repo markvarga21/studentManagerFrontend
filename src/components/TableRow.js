@@ -8,18 +8,13 @@ const TableRow = ({
   placeOfBirth,
   countryOfCitizenship,
   gender,
-  phoneNumber,
+
   passportNumber,
   passportDateOfExpiry,
   passportDateOfIssue,
   handleEditUser,
   handleDeleteUser,
-  getImageUrlForId,
 }) => {
-  const extractImageUrl = () => {
-    return getImageUrlForId(id);
-  };
-
   return (
     <tr className="bg-white text-black border-solid border-b-1 border-black hover:bg-lightUniGreen">
       <td className="px-6 py-4">{id}</td>

@@ -6,17 +6,12 @@ import TableHead from "./components/TableHead";
 import UserFormModal from "./components/UserFormModal";
 import axios from "axios";
 import UserEditFormModal from "./components/UserEditFormModal";
-import {
-  uploadBytes,
-  listAll,
-  getDownloadURL,
-  deleteObject,
-  ref,
-} from "firebase/storage";
 import { auth, storage } from "./firebase";
 import Login from "./components/Login";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
+import CustomButton from "./components/CustomButton";
+import LogoutButton from "./components/LogoutButton";
 
 function App() {
   const [searchValue, setSearchValue] = useState("");
@@ -93,42 +88,10 @@ function App() {
         toast.success("Data filled successfully!");
       })
       .catch((err) => {
+        setIsFillingData(false);
+        toast.error("An error occured while filling the form!");
         console.error(err);
       });
-  };
-
-  const staticImageUrl =
-    "https://st.depositphotos.com/2309453/4503/i/450/depositphotos_45030333-stock-photo-young-man-concentrating-as-he.jpg";
-
-  const imageListRef = ref(storage, "images/");
-  useEffect(() => {
-    listAll(imageListRef).then((response) => {
-      response.items.forEach((item) => {
-        getDownloadURL(item)
-          .then((url) => {
-            const nameStartIndex = url.indexOf("selfie");
-            const nameEndIndex = url.indexOf(".jpg");
-            const fileName = url.substring(nameStartIndex, nameEndIndex);
-            const fileId = fileName.split("_")[1];
-            const imageItem = {
-              id: fileId,
-              fileUrl: url,
-            };
-            setUserSelfies((prev) => [...prev, imageItem]);
-          })
-          .catch((err) => console.error(err));
-      });
-    });
-  }, [formData, isSaving, userWasDeleted, isFormActive, isEditFormActive]);
-
-  const NOT_FOUND_IMAGE_URL =
-    "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg";
-  const getImageUrlForId = (userId) => {
-    const imageItem = userSelfies.find((item) => item.id === String(userId));
-    if (imageItem === undefined) {
-      return NOT_FOUND_IMAGE_URL;
-    }
-    return imageItem.fileUrl;
   };
 
   const displayForm = () => {
@@ -183,9 +146,9 @@ function App() {
     setErrorMessage({});
     setIsErrorPresent(false);
     newFormData[fieldName] = fieldValue;
-    console.log(newFormData[fieldName]);
 
     setFormData(newFormData);
+    console.log(formData);
   };
 
   const handleEditFormChange = (event) => {
@@ -244,7 +207,6 @@ function App() {
           setIsSaving(false);
           setIsFormActive(false);
           setUserToEdit({});
-          saveSelfie(res.data.id);
           setIdPhoto(null);
           setSelfiePhoto(null);
           setPassportIsValid(false);
@@ -261,13 +223,6 @@ function App() {
           }
         });
     }
-  };
-
-  const saveSelfie = (selfieId) => {
-    const imageRef = ref(storage, `images/selfie_${selfieId}.jpg`);
-    uploadBytes(imageRef, selfiePhoto).then((res) => {
-      console.log("Image uploaded!");
-    });
   };
 
   const handleEditFormSubmit = (event) => {
@@ -392,10 +347,7 @@ function App() {
 
     axios
       .delete(`http://localhost:8080/api/v1/students/${userToDeleteId}`)
-      .then((res) => {
-        deleteImageFromFirebaseStorage(userToDeleteId);
-        setUserWasDeleted(-1 * userWasDeleted);
-      })
+      .then((res) => {})
       .catch((err) => {
         if (err.response != null) {
           const errorMessage = err.response.data.message;
@@ -403,15 +355,6 @@ function App() {
           toast.error(errorMessage);
         }
       });
-  };
-
-  const deleteImageFromFirebaseStorage = (id) => {
-    const deleteImageRef = ref(storage, `images/selfie_${id}.jpg`);
-    deleteObject(deleteImageRef)
-      .then(() =>
-        console.log(`Selfie with ID ${id} deleted from Firebase Storage!`)
-      )
-      .catch((err) => console.error(err));
   };
 
   const handleDropdownClick = () => {
@@ -459,7 +402,9 @@ function App() {
 
     const formToSend = new FormData();
     formToSend.append("passport", idPhoto);
-    formToSend.append("appUserJson", JSON.stringify(formData));
+    formToSend.append("studentJson", JSON.stringify(formData));
+
+    console.log("Validating passport!" + JSON.stringify(formData));
 
     const values = Object.values(formData);
     if (values.includes("")) {
@@ -481,7 +426,7 @@ function App() {
           //setPassportIsValidating(false);
           toast.success("Passport is valid!");
         } else {
-          toast.error("Passport is invalid!");
+          toast.error("Passport validation unsuccessful!");
           const passportData = response.appUserDto;
           handleInvalidPassport(passportData);
           setPassportIsValid(false);
@@ -515,20 +460,20 @@ function App() {
           <div className="flex flex-row items-center justify-between">
             <div className="flex items-center">
               <SearchBar setSearchValue={setSearchValue} />
-              <button
-                className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                onClick={displayForm}
-              >
-                Add user
-              </button>
+              <CustomButton
+                text={"Add new student"}
+                isLoading={false}
+                isDisabled={false}
+                handleButtonClick={displayForm}
+              />
             </div>
             <div className="flex flex-row">
               <div className="flex flex-col items-end px-5 relative">
-                <p className="text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
+                <p className="text-lg font-thin text-gray-500 lg:text-xl">
                   Currently logged in as
                 </p>
                 <div
-                  className="hover:underline hover:text-blue-500 cursor-pointer"
+                  className="hover:underline hover:text-uniGreen cursor-pointer"
                   onClick={handleDropdownClick}
                 >
                   <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-3xl dark:text-white">
@@ -536,12 +481,7 @@ function App() {
                   </h1>
                 </div>
               </div>
-              <button
-                className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
+              <LogoutButton handleLogout={handleLogout} />
             </div>
           </div>
 
@@ -634,7 +574,6 @@ function App() {
                   <TableRow
                     key={user.id}
                     id={user.id}
-                    userImageUrl={staticImageUrl}
                     firstName={user.firstName}
                     lastName={user.lastName}
                     birthDate={user.birthDate}
@@ -647,7 +586,6 @@ function App() {
                     passportDateOfIssue={user.passportDateOfIssue}
                     handleEditUser={handleEditUser}
                     handleDeleteUser={handleDeleteUser}
-                    getImageUrlForId={getImageUrlForId}
                   />
                 ))}
             </tbody>

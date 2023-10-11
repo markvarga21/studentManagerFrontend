@@ -30,9 +30,6 @@ function UserFormModal({
   passportIsValidating,
   passportIsValid,
 }) {
-  const [validationLabelText, setValidationLabelText] = useState(
-    "Photo is not validated yet"
-  );
   const [isValidating, setIsValidating] = useState(false);
   const staticPhotoUrl =
     "https://www.gravatar.com/avatar/447eccb3e9777173f1efc80d8e100e96.jpg?size=240&d=https%3A%2F%2Fwww.artstation.com%2Fassets%2Fdefault_avatar.jpg";
@@ -97,6 +94,8 @@ function UserFormModal({
       })
       .catch((err) => {
         toast.error("Something went wrong when validating the photo!");
+        setIsValidating(false);
+        setSelfiePhoto(null);
         console.error(err);
       });
   };
@@ -112,18 +111,22 @@ function UserFormModal({
           <div className="flex space-x-20 items-center">
             <div className="flex-col space-y-8">
               <SimpleTextInput
+                type={"text"}
+                width={"72"}
                 labelText={"First name"}
                 name={"firstName"}
                 id={"firstName"}
                 placeholderValue={"John"}
-                isThereError={false}
+                handleInputChange={handleFormChange}
               />
               <SimpleTextInput
+                type={"text"}
+                width={"72"}
                 labelText={"Last name"}
                 name={"lastName"}
                 id={"lastName"}
                 placeholderValue={"Doe"}
-                isThereError={false}
+                handleInputChange={handleFormChange}
               />
             </div>
 
@@ -167,26 +170,32 @@ function UserFormModal({
 
           <div className="flex space-x-24">
             <SimpleTextInput
+              type={"text"}
+              width={"72"}
               labelText={"Birthdate"}
               name={"birthDate"}
               id={"birthDate"}
               placeholderValue={"2005-05-15"}
-              isThereError={false}
+              handleInputChange={handleFormChange}
             />
             <SimpleTextInput
+              type={"text"}
+              width={"72"}
               labelText={"Gender"}
               placeholderValue={"Male"}
               id={"gender"}
               name={"gender"}
-              isThereError={false}
+              handleInputChange={handleFormChange}
             />
           </div>
           <SimpleTextInput
+            type={"text"}
+            width={"72"}
             labelText={"Place of birth"}
             placeholderValue={"Hungary"}
             id={"placeOfBirth"}
             name={"placeOfBirth"}
-            isThereError={false}
+            handleInputChange={handleFormChange}
           />
 
           <div className="saveButton">
@@ -213,32 +222,40 @@ function UserFormModal({
         <div className="flex flex-col space-y-8">
           <div className="h-8"></div>
           <SimpleTextInput
+            type={"text"}
+            width={"72"}
             labelText={"Country of citizenship"}
             placeholderValue={"Hungary"}
             id={"countryOfCitizenship"}
             name={"countryOfCitizenship"}
-            isThereError={false}
+            handleInputChange={handleFormChange}
           />
           <SimpleTextInput
+            type={"text"}
+            width={"72"}
             labelText={"Passport number"}
             placeholderValue={"123456789"}
             id={"passportNumber"}
             name={"passportNumber"}
-            isErrorPresent={false}
+            handleInputChange={handleFormChange}
           />
           <SimpleTextInput
+            type={"text"}
+            width={"72"}
             labelText={"Passport date of issue"}
             placeholderValue={"1979-12-31"}
             id={"passportDateOfIssue"}
             name={"passportDateOfIssue"}
-            isErrorPresent={false}
+            handleInputChange={handleFormChange}
           />
           <SimpleTextInput
+            type={"text"}
+            width={"72"}
             labelText={"Passport date of expiry"}
             placeholderValue={"1979-12-31"}
             id={"passportDateOfExpiry"}
             name={"passportDateOfExpiry"}
-            isErrorPresent={false}
+            handleInputChange={handleFormChange}
           />
           <div className="flex space-x-3">
             <div className="passportValidatorButton">
@@ -341,15 +358,15 @@ function UserFormModal({
             </div>
           </div>
         </div>
-        <div className="flex flex-col space-y-3 items-end">
-          <div className="">
+        <div className="flex flex-col space-y-3 items-center">
+          <div className="flex w-full justify-end">
             <CloseButton onButtonClick={closeModal} />
           </div>
           <RadioSelector showSelfie={showSelfie} showPassport={showPassport} />
           <img
             src={photoToShowUrl}
             alt="User not known."
-            className="object-scale-down h-48 hover:scale-150 shadow-2xl hover:shadow-2xl transition duration-500 ease-in-out"
+            className="object-scale-down h-64 hover:scale-150 shadow-2xl hover:shadow-2xl transition duration-500 ease-in-out"
           />
         </div>
         <Toaster />

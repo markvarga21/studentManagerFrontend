@@ -27,7 +27,7 @@ const CustomButton = ({
             <button
               onClick={handleButtonClick}
               type={buttonType}
-              className=" text-white bg-uniGreen hover:bg-uniGreenLight focus:ring-4 focus:outline-none focus:ring-uniGreenLight font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-uniGreenLight dark:hover:bg-uniGreenLight dark:focus:ring-uniGreenLight"
+              className=" text-white bg-uniGreen hover:bg-uniGreenLight focus:ring-4 focus:outline-none px-5 py-2.5 focus:ring-uniGreenLight font-medium rounded-lg text-sm text-center dark:bg-uniGreenLight dark:hover:bg-uniGreenLight dark:focus:ring-uniGreenLight"
             >
               {text}
             </button>
