@@ -58,6 +58,16 @@ function UserFormModal({
   const handleSelfieValidation = (event) => {
     event.preventDefault();
 
+    if (idPhoto === null) {
+      toast.error("No passport uploaded yet.");
+      return;
+    }
+
+    if (actualUser.firstName === "" || actualUser.lastName === "") {
+      toast.error("No first or last name provided.");
+      return;
+    }
+
     const formToSend = new FormData();
     formToSend.append("passport", idPhoto);
     formToSend.append("selfiePhoto", selfiePhoto);
@@ -73,18 +83,20 @@ function UserFormModal({
       })
       .then((res) => {
         const message = res.data;
-        if (message.isValid) {
-          toast.success("Faces are similar!");
+        const isIdentical = message.isIdentical;
+        const confidence = Math.round(message.confidence * 100);
+        if (isIdentical) {
+          toast.success(`Photo is ${confidence}% similar!`);
           setIsValidating(false);
           setSelfieIsValid(true);
         } else {
-          toast.error("Faces are not similar!");
+          toast.error(`Faces are not similar!\nConfidence: ${confidence}%`);
           setSelfiePhoto(null);
           setIsValidating(false);
         }
       })
       .catch((err) => {
-        toast.error("Faces are similar!");
+        toast.error("Something went wrong when validating the photo!");
         console.error(err);
       });
   };
@@ -181,10 +193,7 @@ function UserFormModal({
             {isSaving ? (
               <CustomButton
                 buttonType={"button"}
-                text={"Save"}
                 isLoading={true}
-                isDisabled={true}
-                disabledText={""}
                 loadingText={"Saving..."}
               />
             ) : (
@@ -285,14 +294,23 @@ function UserFormModal({
             </div>
             <div className="portraitValidatorButton">
               {selfiePhoto && !selfieIsValid ? (
-                <CustomButton
-                  text={"Validate portrait"}
-                  isLoading={false}
-                  isDisabled={false}
-                  disabledText={""}
-                  loadingText={""}
-                  handleButtonClick={handleSelfieValidation}
-                />
+                <div>
+                  {isValidating ? (
+                    <CustomButton
+                      isLoading={true}
+                      loadingText={"Validating..."}
+                    />
+                  ) : (
+                    <CustomButton
+                      text={"Validate portrait"}
+                      isLoading={false}
+                      isDisabled={false}
+                      disabledText={""}
+                      loadingText={""}
+                      handleButtonClick={handleSelfieValidation}
+                    />
+                  )}
+                </div>
               ) : (
                 <div>
                   {selfieIsValid ? (
@@ -331,7 +349,7 @@ function UserFormModal({
           <img
             src={photoToShowUrl}
             alt="User not known."
-            className="object-scale-down w-64 hover:scale-150 shadow-2xl hover:shadow-2xl transition duration-500 ease-in-out"
+            className="object-scale-down h-48 hover:scale-150 shadow-2xl hover:shadow-2xl transition duration-500 ease-in-out"
           />
         </div>
         <Toaster />
