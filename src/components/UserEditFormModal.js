@@ -1,7 +1,6 @@
 import { React, useState } from "react";
 import SimpleTextInput from "./SimpleTextInput";
 import GenderSelector from "./GenderSelector";
-import NationalityList from "./NationalityList";
 
 function UserEditFormModal({
   title,
@@ -11,8 +10,6 @@ function UserEditFormModal({
   handleIdPhotoChange,
   handleSelfiePhotoChange,
   isSaving,
-  isErrorPresent,
-  errorMessage,
   editUserInfo,
   idPhoto,
   selfiePhoto,
@@ -88,14 +85,6 @@ function UserEditFormModal({
                 />
                 <GenderSelector customValue={editUserInfo.gender} />
               </div>
-              <NationalityList
-                type={"text"}
-                labelText={"Place of birth"}
-                placeholder={"Hungary"}
-                id={"placeOfBirth"}
-                name={"placeOfBirth"}
-                customValue={editUserInfo.placeOfBirth}
-              />
 
               <SimpleTextInput
                 type={"text"}
