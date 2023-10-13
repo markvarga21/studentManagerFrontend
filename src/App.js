@@ -6,16 +6,12 @@ import TableHead from "./components/TableHead";
 import UserFormModal from "./components/UserFormModal";
 import axios from "axios";
 import UserEditFormModal from "./components/UserEditFormModal";
-import {
-  uploadBytes,
-  listAll,
-  getDownloadURL,
-  deleteObject,
-  ref,
-} from "firebase/storage";
-import { auth, storage } from "./firebase";
+import { auth } from "./firebase";
 import Login from "./components/Login";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import toast, { Toaster } from "react-hot-toast";
+import CustomButton from "./components/CustomButton";
+import LogoutButton from "./components/LogoutButton";
 
 function App() {
   const [searchValue, setSearchValue] = useState("");
@@ -25,25 +21,14 @@ function App() {
     firstName: "",
     lastName: "",
     birthDate: "",
-    placeOfBirth: {
-      country: "",
-      city: "",
-      street: "",
-      number: 0,
-    },
-    nationality: "",
+    placeOfBirth: "",
+    countryOfCitizenship: "",
     gender: "",
-    address: {
-      country: "",
-      city: "",
-      street: "",
-      number: 0,
-    },
-    email: "",
-    phoneNumber: "",
+    passportNumber: "",
+    passportDateOfExpiry: "",
+    passportDateOfIssue: "",
   });
   const [isUserLogin, setIsUserLogin] = useState(false);
-  const [userSelfies, setUserSelfies] = useState([]);
   const [userList, setUserList] = useState([]);
   const [userToEdit, setUserToEdit] = useState({});
   const [isSaving, setIsSaving] = useState(false);
@@ -56,40 +41,56 @@ function App() {
   const [isEditFormActive, setIsEditFormActive] = useState(false);
   const [idPhoto, setIdPhoto] = useState(null);
   const [selfiePhoto, setSelfiePhoto] = useState(null);
-  const [userWasDeleted, setUserWasDeleted] = useState(-1);
+  const [sortByCriteria, setSortByCriteria] = useState("nosort");
+  const [sortingOrder, setSortingOrder] = useState({
+    firstName: 1,
+    lastName: 1,
+    birthDate: 1,
+    placeOfBirth: 1,
+    countryOfCitizenship: 1,
+    gender: 1,
+    passportNumber: 1,
+    passportDateOfExpiry: 1,
+    passportDateOfIssue: 1,
+  });
+  const [useWasDeleted, setUserWasDeleted] = useState(1);
 
-  const staticImageUrl =
-    "https://st.depositphotos.com/2309453/4503/i/450/depositphotos_45030333-stock-photo-young-man-concentrating-as-he.jpg";
+  const [isFillingData, setIsFillingData] = useState(false);
+  const [fillingWasSuccessful, setFillingWasSuccessful] = useState(false);
+  const handleFillFormData = (event) => {
+    event.preventDefault();
+    setIsFillingData(true);
+    console.log("Filling form data!");
 
-  const imageListRef = ref(storage, "images/");
-  useEffect(() => {
-    listAll(imageListRef).then((response) => {
-      response.items.forEach((item) => {
-        getDownloadURL(item)
-          .then((url) => {
-            const nameStartIndex = url.indexOf("selfie");
-            const nameEndIndex = url.indexOf(".jpg");
-            const fileName = url.substring(nameStartIndex, nameEndIndex);
-            const fileId = fileName.split("_")[1];
-            const imageItem = {
-              id: fileId,
-              fileUrl: url,
-            };
-            setUserSelfies((prev) => [...prev, imageItem]);
-          })
-          .catch((err) => console.error(err));
+    const formToSend = new FormData();
+    formToSend.append("passport", idPhoto);
+
+    axios
+      .post("http://localhost:8080/api/v1/form/extractData", formToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        setIsFillingData(false);
+        setFillingWasSuccessful(true);
+        const user = res.data;
+        delete user["id"];
+        const keys = Object.keys(user);
+        for (const key of keys) {
+          const element = document.getElementById(key);
+          if (element !== null) {
+            element.value = user[key];
+          }
+        }
+        setFormData(user);
+        toast.success("Data filled successfully!");
+      })
+      .catch((err) => {
+        setIsFillingData(false);
+        toast.error("An error occured while filling the form!");
+        console.error(err);
       });
-    });
-  }, [formData, isSaving, userWasDeleted, isFormActive, isEditFormActive]);
-
-  const NOT_FOUND_IMAGE_URL =
-    "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg";
-  const getImageUrlForId = (userId) => {
-    const imageItem = userSelfies.find((item) => item.id === String(userId));
-    if (imageItem === undefined) {
-      return NOT_FOUND_IMAGE_URL;
-    }
-    return imageItem.fileUrl;
   };
 
   const displayForm = () => {
@@ -103,6 +104,45 @@ function App() {
     setUserToEdit({});
     setIsErrorPresent(false);
     setIsFormActive(!isFormActive);
+    setIdPhoto(null);
+    setSelfiePhoto(null);
+    setFillingWasSuccessful(false);
+    setSelfieIsValid(false);
+    setPassportIsValid(false);
+    setPassportIsValidating(false);
+    setFormData({
+      firstName: "",
+      lastName: "",
+      birthDate: "",
+      placeOfBirth: "",
+      countryOfCitizenship: "",
+      gender: "",
+      passportNumber: "",
+      passportDateOfExpiry: "",
+      passportDateOfIssue: "",
+    });
+    setInvalidFields({
+      firstName: false,
+      lastName: false,
+      birthDate: false,
+      placeOfBirth: false,
+      countryOfCitizenship: false,
+      gender: false,
+      passportNumber: false,
+      passportDateOfExpiry: false,
+      passportDateOfIssue: false,
+    });
+    setPassportData({
+      firstName: "",
+      lastName: "",
+      birthDate: "",
+      placeOfBirth: "",
+      countryOfCitizenship: "",
+      gender: "",
+      passportNumber: "",
+      passportDateOfExpiry: "",
+      passportDateOfIssue: "",
+    });
   };
 
   const closeEditModal = () => {
@@ -110,10 +150,14 @@ function App() {
     setUserToEdit({});
     setIsErrorPresent(false);
     setIsEditFormActive(false);
+    setIdPhoto(null);
+    setSelfiePhoto(null);
   };
 
   const handleFormChange = (event) => {
     event.preventDefault();
+    setPassportIsValid(false);
+    setPassportIsValidating(false);
 
     const fieldName = event.target.getAttribute("name");
     const fieldValue = event.target.value;
@@ -122,30 +166,12 @@ function App() {
       ...formData,
     };
 
-    const addressType = String(fieldName).split("_")[0];
-    if (addressType === "Birthplace" || addressType === "Address") {
-      if (addressType === "Birthplace") {
-        newFormData["placeOfBirth"][String(fieldName).split("_")[1]] =
-          fieldValue;
-        setFormData(newFormData);
-      } else if (addressType === "Address") {
-        newFormData["address"][String(fieldName).split("_")[1]] = fieldValue;
-        setFormData(newFormData);
-      } else {
-        setErrorMessage({
-          title: "INVALID ADDRESS",
-          details: "The address you've entered is invalid!",
-        });
-        setIsErrorPresent(true);
-      }
-    } else {
-      setErrorMessage({});
-      setIsErrorPresent(false);
-      newFormData[fieldName] = fieldValue;
-      console.log(newFormData[fieldName]);
+    setErrorMessage({});
+    setIsErrorPresent(false);
+    newFormData[fieldName] = fieldValue;
 
-      setFormData(newFormData);
-    }
+    setFormData(newFormData);
+    console.log(formData);
   };
 
   const handleEditFormChange = (event) => {
@@ -158,63 +184,43 @@ function App() {
       ...userToEdit,
     };
 
-    const addressType = String(fieldName).split("_")[0];
-    if (addressType === "Birthplace" || addressType === "Address") {
-      if (addressType === "Birthplace") {
-        newFormData["placeOfBirth"][String(fieldName).split("_")[1]] =
-          fieldValue;
-        setUserToEdit(newFormData);
-      } else if (addressType === "Address") {
-        newFormData["address"][String(fieldName).split("_")[1]] = fieldValue;
-        setUserToEdit(newFormData);
-      } else {
-        setErrorMessage({
-          title: "INVALID ADDRESS",
-          details: "The address you've entered is invalid!",
-        });
-        setIsErrorPresent(true);
-      }
-    } else {
-      setErrorMessage({});
-      setIsErrorPresent(false);
-      newFormData[fieldName] = fieldValue;
-      console.log(newFormData[fieldName]);
+    setErrorMessage({});
+    setIsErrorPresent(false);
+    newFormData[fieldName] = fieldValue;
+    console.log(newFormData[fieldName]);
 
-      setUserToEdit(newFormData);
-    }
+    setUserToEdit(newFormData);
   };
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
+    console.log("Saving form data!");
     if (idPhoto === null || selfiePhoto === null) {
       if (idPhoto == null) {
-        setErrorMessage({
-          title: "MISSING ID DOCUMENT",
-          details: "Upload the ID document!",
-        });
-        setIsErrorPresent(true);
+        toast.error("Upload the passport!");
       } else {
-        setErrorMessage({
-          title: "MISSING SELFIE PHOTO",
-          details: "Upload the selfie!",
-        });
-        setIsErrorPresent(true);
+        toast.error("Upload the portrait!");
+      }
+    } else if (!selfieIsValid || !passportIsValid) {
+      if (!selfieIsValid) {
+        toast.error("Selfie is invalid!");
+      } else {
+        toast.error("Passport is invalid!");
       }
     } else {
       setErrorMessage({});
       setIsErrorPresent(false);
       setIsSaving(true);
+      const uppercase_gender = String(formData.gender).toUpperCase();
+      formData.gender = uppercase_gender;
       const userJson = JSON.stringify(formData);
       console.log(`Saving ${logObject(userJson)}`);
 
       const formToSend = new FormData();
-      formToSend.append("idDocument", idPhoto);
-      formToSend.append("selfiePhoto", selfiePhoto);
-      formToSend.append("appUserJson", userJson);
-      formToSend.append("identification", "idCard");
+      formToSend.append("studentJson", userJson);
 
       axios
-        .post("http://localhost:8080/api/v1/users", formToSend, {
+        .post("http://localhost:8080/api/v1/students", formToSend, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -224,31 +230,22 @@ function App() {
           setIsSaving(false);
           setIsFormActive(false);
           setUserToEdit({});
-          saveSelfie(res.data.id);
           setIdPhoto(null);
           setSelfiePhoto(null);
+          setPassportIsValid(false);
+          setSelfieIsValid(false);
+          setFillingWasSuccessful(false);
+          toast.success("User saved successfully!");
         })
         .catch((err) => {
           setIsSaving(false);
           console.error(err);
           if (err.response != null) {
             const errorMessage = err.response.data.message;
-            const errorOperationType = err.response.data.operationType;
-            setErrorMessage({
-              title: `${errorOperationType} ERROR`,
-              details: errorMessage,
-            });
-            setIsErrorPresent(true);
+            toast.error(errorMessage);
           }
         });
     }
-  };
-
-  const saveSelfie = (selfieId) => {
-    const imageRef = ref(storage, `images/selfie_${selfieId}.jpg`);
-    uploadBytes(imageRef, selfiePhoto).then((res) => {
-      console.log("Image uploaded!");
-    });
   };
 
   const handleEditFormSubmit = (event) => {
@@ -275,14 +272,11 @@ function App() {
       console.log(`Saving ${logObject(userJson)}`);
 
       const formToSend = new FormData();
-      formToSend.append("idDocument", idPhoto);
-      formToSend.append("selfiePhoto", selfiePhoto);
-      formToSend.append("appUserJson", userJson);
-      formToSend.append("identification", "idCard");
+      formToSend.append("studentJson", userJson);
 
       axios
         .put(
-          `http://localhost:8080/api/v1/users/${userToEdit.id}`,
+          `http://localhost:8080/api/v1/students/${userToEdit.id}`,
           formToSend,
           {
             headers: {
@@ -316,14 +310,14 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/v1/users")
+      .get("http://localhost:8080/api/v1/students")
       .then((res) => {
         setUserList(res.data);
       })
       .catch((err) => {
         console.error(err);
       });
-  }, [formData, isSaving, userWasDeleted]);
+  }, [formData, isSaving, useWasDeleted]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -356,14 +350,15 @@ function App() {
   };
 
   const handleIdPhotoChange = (event) => {
-    console.log("ID photo changed!");
     event.preventDefault();
     const file = event.target.files[0];
+    toast.success("Passport uploaded successfully!");
     setIdPhoto(file);
   };
 
+  const [selfieIsValid, setSelfieIsValid] = useState(false);
   const handleSelfiePhotoChange = (event) => {
-    console.log("Selfie photo changed!");
+    toast.success("Portrait uploaded successfully!");
     event.preventDefault();
     const file = event.target.files[0];
     setSelfiePhoto(file);
@@ -374,31 +369,17 @@ function App() {
     console.log(`Deleting user with id: ${userToDeleteId}`);
 
     axios
-      .delete(`http://localhost:8080/api/v1/users/${userToDeleteId}`)
+      .delete(`http://localhost:8080/api/v1/students/${userToDeleteId}`)
       .then((res) => {
-        deleteImageFromFirebaseStorage(userToDeleteId);
-        setUserWasDeleted(-1 * userWasDeleted);
+        setUserWasDeleted(-1 * useWasDeleted);
       })
       .catch((err) => {
         if (err.response != null) {
           const errorMessage = err.response.data.message;
           console.error(err);
-          alert(errorMessage);
+          toast.error(errorMessage);
         }
       });
-  };
-
-  const deleteImageFromFirebaseStorage = (id) => {
-    const deleteImageRef = ref(storage, `images/selfie_${id}.jpg`);
-    deleteObject(deleteImageRef)
-      .then(() =>
-        console.log(`Selfie with ID ${id} deleted from Firebase Storage!`)
-      )
-      .catch((err) => console.error(err));
-  };
-
-  const formatAddress = (address) => {
-    return `${address.country}, ${address.city}, ${address.street} ${address.number}`;
   };
 
   const handleDropdownClick = () => {
@@ -421,6 +402,124 @@ function App() {
       });
   };
 
+  const sortItems = (criteria, order) => {
+    try {
+      const newSortedList = [...userList].sort((a, b) => {
+        return a[criteria].localeCompare(b[criteria]) * order;
+      });
+      setUserList(newSortedList);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const [invalidFields, setInvalidFields] = useState({
+    firstName: false,
+    lastName: false,
+    birthDate: false,
+    placeOfBirth: false,
+    countryOfCitizenship: false,
+    gender: false,
+    passportNumber: false,
+    passportDateOfExpiry: false,
+    passportDateOfIssue: false,
+  });
+
+  const [passportData, setPassportData] = useState({
+    firstName: false,
+    lastName: "",
+    birthDate: "",
+    placeOfBirth: "",
+    countryOfCitizenship: "",
+    gender: "",
+    passportNumber: "",
+    passportDateOfExpiry: "",
+    passportDateOfIssue: "",
+  });
+  const handleInvalidPassport = (passportData) => {
+    console.log("Handling invalid passport!");
+    const keys = Object.keys(formData);
+
+    let newInvalidFields = { ...invalidFields };
+    for (let i = 0; i < keys.length; i++) {
+      if (
+        formData[keys[i]].toLowerCase() !== passportData[keys[i]].toLowerCase()
+      ) {
+        newInvalidFields[keys[i]] = true;
+      }
+    }
+    setInvalidFields(newInvalidFields);
+  };
+
+  const [passportIsValid, setPassportIsValid] = useState(false);
+  const [passportIsValidating, setPassportIsValidating] = useState(false);
+  const validatePassport = (e) => {
+    e.preventDefault();
+
+    setPassportIsValidating(true);
+
+    const formToSend = new FormData();
+    formToSend.append("passport", idPhoto);
+    formToSend.append("studentJson", JSON.stringify(formData));
+
+    const values = Object.values(formData);
+    if (values.includes("")) {
+      setPassportIsValidating(false);
+      toast.error("Please fill all the input fields!");
+      return;
+    }
+
+    axios
+      .post("http://localhost:8080/api/v1/form/validate", formToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        const response = res.data;
+        if (response.isValid) {
+          setPassportIsValid(true);
+          //setPassportIsValidating(false);
+          toast.success("Passport is valid!");
+          setInvalidFields({
+            firstName: false,
+            lastName: false,
+            birthDate: false,
+            placeOfBirth: false,
+            countryOfCitizenship: false,
+            gender: false,
+            passportNumber: false,
+            passportDateOfExpiry: false,
+            passportDateOfIssue: false,
+          });
+          setPassportData({
+            firstName: "",
+            lastName: "",
+            birthDate: "",
+            placeOfBirth: "",
+            countryOfCitizenship: "",
+            gender: "",
+            passportNumber: "",
+            passportDateOfExpiry: "",
+            passportDateOfIssue: "",
+          });
+        } else {
+          toast.error("Passport validation unsuccessful!");
+          const passportData = response.studentDto;
+          setPassportData(passportData);
+          handleInvalidPassport(passportData);
+          setPassportIsValid(false);
+          setPassportIsValidating(false);
+        }
+      })
+      .catch((err) => {
+        toast.error("An error occured while validating passport!");
+        console.error(err);
+        setPassportIsValid(false);
+        setPassportIsValidating(false);
+      });
+  };
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -440,20 +539,20 @@ function App() {
           <div className="flex flex-row items-center justify-between">
             <div className="flex items-center">
               <SearchBar setSearchValue={setSearchValue} />
-              <button
-                className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                onClick={displayForm}
-              >
-                Add user
-              </button>
+              <CustomButton
+                text={"Add new student"}
+                isLoading={false}
+                isDisabled={false}
+                handleButtonClick={displayForm}
+              />
             </div>
             <div className="flex flex-row">
               <div className="flex flex-col items-end px-5 relative">
-                <p className="text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
+                <p className="text-lg font-thin text-gray-500 lg:text-xl">
                   Currently logged in as
                 </p>
                 <div
-                  className="hover:underline hover:text-blue-500 cursor-pointer"
+                  className="hover:underline hover:text-uniGreen cursor-pointer"
                   onClick={handleDropdownClick}
                 >
                   <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-3xl dark:text-white">
@@ -461,12 +560,7 @@ function App() {
                   </h1>
                 </div>
               </div>
-              <button
-                className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
+              <LogoutButton handleLogout={handleLogout} />
             </div>
           </div>
 
@@ -482,6 +576,8 @@ function App() {
               isErrorPresent={isErrorPresent}
               errorMessage={errorMessage}
               editUserInfo={userToEdit}
+              idPhoto={idPhoto}
+              selfiePhoto={selfiePhoto}
             />
           )}
 
@@ -496,43 +592,88 @@ function App() {
               isSaving={isSaving}
               isErrorPresent={isErrorPresent}
               errorMessage={errorMessage}
+              idPhoto={idPhoto}
+              selfiePhoto={selfiePhoto}
+              handleFillFormData={handleFillFormData}
+              setSelfiePhoto={setSelfiePhoto}
+              isFillingData={isFillingData}
+              fillingWasSuccessful={fillingWasSuccessful}
+              validatePassport={validatePassport}
+              actualUser={formData}
+              setSelfieIsValid={setSelfieIsValid}
+              selfieIsValid={selfieIsValid}
+              passportIsValidating={passportIsValidating}
+              passportIsValid={passportIsValid}
+              invalidFields={invalidFields}
+              setInvalidFields={setInvalidFields}
+              passportData={passportData}
+              setFormData={setFormData}
             />
           )}
 
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <TableHead />
+            <TableHead
+              sortingCriteria={sortByCriteria}
+              setSortByCriteria={setSortByCriteria}
+              sortingOrder={sortingOrder}
+              setSortingOrder={setSortingOrder}
+              sortItems={sortItems}
+            />
             <tbody>
               {userList
                 .filter((user) => {
                   if (searchValue === "") {
                     return true;
                   }
-                  const name = user.firstName + " " + user.lastName;
-                  const normalizedName = name
+                  const normalizedFullNameInternationalFormat =
+                    `${user.firstName} ${user.lastName}`
+                      .normalize("NFD")
+                      .replace(/[\u0300-\u036f]/g, "");
+
+                  const normalizedFullNameHungarianFormat =
+                    `${user.lastName} ${user.firstName}`
+                      .normalize("NFD")
+                      .replace(/[\u0300-\u036f]/g, "");
+
+                  const normalizedFirstName = user.firstName
                     .normalize("NFD")
                     .replace(/[\u0300-\u036f]/g, "");
-                  return normalizedName.toLowerCase().includes(searchValue);
+
+                  const normalizedLastName = user.lastName
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "");
+                  return (
+                    normalizedFirstName.toLowerCase().includes(searchValue) ||
+                    normalizedLastName.toLowerCase().includes(searchValue) ||
+                    normalizedFullNameInternationalFormat
+                      .toLowerCase()
+                      .includes(searchValue) ||
+                    normalizedFullNameHungarianFormat
+                      .toLowerCase()
+                      .includes(searchValue)
+                  );
                 })
                 .map((user) => (
                   <TableRow
                     key={user.id}
                     id={user.id}
-                    userImageUrl={staticImageUrl}
-                    email={user.email}
-                    name={`${user.firstName} ${user.lastName}`}
+                    firstName={user.firstName}
+                    lastName={user.lastName}
                     birthDate={user.birthDate}
-                    placeOfBirth={formatAddress(user.placeOfBirth)}
-                    nationality={user.nationality}
+                    placeOfBirth={user.placeOfBirth}
+                    countryOfCitizenship={user.countryOfCitizenship}
                     gender={user.gender}
-                    address={formatAddress(user.address)}
                     phoneNumber={user.phoneNumber}
+                    passportNumber={user.passportNumber}
+                    passportDateOfExpiry={user.passportDateOfExpiry}
+                    passportDateOfIssue={user.passportDateOfIssue}
                     handleEditUser={handleEditUser}
                     handleDeleteUser={handleDeleteUser}
-                    getImageUrlForId={getImageUrlForId}
                   />
                 ))}
             </tbody>
           </table>
+          <Toaster />
         </div>
       ) : (
         <Login
