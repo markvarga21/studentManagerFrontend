@@ -176,6 +176,7 @@ function App() {
 
   const handleEditFormChange = (event) => {
     event.preventDefault();
+    console.log("Handling edit form change!");
 
     const fieldName = event.target.getAttribute("name");
     const fieldValue = event.target.value;
@@ -460,13 +461,19 @@ function App() {
 
     const formToSend = new FormData();
     formToSend.append("passport", idPhoto);
-    formToSend.append("studentJson", JSON.stringify(formData));
 
     const values = Object.values(formData);
+    const editUserInfoFields = Object.values(userToEdit);
     if (values.includes("")) {
-      setPassportIsValidating(false);
-      toast.error("Please fill all the input fields!");
-      return;
+      if (editUserInfoFields.includes("")) {
+        setPassportIsValidating(false);
+        toast.error("Please fill all the input fields!");
+        return;
+      } else {
+        formToSend.append("studentJson", JSON.stringify(userToEdit));
+      }
+    } else {
+      formToSend.append("studentJson", JSON.stringify(formData));
     }
 
     axios
@@ -578,6 +585,20 @@ function App() {
               editUserInfo={userToEdit}
               idPhoto={idPhoto}
               selfiePhoto={selfiePhoto}
+              handleFillFormData={handleFillFormData}
+              setSelfiePhoto={setSelfiePhoto}
+              isFillingData={isFillingData}
+              fillingWasSuccessful={fillingWasSuccessful}
+              validatePassport={validatePassport}
+              actualUser={formData}
+              setSelfieIsValid={setSelfieIsValid}
+              selfieIsValid={selfieIsValid}
+              passportIsValidating={passportIsValidating}
+              passportIsValid={passportIsValid}
+              invalidFields={invalidFields}
+              setInvalidFields={setInvalidFields}
+              passportData={passportData}
+              setFormData={setFormData}
             />
           )}
 

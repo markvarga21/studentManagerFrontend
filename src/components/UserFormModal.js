@@ -8,15 +8,12 @@ import CloseButton from "./CloseButton";
 import toast, { Toaster } from "react-hot-toast";
 
 function UserFormModal({
-  title,
   closeModal,
   handleFormChange,
   handleFormSubmit,
   handleIdPhotoChange,
   handleSelfiePhotoChange,
   isSaving,
-  isErrorPresent,
-  errorMessage,
   idPhoto,
   selfiePhoto,
   handleFillFormData,

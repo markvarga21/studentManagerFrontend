@@ -1,6 +1,11 @@
 import { React, useState } from "react";
 import SimpleTextInput from "./SimpleTextInput";
 import GenderSelector from "./GenderSelector";
+import CustomButton from "./CustomButton";
+import CloseButton from "./CloseButton";
+import RadioSelector from "./RadioSelector";
+import toast, { Toaster } from "react-hot-toast";
+import axios from "axios";
 
 function UserEditFormModal({
   title,
@@ -13,226 +18,408 @@ function UserEditFormModal({
   editUserInfo,
   idPhoto,
   selfiePhoto,
+  handleFillFormData,
+  setSelfiePhoto,
+  isFillingData,
+  fillingWasSuccessful,
+  validatePassport,
+  actualUser,
+  setSelfieIsValid,
+  selfieIsValid,
+  passportIsValidating,
+  passportIsValid,
+  invalidFields,
+  setInvalidFields,
+  passportData,
+  setFormData,
+  handleEditFormChange,
 }) {
+  const [isValidating, setIsValidating] = useState(false);
   const staticPhotoUrl =
     "https://www.gravatar.com/avatar/447eccb3e9777173f1efc80d8e100e96.jpg?size=240&d=https%3A%2F%2Fwww.artstation.com%2Fassets%2Fdefault_avatar.jpg";
   const [photoToShowUrl, setPhotoToShowUrl] = useState(
     selfiePhoto === null ? staticPhotoUrl : URL.createObjectURL(selfiePhoto)
   );
   const showPassport = (event) => {
-    event.preventDefault();
+    if (idPhoto === null) {
+      toast.error("No passport uploaded yet.");
+      return;
+    }
     setPhotoToShowUrl(URL.createObjectURL(idPhoto));
   };
 
   const showSelfie = (event) => {
-    event.preventDefault();
     if (selfiePhoto === null) {
-      alert("No selfie photo uploaded yet.");
+      toast.error("No portrait uploaded yet.");
       return;
     }
     setPhotoToShowUrl(URL.createObjectURL(selfiePhoto));
   };
 
+  const handleSelfieValidation = (event) => {
+    event.preventDefault();
+
+    if (idPhoto === null) {
+      toast.error("No passport uploaded yet.");
+      return;
+    }
+
+    if (editUserInfo.firstName === "" || editUserInfo.lastName === "") {
+      toast.error("No first or last name provided.");
+      return;
+    }
+
+    const formToSend = new FormData();
+    formToSend.append("passport", idPhoto);
+    formToSend.append("selfiePhoto", selfiePhoto);
+    formToSend.append("firstName", actualUser.firstName);
+    formToSend.append("lastName", actualUser.lastName);
+
+    setIsValidating(true);
+    axios
+      .post("http://localhost:8080/api/v1/faces/validate", formToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        const message = res.data;
+        const isIdentical = message.isIdentical;
+        const confidence = Math.round(message.confidence * 100);
+        if (isIdentical) {
+          toast.success(`Photo is ${confidence}% similar!`);
+          setIsValidating(false);
+          setSelfieIsValid(true);
+        } else {
+          toast.error(`Faces are not similar!\nConfidence: ${confidence}%`);
+          setSelfiePhoto(null);
+          setIsValidating(false);
+        }
+      })
+      .catch((err) => {
+        toast.error("Something went wrong when validating the photo!");
+        setIsValidating(false);
+        setSelfiePhoto(null);
+        console.error(err);
+      });
+  };
   return (
     <div
       tabIndex="-1"
-      aria-hidden="true"
       className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75"
     >
-      <div className="bg-white rounded-lg shadow dark:bg-gray-700 w-200 flex items-center">
-        <div className="p-6 lg:p-8">
-          <div className="flex">
-            <h3 className="mb-10 text-xl font-light text-gray-900 dark:text-white">
-              {title}
-            </h3>
+      <div className="border-t-4 border-uniGreen bg-white rounded-2xl shadow dark:bg-white w-2/3 p-10 flex justify-evenly">
+        <div className="flex flex-col space-y-8">
+          <h2 className="font-bold text-3xl">{title}</h2>
+
+          <div className="flex space-x-20 items-center">
+            <div className="flex-col space-y-8">
+              <SimpleTextInput
+                type={"text"}
+                width={"72"}
+                labelText={"First name"}
+                name={"firstName"}
+                id={"firstName"}
+                placeholderValue={"John"}
+                handleInputChange={handleEditFormChange}
+                invalidFields={invalidFields}
+                setInvalidFields={setInvalidFields}
+                passportData={passportData}
+                setFormData={setFormData}
+                customValue={editUserInfo.firstName}
+              />
+              <SimpleTextInput
+                type={"text"}
+                width={"72"}
+                labelText={"Last name"}
+                name={"lastName"}
+                id={"lastName"}
+                placeholderValue={"Doe"}
+                handleInputChange={handleEditFormChange}
+                invalidFields={invalidFields}
+                setInvalidFields={setInvalidFields}
+                passportData={passportData}
+                setFormData={setFormData}
+                customValue={editUserInfo.lastName}
+              />
+            </div>
+
+            <div className="fillingButton">
+              {idPhoto && !fillingWasSuccessful ? (
+                <div>
+                  {isFillingData ? (
+                    <CustomButton isLoading={true} loadingText={"Filling..."} />
+                  ) : (
+                    <CustomButton
+                      text={"Fill data from passport"}
+                      isLoading={false}
+                      isDisabled={false}
+                      disabledText={""}
+                      loadingText={""}
+                      handleButtonClick={handleFillFormData}
+                    />
+                  )}
+                </div>
+              ) : (
+                <div>
+                  {fillingWasSuccessful ? (
+                    <CustomButton
+                      isLoading={false}
+                      isDisabled={true}
+                      disabledText={"Successfully filled!"}
+                      loadingText={""}
+                    />
+                  ) : (
+                    <CustomButton
+                      isLoading={false}
+                      isDisabled={true}
+                      disabledText={"Fill data from passport"}
+                      loadingText={""}
+                    />
+                  )}
+                </div>
+              )}
+            </div>
           </div>
 
-          <form
-            className="space-y-6"
-            onChange={handleFormChange}
-            onSubmit={handleFormSubmit}
-          >
-            <div>
-              <div className="flex space-x-5">
-                <SimpleTextInput
-                  type={"text"}
-                  labelText={"First name"}
-                  htmlFor={"firstName"}
-                  name={"firstName"}
-                  id={"firstName"}
-                  placeholder={"John"}
-                  customValue={editUserInfo.firstName}
-                />
-                <SimpleTextInput
-                  type={"text"}
-                  labelText={"Last name"}
-                  htmlFor={"lastName"}
-                  name={"lastName"}
-                  id={"lastName"}
-                  placeholder={"Doe"}
-                  customValue={editUserInfo.lastName}
-                />
-              </div>
-              <div className="flex space-x-5">
-                <SimpleTextInput
-                  type={"text"}
-                  labelText={"Birthdate"}
-                  htmlFor={"birthDate"}
-                  name={"birthDate"}
-                  id={"birthDate"}
-                  placeholder={"2005-05-15"}
-                  customValue={editUserInfo.birthDate}
-                />
-                <GenderSelector customValue={editUserInfo.gender} />
-              </div>
+          <div className="flex space-x-24">
+            <SimpleTextInput
+              type={"text"}
+              width={"72"}
+              labelText={"Birthdate"}
+              name={"birthDate"}
+              id={"birthDate"}
+              placeholderValue={"2005-05-15"}
+              handleInputChange={handleEditFormChange}
+              invalidFields={invalidFields}
+              setInvalidFields={setInvalidFields}
+              passportData={passportData}
+              setFormData={setFormData}
+              customValue={editUserInfo.birthDate}
+            />
+            <GenderSelector
+              type={"text"}
+              width={"72"}
+              labelText={"Gender"}
+              placeholderValue={"Male"}
+              id={"gender"}
+              name={"gender"}
+              handleInputChange={handleEditFormChange}
+              invalidFields={invalidFields}
+              setInvalidFields={setInvalidFields}
+              passportData={passportData}
+              setFormData={setFormData}
+              selectedOption={editUserInfo.gender}
+            />
+          </div>
+          <SimpleTextInput
+            type={"text"}
+            width={"36"}
+            labelText={"Place of Birth"}
+            name={"placeOfBirth"}
+            id={"placeOfBirth"}
+            placeholderValue={"Hungary"}
+            handleInputChange={handleEditFormChange}
+            invalidFields={invalidFields}
+            setInvalidFields={setInvalidFields}
+            passportData={passportData}
+            setFormData={setFormData}
+            customValue={editUserInfo.placeOfBirth}
+          />
 
-              <SimpleTextInput
-                type={"text"}
-                htmlFor={"countryOfCitizenship"}
-                labelText={"Country of citizenship"}
-                placeholder={"Hungary"}
-                id={"countryOfCitizenship"}
-                name={"countryOfCitizenship"}
-                customValue={editUserInfo.countryOfCitizenship}
+          <div className="saveButton">
+            {isSaving ? (
+              <CustomButton
+                buttonType={"button"}
+                isLoading={true}
+                loadingText={"Updating..."}
               />
-              <SimpleTextInput
-                type={"text"}
-                htmlFor={"passportNumber"}
-                labelText={"Passport number"}
-                placeholder={"123456789"}
-                id={"passportNumber"}
-                name={"passportNumber"}
-                customValue={editUserInfo.passportNumber}
+            ) : (
+              <CustomButton
+                buttonType={"submit"}
+                text={"Update"}
+                isLoading={false}
+                isDisabled={false}
+                disabledText={""}
+                loadingText={""}
+                handleButtonClick={handleFormSubmit}
               />
+            )}
+          </div>
+        </div>
 
-              <SimpleTextInput
-                type={"text"}
-                htmlFor={"passportDateOfExpiry"}
-                labelText={"Passport date of expiry"}
-                placeholder={"1970-01-01"}
-                id={"passportDateOfExpiry"}
-                name={"passportDateOfExpiry"}
-                customValue={editUserInfo.passportDateOfExpiry}
-              />
-              <SimpleTextInput
-                type={"text"}
-                htmlFor={"passportDateOfIssue"}
-                labelText={"Passport date of issue"}
-                placeholder={"1979-01-01"}
-                id={"passportDateOfIssue"}
-                name={"passportDateOfIssue"}
-                customValue={editUserInfo.passportDateOfIssue}
-              />
-            </div>
-            <div className="flex gap-x-3 items-center">
-              {isSaving ? (
-                <button
-                  disabled
-                  type="button"
-                  className="w-full py-2.5 px-5 mr-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center"
-                >
-                  <svg
-                    aria-hidden="true"
-                    role="status"
-                    className="inline w-4 h-4 mr-3 text-gray-200 animate-spin dark:text-gray-600"
-                    viewBox="0 0 100 101"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                      fill="currentColor"
+        <div className="flex flex-col space-y-8">
+          <div className="h-8"></div>
+          <SimpleTextInput
+            type={"text"}
+            width={"72"}
+            labelText={"Country of citizenship"}
+            placeholderValue={"Hungary"}
+            id={"countryOfCitizenship"}
+            name={"countryOfCitizenship"}
+            handleInputChange={handleEditFormChange}
+            setInvalidFields={setInvalidFields}
+            invalidFields={invalidFields}
+            passportData={passportData}
+            setFormData={setFormData}
+            customValue={editUserInfo.countryOfCitizenship}
+          />
+
+          <SimpleTextInput
+            type={"text"}
+            width={"72"}
+            labelText={"Passport number"}
+            placeholderValue={"123456789"}
+            id={"passportNumber"}
+            name={"passportNumber"}
+            handleInputChange={handleEditFormChange}
+            invalidFields={invalidFields}
+            setInvalidFields={setInvalidFields}
+            passportData={passportData}
+            setFormData={setFormData}
+            customValue={editUserInfo.passportNumber}
+          />
+          <SimpleTextInput
+            type={"text"}
+            width={"72"}
+            labelText={"Passport date of issue"}
+            placeholderValue={"1979-12-31"}
+            id={"passportDateOfIssue"}
+            name={"passportDateOfIssue"}
+            handleInputChange={handleEditFormChange}
+            invalidFields={invalidFields}
+            setInvalidFields={setInvalidFields}
+            passportData={passportData}
+            setFormData={setFormData}
+            customValue={editUserInfo.passportDateOfIssue}
+          />
+          <SimpleTextInput
+            type={"text"}
+            width={"72"}
+            labelText={"Passport date of expiry"}
+            placeholderValue={"1979-12-31"}
+            id={"passportDateOfExpiry"}
+            name={"passportDateOfExpiry"}
+            handleInputChange={handleEditFormChange}
+            invalidFields={invalidFields}
+            setInvalidFields={setInvalidFields}
+            passportData={passportData}
+            setFormData={setFormData}
+            customValue={editUserInfo.passportDateOfExpiry}
+          />
+          <div className="flex space-x-3">
+            <div className="passportValidatorButton">
+              {idPhoto && !passportIsValid ? (
+                <div>
+                  {passportIsValidating === true ? (
+                    <CustomButton
+                      isLoading={true}
+                      loadingText={"Validating..."}
                     />
-                    <path
-                      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                      fill="#1C64F2"
+                  ) : (
+                    <CustomButton
+                      text={"Validate passport"}
+                      isLoading={false}
+                      isDisabled={false}
+                      disabledText={""}
+                      loadingText={""}
+                      handleButtonClick={validatePassport}
                     />
-                  </svg>
-                  Saving...
-                </button>
-              ) : (
-                <button
-                  type="submit"
-                  className="w-15 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  Save
-                </button>
-              )}
-              <button
-                className="w-15 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-                onClick={closeModal}
-              >
-                Close without saving
-              </button>
-              {idPhoto ? (
-                <button
-                  className="w-15 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                  onClick={showPassport}
-                >
-                  Show passport
-                </button>
+                  )}
+                </div>
               ) : (
                 <div>
-                  <input
-                    className="hidden"
-                    type="file"
-                    id="idPhoto"
-                    onChange={handleIdPhotoChange}
-                  />
-                  <label
-                    for="idPhoto"
-                    className="w-15 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer"
-                  >
-                    Upload passport
-                  </label>
-                </div>
-              )}
-              {selfiePhoto ? (
-                <></>
-              ) : (
-                <div>
-                  <input
-                    className="hidden"
-                    type="file"
-                    id="selfiePhoto"
-                    onChange={handleSelfiePhotoChange}
-                  />
-                  <label
-                    for="selfiePhoto"
-                    className="w-15 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer"
-                  >
-                    Upload portrait
-                  </label>
+                  {passportIsValid ? (
+                    <div>
+                      {" "}
+                      <CustomButton
+                        isLoading={false}
+                        isDisabled={true}
+                        disabledText={"Passport is valid!"}
+                        loadingText={""}
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      {" "}
+                      <input
+                        className="hidden"
+                        type="file"
+                        id="idPhoto"
+                        onChange={handleIdPhotoChange}
+                      />
+                      <label
+                        for="idPhoto"
+                        className="text-white bg-uniGreen hover:bg-uniGreenLight focus:ring-4 focus:outline-none focus:ring-uniGreenLight font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-uniGreenLight dark:hover:bg-uniGreenLight dark:focus:ring-uniGreenLight hover:cursor-pointer"
+                      >
+                        Upload passport
+                      </label>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
-          </form>
+            <div className="portraitValidatorButton">
+              {selfiePhoto && !selfieIsValid ? (
+                <div>
+                  {isValidating ? (
+                    <CustomButton
+                      isLoading={true}
+                      loadingText={"Validating..."}
+                    />
+                  ) : (
+                    <CustomButton
+                      text={"Validate portrait"}
+                      isLoading={false}
+                      isDisabled={false}
+                      disabledText={""}
+                      loadingText={""}
+                      handleButtonClick={handleSelfieValidation}
+                    />
+                  )}
+                </div>
+              ) : (
+                <div>
+                  {selfieIsValid ? (
+                    <CustomButton
+                      isLoading={false}
+                      isDisabled={true}
+                      disabledText={"Selfie is valid!"}
+                      loadingText={""}
+                    />
+                  ) : (
+                    <div>
+                      <input
+                        className="hidden"
+                        type="file"
+                        id="selfiePhoto"
+                        onChange={handleSelfiePhotoChange}
+                      />
+                      <label
+                        for="selfiePhoto"
+                        className="text-white bg-uniGreen hover:bg-uniGreenLight focus:ring-4 focus:outline-none focus:ring-uniGreenLight font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-uniGreenLight dark:hover:bg-uniGreenLight dark:focus:ring-uniGreenLight hover:cursor-pointer"
+                      >
+                        Upload portrait
+                      </label>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-        <div className="flex-col">
-          <label
-            className="block mb-2 text-m text-gray-900 dark:text-white cursor-pointer italic hover:underline"
-            onClick={showSelfie}
-          >
-            Show selfie
-          </label>
-          {photoToShowUrl ? (
-            <img
-              src={photoToShowUrl}
-              className="w-70"
-              alt="User's ID or selfie photo."
-            />
-          ) : (
-            <img
-              src={staticPhotoUrl}
-              className="w-30"
-              alt="Static photo if non of the photos are shown."
-            />
-          )}
-
-          <label className="block mb-2 text-m font-medium text-gray-900 dark:text-white">
-            Static label under selfie
-          </label>
+        <div className="flex flex-col space-y-3 items-center">
+          <div className="flex w-full justify-end">
+            <CloseButton onButtonClick={closeModal} />
+          </div>
+          <RadioSelector showSelfie={showSelfie} showPassport={showPassport} />
+          <img
+            src={photoToShowUrl}
+            alt="User not known."
+            className="object-scale-down h-64 hover:scale-150 shadow-2xl hover:shadow-2xl transition duration-500 ease-in-out"
+          />
         </div>
+        <Toaster />
       </div>
     </div>
   );
