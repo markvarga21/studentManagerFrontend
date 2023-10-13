@@ -338,7 +338,7 @@ function UserFormModal({
                       />
                       <label
                         for="idPhoto"
-                        className="text-white bg-uniGreen hover:bg-uniGreenLight focus:ring-4 focus:outline-none focus:ring-uniGreenLight font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-uniGreenLight dark:hover:bg-uniGreenLight dark:focus:ring-uniGreenLight hover:cursor-pointer"
+                        className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
                       >
                         Upload passport
                       </label>
@@ -385,7 +385,7 @@ function UserFormModal({
                       />
                       <label
                         for="selfiePhoto"
-                        className="text-white bg-uniGreen hover:bg-uniGreenLight focus:ring-4 focus:outline-none focus:ring-uniGreenLight font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-uniGreenLight dark:hover:bg-uniGreenLight dark:focus:ring-uniGreenLight hover:cursor-pointer"
+                        className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
                       >
                         Upload portrait
                       </label>
