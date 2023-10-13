@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import SimpleTextInput from "./SimpleTextInput";
 import GenderSelector from "./GenderSelector";
 import axios from "axios";
@@ -6,6 +6,7 @@ import CustomButton from "./CustomButton";
 import RadioSelector from "./RadioSelector";
 import CloseButton from "./CloseButton";
 import toast, { Toaster } from "react-hot-toast";
+import { id } from "date-fns/locale";
 
 function UserFormModal({
   closeModal,
@@ -44,6 +45,14 @@ function UserFormModal({
     }
     setPhotoToShowUrl(URL.createObjectURL(idPhoto));
   };
+
+  useEffect(() => {
+    if (selfiePhoto === null) {
+      setPhotoToShowUrl(staticPhotoUrl);
+    } else {
+      setPhotoToShowUrl(URL.createObjectURL(selfiePhoto));
+    }
+  }, [selfiePhoto]);
 
   const showSelfie = (event) => {
     if (selfiePhoto === null) {
@@ -400,7 +409,12 @@ function UserFormModal({
           <div className="flex w-full justify-end">
             <CloseButton onButtonClick={closeModal} />
           </div>
-          <RadioSelector showSelfie={showSelfie} showPassport={showPassport} />
+          <RadioSelector
+            showSelfie={showSelfie}
+            selfiePhoto={selfiePhoto}
+            showPassport={showPassport}
+            idPhoto={idPhoto}
+          />
           <img
             src={photoToShowUrl}
             alt="User not known."
