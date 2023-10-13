@@ -6,6 +6,7 @@ import CustomButton from "./CustomButton";
 import RadioSelector from "./RadioSelector";
 import CloseButton from "./CloseButton";
 import toast, { Toaster } from "react-hot-toast";
+import NationalityList from "./NationalityList";
 
 function UserFormModal({
   title,
@@ -29,6 +30,10 @@ function UserFormModal({
   selfieIsValid,
   passportIsValidating,
   passportIsValid,
+  invalidFields,
+  setInvalidFields,
+  passportData,
+  setFormData,
 }) {
   const [isValidating, setIsValidating] = useState(false);
   const staticPhotoUrl =
@@ -118,6 +123,10 @@ function UserFormModal({
                 id={"firstName"}
                 placeholderValue={"John"}
                 handleInputChange={handleFormChange}
+                invalidFields={invalidFields}
+                setInvalidFields={setInvalidFields}
+                passportData={passportData}
+                setFormData={setFormData}
               />
               <SimpleTextInput
                 type={"text"}
@@ -127,6 +136,10 @@ function UserFormModal({
                 id={"lastName"}
                 placeholderValue={"Doe"}
                 handleInputChange={handleFormChange}
+                invalidFields={invalidFields}
+                setInvalidFields={setInvalidFields}
+                passportData={passportData}
+                setFormData={setFormData}
               />
             </div>
 
@@ -177,8 +190,12 @@ function UserFormModal({
               id={"birthDate"}
               placeholderValue={"2005-05-15"}
               handleInputChange={handleFormChange}
+              invalidFields={invalidFields}
+              setInvalidFields={setInvalidFields}
+              passportData={passportData}
+              setFormData={setFormData}
             />
-            <SimpleTextInput
+            <GenderSelector
               type={"text"}
               width={"72"}
               labelText={"Gender"}
@@ -186,16 +203,24 @@ function UserFormModal({
               id={"gender"}
               name={"gender"}
               handleInputChange={handleFormChange}
+              invalidFields={invalidFields}
+              setInvalidFields={setInvalidFields}
+              passportData={passportData}
+              setFormData={setFormData}
             />
           </div>
           <SimpleTextInput
             type={"text"}
-            width={"72"}
-            labelText={"Place of birth"}
-            placeholderValue={"Hungary"}
-            id={"placeOfBirth"}
+            width={"36"}
+            labelText={"Place of Birth"}
             name={"placeOfBirth"}
+            id={"placeOfBirth"}
+            placeholderValue={"Hungary"}
             handleInputChange={handleFormChange}
+            invalidFields={invalidFields}
+            setInvalidFields={setInvalidFields}
+            passportData={passportData}
+            setFormData={setFormData}
           />
 
           <div className="saveButton">
@@ -229,7 +254,12 @@ function UserFormModal({
             id={"countryOfCitizenship"}
             name={"countryOfCitizenship"}
             handleInputChange={handleFormChange}
+            setInvalidFields={setInvalidFields}
+            invalidFields={invalidFields}
+            passportData={passportData}
+            setFormData={setFormData}
           />
+
           <SimpleTextInput
             type={"text"}
             width={"72"}
@@ -238,6 +268,10 @@ function UserFormModal({
             id={"passportNumber"}
             name={"passportNumber"}
             handleInputChange={handleFormChange}
+            invalidFields={invalidFields}
+            setInvalidFields={setInvalidFields}
+            passportData={passportData}
+            setFormData={setFormData}
           />
           <SimpleTextInput
             type={"text"}
@@ -247,6 +281,10 @@ function UserFormModal({
             id={"passportDateOfIssue"}
             name={"passportDateOfIssue"}
             handleInputChange={handleFormChange}
+            invalidFields={invalidFields}
+            setInvalidFields={setInvalidFields}
+            passportData={passportData}
+            setFormData={setFormData}
           />
           <SimpleTextInput
             type={"text"}
@@ -256,6 +294,10 @@ function UserFormModal({
             id={"passportDateOfExpiry"}
             name={"passportDateOfExpiry"}
             handleInputChange={handleFormChange}
+            invalidFields={invalidFields}
+            setInvalidFields={setInvalidFields}
+            passportData={passportData}
+            setFormData={setFormData}
           />
           <div className="flex space-x-3">
             <div className="passportValidatorButton">

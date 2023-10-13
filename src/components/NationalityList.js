@@ -1,23 +1,26 @@
 import React from "react";
 
-const NationalityList = ({ customValue }) => {
+const NationalityList = ({
+  labelText,
+  name,
+  id,
+  width,
+  selectedOption,
+  handleInputChange,
+}) => {
+  const selectStyle = `py-3 px-4 block w-${width} border-b-2 border-lightUniGreen focus:outline-none focus:border-uniGreen focus:border-b-2`;
+
   return (
     <div>
-      <label
-        htmlFor="countries"
-        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-      >
-        Nationality
+      <label htmlFor={id} className="block font-thin mb-2 text-gray-500">
+        {labelText}
       </label>
       <select
-        name="nationality"
-        id="nationalities"
-        className="
- bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
-  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white
-"
-        value={customValue}
+        name={name}
+        id={id}
+        className={selectStyle}
+        value={selectedOption}
+        onChange={handleInputChange}
       >
         <option value="">-- select one --</option>
         <option value="afghan">Afghan</option>

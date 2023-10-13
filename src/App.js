@@ -6,7 +6,7 @@ import TableHead from "./components/TableHead";
 import UserFormModal from "./components/UserFormModal";
 import axios from "axios";
 import UserEditFormModal from "./components/UserEditFormModal";
-import { auth, storage } from "./firebase";
+import { auth } from "./firebase";
 import Login from "./components/Login";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
@@ -29,7 +29,6 @@ function App() {
     passportDateOfIssue: "",
   });
   const [isUserLogin, setIsUserLogin] = useState(false);
-  const [userSelfies, setUserSelfies] = useState([]);
   const [userList, setUserList] = useState([]);
   const [userToEdit, setUserToEdit] = useState({});
   const [isSaving, setIsSaving] = useState(false);
@@ -42,7 +41,6 @@ function App() {
   const [isEditFormActive, setIsEditFormActive] = useState(false);
   const [idPhoto, setIdPhoto] = useState(null);
   const [selfiePhoto, setSelfiePhoto] = useState(null);
-  const [userWasDeleted, setUserWasDeleted] = useState(-1);
   const [sortByCriteria, setSortByCriteria] = useState("nosort");
   const [sortingOrder, setSortingOrder] = useState({
     firstName: 1,
@@ -55,6 +53,7 @@ function App() {
     passportDateOfExpiry: 1,
     passportDateOfIssue: 1,
   });
+  const [useWasDeleted, setUserWasDeleted] = useState(1);
 
   const [isFillingData, setIsFillingData] = useState(false);
   const [fillingWasSuccessful, setFillingWasSuccessful] = useState(false);
@@ -122,6 +121,28 @@ function App() {
       passportDateOfExpiry: "",
       passportDateOfIssue: "",
     });
+    setInvalidFields({
+      firstName: false,
+      lastName: false,
+      birthDate: false,
+      placeOfBirth: false,
+      countryOfCitizenship: false,
+      gender: false,
+      passportNumber: false,
+      passportDateOfExpiry: false,
+      passportDateOfIssue: false,
+    });
+    setPassportData({
+      firstName: "",
+      lastName: "",
+      birthDate: "",
+      placeOfBirth: "",
+      countryOfCitizenship: "",
+      gender: "",
+      passportNumber: "",
+      passportDateOfExpiry: "",
+      passportDateOfIssue: "",
+    });
   };
 
   const closeEditModal = () => {
@@ -135,6 +156,8 @@ function App() {
 
   const handleFormChange = (event) => {
     event.preventDefault();
+    setPassportIsValid(false);
+    setPassportIsValidating(false);
 
     const fieldName = event.target.getAttribute("name");
     const fieldValue = event.target.value;
@@ -294,7 +317,7 @@ function App() {
       .catch((err) => {
         console.error(err);
       });
-  }, [formData, isSaving, userWasDeleted]);
+  }, [formData, isSaving, useWasDeleted]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -347,7 +370,9 @@ function App() {
 
     axios
       .delete(`http://localhost:8080/api/v1/students/${userToDeleteId}`)
-      .then((res) => {})
+      .then((res) => {
+        setUserWasDeleted(-1 * useWasDeleted);
+      })
       .catch((err) => {
         if (err.response != null) {
           const errorMessage = err.response.data.message;
@@ -388,9 +413,42 @@ function App() {
     }
   };
 
+  const [invalidFields, setInvalidFields] = useState({
+    firstName: false,
+    lastName: false,
+    birthDate: false,
+    placeOfBirth: false,
+    countryOfCitizenship: false,
+    gender: false,
+    passportNumber: false,
+    passportDateOfExpiry: false,
+    passportDateOfIssue: false,
+  });
+
+  const [passportData, setPassportData] = useState({
+    firstName: false,
+    lastName: "",
+    birthDate: "",
+    placeOfBirth: "",
+    countryOfCitizenship: "",
+    gender: "",
+    passportNumber: "",
+    passportDateOfExpiry: "",
+    passportDateOfIssue: "",
+  });
   const handleInvalidPassport = (passportData) => {
     console.log("Handling invalid passport!");
-    console.log(passportData);
+    const keys = Object.keys(formData);
+
+    let newInvalidFields = { ...invalidFields };
+    for (let i = 0; i < keys.length; i++) {
+      if (
+        formData[keys[i]].toLowerCase() !== passportData[keys[i]].toLowerCase()
+      ) {
+        newInvalidFields[keys[i]] = true;
+      }
+    }
+    setInvalidFields(newInvalidFields);
   };
 
   const [passportIsValid, setPassportIsValid] = useState(false);
@@ -403,8 +461,6 @@ function App() {
     const formToSend = new FormData();
     formToSend.append("passport", idPhoto);
     formToSend.append("studentJson", JSON.stringify(formData));
-
-    console.log("Validating passport!" + JSON.stringify(formData));
 
     const values = Object.values(formData);
     if (values.includes("")) {
@@ -425,9 +481,32 @@ function App() {
           setPassportIsValid(true);
           //setPassportIsValidating(false);
           toast.success("Passport is valid!");
+          setInvalidFields({
+            firstName: false,
+            lastName: false,
+            birthDate: false,
+            placeOfBirth: false,
+            countryOfCitizenship: false,
+            gender: false,
+            passportNumber: false,
+            passportDateOfExpiry: false,
+            passportDateOfIssue: false,
+          });
+          setPassportData({
+            firstName: "",
+            lastName: "",
+            birthDate: "",
+            placeOfBirth: "",
+            countryOfCitizenship: "",
+            gender: "",
+            passportNumber: "",
+            passportDateOfExpiry: "",
+            passportDateOfIssue: "",
+          });
         } else {
           toast.error("Passport validation unsuccessful!");
-          const passportData = response.appUserDto;
+          const passportData = response.studentDto;
+          setPassportData(passportData);
           handleInvalidPassport(passportData);
           setPassportIsValid(false);
           setPassportIsValidating(false);
@@ -525,6 +604,10 @@ function App() {
               selfieIsValid={selfieIsValid}
               passportIsValidating={passportIsValidating}
               passportIsValid={passportIsValid}
+              invalidFields={invalidFields}
+              setInvalidFields={setInvalidFields}
+              passportData={passportData}
+              setFormData={setFormData}
             />
           )}
 

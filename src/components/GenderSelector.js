@@ -1,30 +1,31 @@
-import { Option, Select } from "@material-tailwind/react";
 import React from "react";
 
-const GenderSelector = ({ customValue, isErrorPresent, genderId }) => {
+const GenderSelector = ({
+  labelText,
+  name,
+  id,
+  width,
+  selectedOption,
+  handleInputChange,
+}) => {
+  const selectStyle = `py-3 px-4 block w-${width} border-b-2 border-lightUniGreen focus:outline-none focus:border-uniGreen focus:border-b-2`;
+
   return (
     <div>
-      {isErrorPresent === true ? (
-        <div className="flex space-x-3">
-          <Select variant="static" label="Gender" error>
-            <Option value="MALE">Male</Option>
-            <Option value="FEMALE">Female</Option>
-          </Select>
-          <div className="underline hover:cursor-pointer">Accept</div>
-        </div>
-      ) : (
-        <Select
-          id={genderId}
-          variant="static"
-          label="Gender"
-          color="tail"
-          size="md"
-          value={customValue}
-        >
-          <Option value="MALE">Male</Option>
-          <Option value="FEMALE">Female</Option>
-        </Select>
-      )}
+      <label htmlFor={id} className="block font-thin mb-2 text-gray-500">
+        {labelText}
+      </label>
+      <select
+        id={id}
+        name={name}
+        className={selectStyle}
+        onChange={handleInputChange}
+        value={selectedOption}
+      >
+        <option value={""}>-- select one --</option>
+        <option value={"MALE"}>Male</option>
+        <option value={"FEMALE"}>Female</option>
+      </select>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { React, useState } from "react";
 import SimpleTextInput from "./SimpleTextInput";
 import GenderSelector from "./GenderSelector";
-import ErrorPanel from "./ErrorPanel";
+import NationalityList from "./NationalityList";
 
 function UserEditFormModal({
   title,
@@ -88,15 +88,15 @@ function UserEditFormModal({
                 />
                 <GenderSelector customValue={editUserInfo.gender} />
               </div>
-              <SimpleTextInput
+              <NationalityList
                 type={"text"}
-                htmlFor={"placeOfBirth"}
                 labelText={"Place of birth"}
                 placeholder={"Hungary"}
                 id={"placeOfBirth"}
                 name={"placeOfBirth"}
                 customValue={editUserInfo.placeOfBirth}
               />
+
               <SimpleTextInput
                 type={"text"}
                 htmlFor={"countryOfCitizenship"}
@@ -243,16 +243,6 @@ function UserEditFormModal({
           <label className="block mb-2 text-m font-medium text-gray-900 dark:text-white">
             Static label under selfie
           </label>
-        </div>
-        <div className="flex align-middle items-center flex-col p-2 space-y-5">
-          {isErrorPresent ? (
-            <ErrorPanel
-              title={errorMessage.title}
-              details={errorMessage.details}
-            />
-          ) : (
-            <></>
-          )}
         </div>
       </div>
     </div>
