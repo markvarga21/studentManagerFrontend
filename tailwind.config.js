@@ -10,6 +10,7 @@ module.exports = withMT({
       colors: {
         uniGreen: "#00AE82",
         lightUniGreen: "#A5EEDC",
+        darkUniGreen: "#00916C",
         uniGold: "#FFAB0D",
         uniGoldLight: "#FFC962",
       },

@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import SimpleTextInput from "./SimpleTextInput";
 import GenderSelector from "./GenderSelector";
 import axios from "axios";
@@ -8,15 +8,12 @@ import CloseButton from "./CloseButton";
 import toast, { Toaster } from "react-hot-toast";
 
 function UserFormModal({
-  title,
   closeModal,
   handleFormChange,
   handleFormSubmit,
   handleIdPhotoChange,
   handleSelfiePhotoChange,
   isSaving,
-  isErrorPresent,
-  errorMessage,
   idPhoto,
   selfiePhoto,
   handleFillFormData,
@@ -47,6 +44,14 @@ function UserFormModal({
     }
     setPhotoToShowUrl(URL.createObjectURL(idPhoto));
   };
+
+  useEffect(() => {
+    if (selfiePhoto === null) {
+      setPhotoToShowUrl(staticPhotoUrl);
+    } else {
+      setPhotoToShowUrl(URL.createObjectURL(selfiePhoto));
+    }
+  }, [selfiePhoto]);
 
   const showSelfie = (event) => {
     if (selfiePhoto === null) {
@@ -341,7 +346,7 @@ function UserFormModal({
                       />
                       <label
                         for="idPhoto"
-                        className="text-white bg-uniGreen hover:bg-uniGreenLight focus:ring-4 focus:outline-none focus:ring-uniGreenLight font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-uniGreenLight dark:hover:bg-uniGreenLight dark:focus:ring-uniGreenLight hover:cursor-pointer"
+                        className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
                       >
                         Upload passport
                       </label>
@@ -388,7 +393,7 @@ function UserFormModal({
                       />
                       <label
                         for="selfiePhoto"
-                        className="text-white bg-uniGreen hover:bg-uniGreenLight focus:ring-4 focus:outline-none focus:ring-uniGreenLight font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-uniGreenLight dark:hover:bg-uniGreenLight dark:focus:ring-uniGreenLight hover:cursor-pointer"
+                        className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
                       >
                         Upload portrait
                       </label>
@@ -403,7 +408,12 @@ function UserFormModal({
           <div className="flex w-full justify-end">
             <CloseButton onButtonClick={closeModal} />
           </div>
-          <RadioSelector showSelfie={showSelfie} showPassport={showPassport} />
+          <RadioSelector
+            showSelfie={showSelfie}
+            selfiePhoto={selfiePhoto}
+            showPassport={showPassport}
+            idPhoto={idPhoto}
+          />
           <img
             src={photoToShowUrl}
             alt="User not known."

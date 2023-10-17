@@ -8,7 +8,6 @@ const TableRow = ({
   placeOfBirth,
   countryOfCitizenship,
   gender,
-
   passportNumber,
   passportDateOfExpiry,
   passportDateOfIssue,
@@ -30,6 +29,7 @@ const TableRow = ({
       <td className="px-6 py-4">
         <div className="flex flex-col space-y-3">
           <a
+            href="/#"
             id={id}
             className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
             onClick={handleEditUser}
@@ -37,6 +37,7 @@ const TableRow = ({
             Edit user
           </a>
           <a
+            href="/#"
             id={id}
             className="font-medium text-red-600 dark:red-blue-500 hover:underline cursor-pointer"
             onClick={handleDeleteUser}

@@ -176,6 +176,7 @@ function App() {
 
   const handleEditFormChange = (event) => {
     event.preventDefault();
+    console.log("Handling edit form change!");
 
     const fieldName = event.target.getAttribute("name");
     const fieldValue = event.target.value;
@@ -250,23 +251,14 @@ function App() {
 
   const handleEditFormSubmit = (event) => {
     event.preventDefault();
+    console.log(userToEdit);
     if (idPhoto === null || selfiePhoto === null) {
       if (idPhoto == null) {
-        setErrorMessage({
-          title: "MISSING ID DOCUMENT",
-          details: "Upload the ID document!",
-        });
-        setIsErrorPresent(true);
+        toast.error("Upload the passport!");
       } else {
-        setErrorMessage({
-          title: "MISSING SELFIE PHOTO",
-          details: "Upload the selfie!",
-        });
-        setIsErrorPresent(true);
+        toast.error("Upload the portrait!");
       }
     } else {
-      setErrorMessage({});
-      setIsErrorPresent(false);
       setIsSaving(true);
       const userJson = JSON.stringify(userToEdit);
       console.log(`Saving ${logObject(userJson)}`);
@@ -345,7 +337,6 @@ function App() {
     const editId = Number(event.target.getAttribute("id"));
     const user = userList.find((user) => user.id === editId);
     setUserToEdit(user);
-    console.log(user);
     setIsEditFormActive(true);
   };
 
@@ -366,12 +357,14 @@ function App() {
 
   const handleDeleteUser = (event) => {
     const userToDeleteId = event.target.id;
-    console.log(`Deleting user with id: ${userToDeleteId}`);
 
     axios
       .delete(`http://localhost:8080/api/v1/students/${userToDeleteId}`)
       .then((res) => {
         setUserWasDeleted(-1 * useWasDeleted);
+        toast.success(
+          `User with id: '${userToDeleteId}' deleted successfully!`
+        );
       })
       .catch((err) => {
         if (err.response != null) {
@@ -460,13 +453,19 @@ function App() {
 
     const formToSend = new FormData();
     formToSend.append("passport", idPhoto);
-    formToSend.append("studentJson", JSON.stringify(formData));
 
     const values = Object.values(formData);
+    const editUserInfoFields = Object.values(userToEdit);
     if (values.includes("")) {
-      setPassportIsValidating(false);
-      toast.error("Please fill all the input fields!");
-      return;
+      if (editUserInfoFields.includes("")) {
+        setPassportIsValidating(false);
+        toast.error("Please fill all the input fields!");
+        return;
+      } else {
+        formToSend.append("studentJson", JSON.stringify(userToEdit));
+      }
+    } else {
+      formToSend.append("studentJson", JSON.stringify(formData));
     }
 
     axios
@@ -568,7 +567,7 @@ function App() {
             <UserEditFormModal
               title={"Edit existing data"}
               closeModal={closeEditModal}
-              handleFormChange={handleEditFormChange}
+              handleEditFormChange={handleEditFormChange}
               handleFormSubmit={handleEditFormSubmit}
               handleIdPhotoChange={handleIdPhotoChange}
               handleSelfiePhotoChange={handleSelfiePhotoChange}
@@ -578,6 +577,20 @@ function App() {
               editUserInfo={userToEdit}
               idPhoto={idPhoto}
               selfiePhoto={selfiePhoto}
+              handleFillFormData={handleFillFormData}
+              setSelfiePhoto={setSelfiePhoto}
+              isFillingData={isFillingData}
+              fillingWasSuccessful={fillingWasSuccessful}
+              validatePassport={validatePassport}
+              actualUser={formData}
+              setSelfieIsValid={setSelfieIsValid}
+              selfieIsValid={selfieIsValid}
+              passportIsValidating={passportIsValidating}
+              passportIsValid={passportIsValid}
+              invalidFields={invalidFields}
+              setInvalidFields={setInvalidFields}
+              passportData={passportData}
+              setFormData={setFormData}
             />
           )}
 

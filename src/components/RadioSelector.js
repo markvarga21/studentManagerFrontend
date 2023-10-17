@@ -1,7 +1,7 @@
-import { Radio, Typography } from "@material-tailwind/react";
+import { Radio } from "@material-tailwind/react";
 import React from "react";
 
-const RadioSelector = ({ showSelfie, showPassport }) => {
+const RadioSelector = ({ showSelfie, selfiePhoto, showPassport, idPhoto }) => {
   function Icon() {
     return (
       <svg
