@@ -8,11 +8,11 @@
   <p align="center">
     This React project represents the frontend of the Student Manager application.
     <br />
-    <a href="https://github.com/markvarga21/userManagerFrontend"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/markvarga21/studentManagerFrontend"><strong>Explore the docs »</strong></a>
     <br />
-    <a href="https://github.com/markvarga21/userManagerFrontend/issues">Report Bug</a>
+    <a href="https://github.com/markvarga21/studentManagerFrontend/issues">Report Bug</a>
     ·
-    <a href="https://github.com/markvarga21/userManagerFrontend/issues">Request Feature</a>
+    <a href="https://github.com/markvarga21/studentManagerFrontend/issues">Request Feature</a>
   </p>
 </div>
 
@@ -30,11 +30,11 @@
 
 <i>Also, this application is just a part of the student manager main application, so please read that documentation for further information.</i>
 
-<a href="https://github.com/markvarga21/userManager">Link to the main repository</a>
+<a href="https://github.com/markvarga21/studentManager">Link to the main repository</a>
 
 ### Installation
 
-Please visit the main repository of the project which can be found on this <a href="https://github.com/markvarga21/userManager">link</a>.
+Please visit the main repository of the project which can be found on this <a href="https://github.com/markvarga21/studentManager">link</a>.
 
 ## Contact
 
