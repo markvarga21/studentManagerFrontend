@@ -10,7 +10,6 @@ import axios from "axios";
 function UserEditFormModal({
   title,
   closeModal,
-  handleFormChange,
   handleFormSubmit,
   handleIdPhotoChange,
   handleSelfiePhotoChange,

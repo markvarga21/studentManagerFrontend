@@ -6,7 +6,6 @@ import CustomButton from "./CustomButton";
 import RadioSelector from "./RadioSelector";
 import CloseButton from "./CloseButton";
 import toast, { Toaster } from "react-hot-toast";
-import { id } from "date-fns/locale";
 
 function UserFormModal({
   closeModal,
