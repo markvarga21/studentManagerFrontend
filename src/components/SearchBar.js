@@ -9,7 +9,7 @@ const SearchBar = ({ setSearchValue }) => {
     setSearchValue(normalizedName);
   };
   return (
-    <div className="flex items-center justify-between pb-4 bg-white dark:bg-gray-900 p-5">
+    <div className="flex items-center justify-between pb-4 bg-white p-5">
       <div className="relative">
         <div className="pl-5">
           <label htmlFor="table-search" className="sr-only">
@@ -36,7 +36,7 @@ const SearchBar = ({ setSearchValue }) => {
         <input
           type="text"
           id="table-search-users"
-          className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="block p-2 pl-10 text-sm text-gray-900 border border-gray-500 rounded-lg w-80 bg-gray-50 focus:ring-uniGreen focus:border-uniGreen"
           placeholder="Search for students"
           onChange={handleSearchBarValueChange}
         />
