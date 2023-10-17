@@ -4,7 +4,7 @@ const SaveIcon = () => {
   return (
     <div>
       <svg
-        fill="#FFAB0D"
+        fill="#FFFFFF"
         height="16px"
         width="16px"
         version="1.1"

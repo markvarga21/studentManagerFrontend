@@ -186,7 +186,7 @@ function UserEditFormModal({
             </div>
           </div>
 
-          <div className="flex space-x-24">
+          <div className="flex space-x-8">
             <SimpleTextInput
               type={"text"}
               width={"72"}

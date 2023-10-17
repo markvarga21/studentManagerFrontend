@@ -34,7 +34,7 @@ const TableRow = ({
             className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
             onClick={handleEditUser}
           >
-            Edit user
+            Edit
           </a>
           <a
             href="/#"
@@ -42,7 +42,7 @@ const TableRow = ({
             className="font-medium text-red-600 dark:red-blue-500 hover:underline cursor-pointer"
             onClick={handleDeleteUser}
           >
-            Delete user
+            Delete
           </a>
         </div>
       </td>
