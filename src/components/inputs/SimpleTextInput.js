@@ -15,8 +15,8 @@ const SimpleTextInput = ({
   passportData,
   setFormData,
 }) => {
-  const inputStyle = `py-3 px-4 block w-${width} border-b-2 border-lightUniGreen focus:outline-none focus:border-uniGreen focus:border-b-2`;
-  const errorInputStyle = `py-3 bg-red-100 px-4 block w-${width} border-b-2 border-red-500 focus:outline-none focus:border-red-500 focus:border-b-2`;
+  const inputStyle = `py-3 px-4 block w-3/4 border-b-2 border-lightUniGreen focus:outline-none focus:border-uniGreen focus:border-b-2`;
+  const errorInputStyle = `py-3 bg-red-100 px-4 block w-3/4 border-b-2 border-red-500 focus:outline-none focus:border-red-500 focus:border-b-2`;
 
   const [invalidField, setInvalidField] = useState(false);
 
@@ -57,7 +57,10 @@ const SimpleTextInput = ({
       {invalidField === true ? (
         <div>
           <div className="flex items-center justify-between">
-            <label for="input-label" class="block font-thin mb-2 text-red-500">
+            <label
+              for="input-label"
+              className="block font-thin mb-2 text-red-500"
+            >
               {labelText}
             </label>
             <button
@@ -71,7 +74,7 @@ const SimpleTextInput = ({
             required
             type={type}
             id={id}
-            class={errorInputStyle}
+            className={errorInputStyle}
             placeholder={placeholderValue}
             onChange={handleInputChange}
             value={customValue}
@@ -80,14 +83,17 @@ const SimpleTextInput = ({
         </div>
       ) : (
         <div>
-          <label for="input-label" class="block font-thin mb-2 text-gray-500">
+          <label
+            for="input-label"
+            className="block font-thin mb-2 text-gray-700"
+          >
             {labelText}
           </label>
           <input
             required
             type={type}
             id={id}
-            class={inputStyle}
+            className={inputStyle}
             placeholder={placeholderValue}
             onChange={handleInputChange}
             value={customValue}

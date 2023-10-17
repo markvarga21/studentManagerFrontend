@@ -1,20 +1,22 @@
-import { React, useState } from "react";
-import SimpleTextInput from "./SimpleTextInput";
-import GenderSelector from "./GenderSelector";
-import CustomButton from "./CustomButton";
-import CloseButton from "./CloseButton";
-import RadioSelector from "./RadioSelector";
-import toast, { Toaster } from "react-hot-toast";
+import { React, useEffect, useState } from "react";
+import SimpleTextInput from "../inputs/SimpleTextInput";
+import GenderSelector from "../inputs/GenderSelector";
 import axios from "axios";
+import CustomButton from "../buttons/CustomButton";
+import RadioSelector from "../inputs/RadioSelector";
+import CloseButton from "../buttons/CloseButton";
+import toast, { Toaster } from "react-hot-toast";
+import SaveIcon from "../icons/SaveIcon";
+import ValidateIcon from "../icons/ValidateIcon";
+import FillIcon from "../icons/FillIcon";
 
-function UserEditFormModal({
-  title,
+function UserFormModal({
   closeModal,
+  handleFormChange,
   handleFormSubmit,
   handleIdPhotoChange,
   handleSelfiePhotoChange,
   isSaving,
-  editUserInfo,
   idPhoto,
   selfiePhoto,
   handleFillFormData,
@@ -31,7 +33,6 @@ function UserEditFormModal({
   setInvalidFields,
   passportData,
   setFormData,
-  handleEditFormChange,
 }) {
   const [isValidating, setIsValidating] = useState(false);
   const staticPhotoUrl =
@@ -47,9 +48,17 @@ function UserEditFormModal({
     setPhotoToShowUrl(URL.createObjectURL(idPhoto));
   };
 
+  useEffect(() => {
+    if (selfiePhoto === null) {
+      setPhotoToShowUrl(staticPhotoUrl);
+    } else {
+      setPhotoToShowUrl(URL.createObjectURL(selfiePhoto));
+    }
+  }, [selfiePhoto]);
+
   const showSelfie = (event) => {
     if (selfiePhoto === null) {
-      toast.error("No portrait uploaded yet.");
+      toast.error("No selfie uploaded yet.");
       return;
     }
     setPhotoToShowUrl(URL.createObjectURL(selfiePhoto));
@@ -63,7 +72,7 @@ function UserEditFormModal({
       return;
     }
 
-    if (editUserInfo.firstName === "" || editUserInfo.lastName === "") {
+    if (actualUser.firstName === "" || actualUser.lastName === "") {
       toast.error("No first or last name provided.");
       return;
     }
@@ -102,16 +111,16 @@ function UserEditFormModal({
         console.error(err);
       });
   };
+
   return (
     <div
       tabIndex="-1"
       className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75"
     >
-      <div className="border-t-4 border-uniGreen bg-white rounded-2xl shadow dark:bg-white w-2/3 p-10 flex justify-evenly">
+      <div className="border-t-8 border-uniGreen bg-white shadow lg:w-11/12 2xl:w-8/12 p-10 flex justify-evenly">
         <div className="flex flex-col space-y-8">
-          <h2 className="font-bold text-3xl">{title}</h2>
-
-          <div className="flex space-x-20 items-center">
+          <h2 className="font-bold text-3xl">Add new student</h2>
+          <div className="flex gap-x-5 items-center">
             <div className="flex-col space-y-8">
               <SimpleTextInput
                 type={"text"}
@@ -120,12 +129,11 @@ function UserEditFormModal({
                 name={"firstName"}
                 id={"firstName"}
                 placeholderValue={"John"}
-                handleInputChange={handleEditFormChange}
+                handleInputChange={handleFormChange}
                 invalidFields={invalidFields}
                 setInvalidFields={setInvalidFields}
                 passportData={passportData}
                 setFormData={setFormData}
-                customValue={editUserInfo.firstName}
               />
               <SimpleTextInput
                 type={"text"}
@@ -134,12 +142,11 @@ function UserEditFormModal({
                 name={"lastName"}
                 id={"lastName"}
                 placeholderValue={"Doe"}
-                handleInputChange={handleEditFormChange}
+                handleInputChange={handleFormChange}
                 invalidFields={invalidFields}
                 setInvalidFields={setInvalidFields}
                 passportData={passportData}
                 setFormData={setFormData}
-                customValue={editUserInfo.lastName}
               />
             </div>
 
@@ -150,12 +157,13 @@ function UserEditFormModal({
                     <CustomButton isLoading={true} loadingText={"Filling..."} />
                   ) : (
                     <CustomButton
-                      text={"Fill data from passport"}
+                      text={"Fill data"}
                       isLoading={false}
                       isDisabled={false}
                       disabledText={""}
                       loadingText={""}
                       handleButtonClick={handleFillFormData}
+                      customIcon={<FillIcon />}
                     />
                   )}
                 </div>
@@ -172,8 +180,9 @@ function UserEditFormModal({
                     <CustomButton
                       isLoading={false}
                       isDisabled={true}
-                      disabledText={"Fill data from passport"}
+                      disabledText={"Fill data"}
                       loadingText={""}
+                      customIcon={<FillIcon />}
                     />
                   )}
                 </div>
@@ -181,7 +190,7 @@ function UserEditFormModal({
             </div>
           </div>
 
-          <div className="flex space-x-24">
+          <div className="flex">
             <SimpleTextInput
               type={"text"}
               width={"72"}
@@ -189,12 +198,11 @@ function UserEditFormModal({
               name={"birthDate"}
               id={"birthDate"}
               placeholderValue={"2005-05-15"}
-              handleInputChange={handleEditFormChange}
+              handleInputChange={handleFormChange}
               invalidFields={invalidFields}
               setInvalidFields={setInvalidFields}
               passportData={passportData}
               setFormData={setFormData}
-              customValue={editUserInfo.birthDate}
             />
             <GenderSelector
               type={"text"}
@@ -203,12 +211,11 @@ function UserEditFormModal({
               placeholderValue={"Male"}
               id={"gender"}
               name={"gender"}
-              handleInputChange={handleEditFormChange}
+              handleInputChange={handleFormChange}
               invalidFields={invalidFields}
               setInvalidFields={setInvalidFields}
               passportData={passportData}
               setFormData={setFormData}
-              selectedOption={editUserInfo.gender}
             />
           </div>
           <SimpleTextInput
@@ -218,12 +225,11 @@ function UserEditFormModal({
             name={"placeOfBirth"}
             id={"placeOfBirth"}
             placeholderValue={"Hungary"}
-            handleInputChange={handleEditFormChange}
+            handleInputChange={handleFormChange}
             invalidFields={invalidFields}
             setInvalidFields={setInvalidFields}
             passportData={passportData}
             setFormData={setFormData}
-            customValue={editUserInfo.placeOfBirth}
           />
 
           <div className="saveButton">
@@ -231,17 +237,18 @@ function UserEditFormModal({
               <CustomButton
                 buttonType={"button"}
                 isLoading={true}
-                loadingText={"Updating..."}
+                loadingText={"Saving..."}
               />
             ) : (
               <CustomButton
                 buttonType={"submit"}
-                text={"Update"}
+                text={"Save"}
                 isLoading={false}
                 isDisabled={false}
                 disabledText={""}
                 loadingText={""}
                 handleButtonClick={handleFormSubmit}
+                customIcon={<SaveIcon />}
               />
             )}
           </div>
@@ -256,12 +263,11 @@ function UserEditFormModal({
             placeholderValue={"Hungary"}
             id={"countryOfCitizenship"}
             name={"countryOfCitizenship"}
-            handleInputChange={handleEditFormChange}
+            handleInputChange={handleFormChange}
             setInvalidFields={setInvalidFields}
             invalidFields={invalidFields}
             passportData={passportData}
             setFormData={setFormData}
-            customValue={editUserInfo.countryOfCitizenship}
           />
 
           <SimpleTextInput
@@ -271,12 +277,11 @@ function UserEditFormModal({
             placeholderValue={"123456789"}
             id={"passportNumber"}
             name={"passportNumber"}
-            handleInputChange={handleEditFormChange}
+            handleInputChange={handleFormChange}
             invalidFields={invalidFields}
             setInvalidFields={setInvalidFields}
             passportData={passportData}
             setFormData={setFormData}
-            customValue={editUserInfo.passportNumber}
           />
           <SimpleTextInput
             type={"text"}
@@ -285,12 +290,11 @@ function UserEditFormModal({
             placeholderValue={"1979-12-31"}
             id={"passportDateOfIssue"}
             name={"passportDateOfIssue"}
-            handleInputChange={handleEditFormChange}
+            handleInputChange={handleFormChange}
             invalidFields={invalidFields}
             setInvalidFields={setInvalidFields}
             passportData={passportData}
             setFormData={setFormData}
-            customValue={editUserInfo.passportDateOfIssue}
           />
           <SimpleTextInput
             type={"text"}
@@ -299,12 +303,11 @@ function UserEditFormModal({
             placeholderValue={"1979-12-31"}
             id={"passportDateOfExpiry"}
             name={"passportDateOfExpiry"}
-            handleInputChange={handleEditFormChange}
+            handleInputChange={handleFormChange}
             invalidFields={invalidFields}
             setInvalidFields={setInvalidFields}
             passportData={passportData}
             setFormData={setFormData}
-            customValue={editUserInfo.passportDateOfExpiry}
           />
           <div className="flex space-x-3">
             <div className="passportValidatorButton">
@@ -323,6 +326,7 @@ function UserEditFormModal({
                       disabledText={""}
                       loadingText={""}
                       handleButtonClick={validatePassport}
+                      customIcon={<ValidateIcon />}
                     />
                   )}
                 </div>
@@ -339,7 +343,7 @@ function UserEditFormModal({
                       />
                     </div>
                   ) : (
-                    <div>
+                    <div className="mt-2">
                       {" "}
                       <input
                         className="hidden"
@@ -349,7 +353,7 @@ function UserEditFormModal({
                       />
                       <label
                         for="idPhoto"
-                        className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
+                        className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-3 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
                       >
                         Upload passport
                       </label>
@@ -358,7 +362,7 @@ function UserEditFormModal({
                 </div>
               )}
             </div>
-            <div className="portraitValidatorButton">
+            <div className="selfieValidatorButton">
               {selfiePhoto && !selfieIsValid ? (
                 <div>
                   {isValidating ? (
@@ -368,12 +372,13 @@ function UserEditFormModal({
                     />
                   ) : (
                     <CustomButton
-                      text={"Validate portrait"}
+                      text={"Validate selfie"}
                       isLoading={false}
                       isDisabled={false}
                       disabledText={""}
                       loadingText={""}
                       handleButtonClick={handleSelfieValidation}
+                      customIcon={<ValidateIcon />}
                     />
                   )}
                 </div>
@@ -387,7 +392,7 @@ function UserEditFormModal({
                       loadingText={""}
                     />
                   ) : (
-                    <div>
+                    <div className="mt-2">
                       <input
                         className="hidden"
                         type="file"
@@ -396,9 +401,9 @@ function UserEditFormModal({
                       />
                       <label
                         for="selfiePhoto"
-                        className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
+                        className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-3 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
                       >
-                        Upload portrait
+                        Upload selfie
                       </label>
                     </div>
                   )}
@@ -411,7 +416,12 @@ function UserEditFormModal({
           <div className="flex w-full justify-end">
             <CloseButton onButtonClick={closeModal} />
           </div>
-          <RadioSelector showSelfie={showSelfie} showPassport={showPassport} />
+          <RadioSelector
+            showSelfie={showSelfie}
+            selfiePhoto={selfiePhoto}
+            showPassport={showPassport}
+            idPhoto={idPhoto}
+          />
           <img
             src={photoToShowUrl}
             alt="User not known."
@@ -424,4 +434,4 @@ function UserEditFormModal({
   );
 }
 
-export default UserEditFormModal;
+export default UserFormModal;

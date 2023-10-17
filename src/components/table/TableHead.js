@@ -1,5 +1,5 @@
 import React from "react";
-import Arrow from "./Arrow";
+import ArrowIcon from "../icons/ArrowIcon";
 import TableHeadColumn from "./TableHeadColumn";
 
 const TableHead = ({
@@ -54,7 +54,7 @@ const TableHead = ({
           <div className="flex items-center select-none">
             Place of Birth
             {sortingCriteria === "_placeOfBirth" && (
-              <Arrow arrowDirection={sortingOrder.placeOfBirth} />
+              <ArrowIcon arrowDirection={sortingOrder.placeOfBirth} />
             )}
           </div>
         </th>

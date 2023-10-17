@@ -3,10 +3,10 @@
 <br />
 <div align="center">
 
-<h1 align="left">User manager frontend</h1>
+<h1 align="left">Student manager frontend</h1>
 
   <p align="center">
-    This React project represents the frontend of the User Manager application.
+    This React project represents the frontend of the Student Manager application.
     <br />
     <a href="https://github.com/markvarga21/userManagerFrontend"><strong>Explore the docs »</strong></a>
     <br />
@@ -28,7 +28,7 @@
 
 <i>This project was built using React JS with Tailwind CSS for styling purposes. It uses Firebase services for authentication and file storage.</i>
 
-<i>Also, this application is just a part of the user manager main application, so please read that documentation for further information.</i>
+<i>Also, this application is just a part of the student manager main application, so please read that documentation for further information.</i>
 
 <a href="https://github.com/markvarga21/userManager">Link to the main repository</a>
 

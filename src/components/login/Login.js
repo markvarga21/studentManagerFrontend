@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
-import CustomButton from "./CustomButton";
+import { auth } from "../../firebase";
+import CustomButton from "../buttons/CustomButton";
 import toast, { Toaster } from "react-hot-toast";
-import SimpleTextInput from "./SimpleTextInput";
+import SimpleTextInput from "../inputs/SimpleTextInput";
 
 const Login = ({ setIsUserLogin, setLoginEmail, setDropdownOpen }) => {
   var validEmailRegex =
@@ -45,11 +45,11 @@ const Login = ({ setIsUserLogin, setLoginEmail, setDropdownOpen }) => {
       aria-hidden="true"
       className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75"
     >
-      <div className="bg-white rounded-lg shadow dark:bg-gray-700 w-200 flex items-center">
-        <div className="p-6 lg:p-8">
+      <div className="bg-white rounded-xl shadow flex justify-start">
+        <div className="flex p-6">
           <form>
-            <div className="flex">
-              <h3 className="mb-10 text-xl font-light text-gray-900 dark:text-white">
+            <div>
+              <h3 className="mb-5 text-xl font-bold text-gray-900 dark:text-white">
                 Login
               </h3>
             </div>
@@ -66,19 +66,18 @@ const Login = ({ setIsUserLogin, setLoginEmail, setDropdownOpen }) => {
               <SimpleTextInput
                 labelText={"Password"}
                 type={"password"}
-                placeholderValue={"●●●●●●●●●●●●●"}
+                placeholderValue={"●●●●●●●●●●"}
                 handleInputChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <div className="flex justify-end">
-              <CustomButton
-                text={"Login"}
-                type={"submit"}
-                isDisabled={false}
-                isLoading={false}
-                handleButtonClick={handleLogin}
-              />
-            </div>
+
+            <CustomButton
+              text={"Login"}
+              type={"submit"}
+              isDisabled={false}
+              isLoading={false}
+              handleButtonClick={handleLogin}
+            />
           </form>
         </div>
         <Toaster />

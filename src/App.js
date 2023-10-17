@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import TableRow from "./components/TableRow";
-import SearchBar from "./components/SearchBar";
-import TableHead from "./components/TableHead";
-import UserFormModal from "./components/UserFormModal";
+import TableRow from "./components/table/TableRow";
+import SearchBar from "./components/inputs/SearchBar";
+import TableHead from "./components/table/TableHead";
+import UserFormModal from "./components/modals/UserFormModal";
 import axios from "axios";
-import UserEditFormModal from "./components/UserEditFormModal";
+import UserEditFormModal from "./components/modals/UserEditFormModal";
 import { auth } from "./firebase";
-import Login from "./components/Login";
+import Login from "./components/login/Login";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
-import CustomButton from "./components/CustomButton";
-import LogoutButton from "./components/LogoutButton";
+import CustomButton from "./components/buttons/CustomButton";
+import LogoutButton from "./components/login/LogoutButton";
+import AddIcon from "./components/icons/AddIcon";
 
 function App() {
   const [searchValue, setSearchValue] = useState("");
@@ -88,6 +89,7 @@ function App() {
       })
       .catch((err) => {
         setIsFillingData(false);
+        setIdPhoto(null);
         toast.error("An error occured while filling the form!");
         console.error(err);
       });
@@ -200,7 +202,7 @@ function App() {
       if (idPhoto == null) {
         toast.error("Upload the passport!");
       } else {
-        toast.error("Upload the portrait!");
+        toast.error("Upload the selfie!");
       }
     } else if (!selfieIsValid || !passportIsValid) {
       if (!selfieIsValid) {
@@ -256,7 +258,7 @@ function App() {
       if (idPhoto == null) {
         toast.error("Upload the passport!");
       } else {
-        toast.error("Upload the portrait!");
+        toast.error("Upload the selfie!");
       }
     } else {
       setIsSaving(true);
@@ -349,7 +351,7 @@ function App() {
 
   const [selfieIsValid, setSelfieIsValid] = useState(false);
   const handleSelfiePhotoChange = (event) => {
-    toast.success("Portrait uploaded successfully!");
+    toast.success("Selfie uploaded successfully!");
     event.preventDefault();
     const file = event.target.files[0];
     setSelfiePhoto(file);
@@ -543,6 +545,7 @@ function App() {
                 isLoading={false}
                 isDisabled={false}
                 handleButtonClick={displayForm}
+                customIcon={<AddIcon />}
               />
             </div>
             <div className="flex flex-row">

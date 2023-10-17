@@ -8,9 +8,9 @@ module.exports = withMT({
   theme: {
     extend: {
       colors: {
-        uniGreen: "#00AE82",
-        lightUniGreen: "#A5EEDC",
-        darkUniGreen: "#00916C",
+        uniGreen: "#3F7467",
+        lightUniGreen: "#44B89C",
+        darkUniGreen: "#7DA198",
         uniGold: "#FFAB0D",
         uniGoldLight: "#FFC962",
       },
