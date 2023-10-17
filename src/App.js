@@ -89,6 +89,7 @@ function App() {
       })
       .catch((err) => {
         setIsFillingData(false);
+        setIdPhoto(null);
         toast.error("An error occured while filling the form!");
         console.error(err);
       });
