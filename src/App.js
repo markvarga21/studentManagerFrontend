@@ -12,6 +12,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
 import CustomButton from "./components/CustomButton";
 import LogoutButton from "./components/LogoutButton";
+import AddIcon from "./components/AddIcon";
 
 function App() {
   const [searchValue, setSearchValue] = useState("");
@@ -543,6 +544,7 @@ function App() {
                 isLoading={false}
                 isDisabled={false}
                 handleButtonClick={displayForm}
+                customIcon={<AddIcon />}
               />
             </div>
             <div className="flex flex-row">
