@@ -345,7 +345,7 @@ function UserEditFormModal({
                       />
                     </div>
                   ) : (
-                    <div>
+                    <div className="mt-2">
                       {" "}
                       <input
                         className="hidden"
@@ -355,7 +355,7 @@ function UserEditFormModal({
                       />
                       <label
                         for="idPhoto"
-                        className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
+                        className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-3 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
                       >
                         Upload passport
                       </label>
@@ -394,7 +394,7 @@ function UserEditFormModal({
                       loadingText={""}
                     />
                   ) : (
-                    <div>
+                    <div className="mt-2">
                       <input
                         className="hidden"
                         type="file"
@@ -403,7 +403,7 @@ function UserEditFormModal({
                       />
                       <label
                         for="selfiePhoto"
-                        className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
+                        className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-3 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
                       >
                         Upload portrait
                       </label>
