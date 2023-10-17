@@ -30,7 +30,7 @@ const RadioSelector = ({ showSelfie, selfiePhoto, showPassport, idPhoto }) => {
           onClick={showSelfie}
           icon={<Icon />}
           className="border-gray-500 bg-white p-0 transition-all hover:before:opacity-0 focus:border-0"
-          label={"Show portrait"}
+          label={"Show selfie"}
         />
       ) : (
         <div></div>

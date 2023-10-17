@@ -58,7 +58,7 @@ function UserFormModal({
 
   const showSelfie = (event) => {
     if (selfiePhoto === null) {
-      toast.error("No portrait uploaded yet.");
+      toast.error("No selfie uploaded yet.");
       return;
     }
     setPhotoToShowUrl(URL.createObjectURL(selfiePhoto));
@@ -362,7 +362,7 @@ function UserFormModal({
                 </div>
               )}
             </div>
-            <div className="portraitValidatorButton">
+            <div className="selfieValidatorButton">
               {selfiePhoto && !selfieIsValid ? (
                 <div>
                   {isValidating ? (
@@ -372,7 +372,7 @@ function UserFormModal({
                     />
                   ) : (
                     <CustomButton
-                      text={"Validate portrait"}
+                      text={"Validate selfie"}
                       isLoading={false}
                       isDisabled={false}
                       disabledText={""}
@@ -403,7 +403,7 @@ function UserFormModal({
                         for="selfiePhoto"
                         className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-3 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
                       >
-                        Upload portrait
+                        Upload selfie
                       </label>
                     </div>
                   )}

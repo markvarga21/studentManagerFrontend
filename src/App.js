@@ -201,7 +201,7 @@ function App() {
       if (idPhoto == null) {
         toast.error("Upload the passport!");
       } else {
-        toast.error("Upload the portrait!");
+        toast.error("Upload the selfie!");
       }
     } else if (!selfieIsValid || !passportIsValid) {
       if (!selfieIsValid) {
@@ -257,7 +257,7 @@ function App() {
       if (idPhoto == null) {
         toast.error("Upload the passport!");
       } else {
-        toast.error("Upload the portrait!");
+        toast.error("Upload the selfie!");
       }
     } else {
       setIsSaving(true);
@@ -350,7 +350,7 @@ function App() {
 
   const [selfieIsValid, setSelfieIsValid] = useState(false);
   const handleSelfiePhotoChange = (event) => {
-    toast.success("Portrait uploaded successfully!");
+    toast.success("Selfie uploaded successfully!");
     event.preventDefault();
     const file = event.target.files[0];
     setSelfiePhoto(file);
