@@ -1,14 +1,14 @@
 import { React, useState } from "react";
-import SimpleTextInput from "./SimpleTextInput";
-import GenderSelector from "./GenderSelector";
-import CustomButton from "./CustomButton";
-import CloseButton from "./CloseButton";
-import RadioSelector from "./RadioSelector";
+import SimpleTextInput from "../inputs/SimpleTextInput";
+import GenderSelector from "../inputs/GenderSelector";
+import CustomButton from "../buttons/CustomButton";
+import CloseButton from "../buttons/CloseButton";
+import RadioSelector from "../inputs/RadioSelector";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
-import SaveIcon from "./SaveIcon";
-import ValidateIcon from "./ValidateIcon";
-import FillIcon from "./FillIcon";
+import SaveIcon from "../icons/SaveIcon";
+import ValidateIcon from "../icons/ValidateIcon";
+import FillIcon from "../icons/FillIcon";
 
 function UserEditFormModal({
   title,

@@ -1,5 +1,5 @@
 import React from "react";
-import Arrow from "./Arrow";
+import ArrowIcon from "../icons/ArrowIcon";
 
 const TableHeadColumn = ({
   crit,
@@ -16,7 +16,9 @@ const TableHeadColumn = ({
     >
       <div className="flex items-center select-none">
         {columnName}
-        {sortingCriteria === crit && <Arrow arrowDirection={sortingOrder} />}
+        {sortingCriteria === crit && (
+          <ArrowIcon arrowDirection={sortingOrder} />
+        )}
       </div>
     </th>
   );

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
-import CustomButton from "./CustomButton";
+import { auth } from "../../firebase";
+import CustomButton from "../buttons/CustomButton";
 import toast, { Toaster } from "react-hot-toast";
-import SimpleTextInput from "./SimpleTextInput";
+import SimpleTextInput from "../inputs/SimpleTextInput";
 
 const Login = ({ setIsUserLogin, setLoginEmail, setDropdownOpen }) => {
   var validEmailRegex =

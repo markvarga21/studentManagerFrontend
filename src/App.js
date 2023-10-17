@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import TableRow from "./components/TableRow";
-import SearchBar from "./components/SearchBar";
-import TableHead from "./components/TableHead";
-import UserFormModal from "./components/UserFormModal";
+import TableRow from "./components/table/TableRow";
+import SearchBar from "./components/inputs/SearchBar";
+import TableHead from "./components/table/TableHead";
+import UserFormModal from "./components/modals/UserFormModal";
 import axios from "axios";
-import UserEditFormModal from "./components/UserEditFormModal";
+import UserEditFormModal from "./components/modals/UserEditFormModal";
 import { auth } from "./firebase";
-import Login from "./components/Login";
+import Login from "./components/login/Login";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
-import CustomButton from "./components/CustomButton";
-import LogoutButton from "./components/LogoutButton";
-import AddIcon from "./components/AddIcon";
+import CustomButton from "./components/buttons/CustomButton";
+import LogoutButton from "./components/login/LogoutButton";
+import AddIcon from "./components/icons/AddIcon";
 
 function App() {
   const [searchValue, setSearchValue] = useState("");
