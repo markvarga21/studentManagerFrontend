@@ -6,6 +6,7 @@ import CloseButton from "./CloseButton";
 import RadioSelector from "./RadioSelector";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import SaveIcon from "./SaveIcon";
 
 function UserEditFormModal({
   title,
@@ -242,6 +243,7 @@ function UserEditFormModal({
                 disabledText={""}
                 loadingText={""}
                 handleButtonClick={handleFormSubmit}
+                customIcon={<SaveIcon />}
               />
             )}
           </div>
@@ -411,7 +413,12 @@ function UserEditFormModal({
           <div className="flex w-full justify-end">
             <CloseButton onButtonClick={closeModal} />
           </div>
-          <RadioSelector showSelfie={showSelfie} showPassport={showPassport} />
+          <RadioSelector
+            showSelfie={showSelfie}
+            selfiePhoto={selfiePhoto}
+            showPassport={showPassport}
+            idPhoto={idPhoto}
+          />
           <img
             src={photoToShowUrl}
             alt="User not known."

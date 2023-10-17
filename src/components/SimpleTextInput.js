@@ -85,7 +85,7 @@ const SimpleTextInput = ({
         <div>
           <label
             for="input-label"
-            className="block font-thin mb-2 text-gray-500"
+            className="block font-thin mb-2 text-gray-700"
           >
             {labelText}
           </label>

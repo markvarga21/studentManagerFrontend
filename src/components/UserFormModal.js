@@ -6,6 +6,7 @@ import CustomButton from "./CustomButton";
 import RadioSelector from "./RadioSelector";
 import CloseButton from "./CloseButton";
 import toast, { Toaster } from "react-hot-toast";
+import SaveIcon from "./SaveIcon";
 
 function UserFormModal({
   closeModal,
@@ -243,6 +244,7 @@ function UserFormModal({
                 disabledText={""}
                 loadingText={""}
                 handleButtonClick={handleFormSubmit}
+                customIcon={<SaveIcon />}
               />
             )}
           </div>
