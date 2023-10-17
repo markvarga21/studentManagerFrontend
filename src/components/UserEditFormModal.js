@@ -8,6 +8,7 @@ import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import SaveIcon from "./SaveIcon";
 import ValidateIcon from "./ValidateIcon";
+import FillIcon from "./FillIcon";
 
 function UserEditFormModal({
   title,
@@ -113,7 +114,7 @@ function UserEditFormModal({
         <div className="flex flex-col space-y-8">
           <h2 className="font-bold text-3xl">{title}</h2>
 
-          <div className="flex space-x-20 items-center">
+          <div className="flex space-x-10 items-center">
             <div className="flex-col space-y-8">
               <SimpleTextInput
                 type={"text"}
@@ -152,12 +153,13 @@ function UserEditFormModal({
                     <CustomButton isLoading={true} loadingText={"Filling..."} />
                   ) : (
                     <CustomButton
-                      text={"Fill data from passport"}
+                      text={"Fill data"}
                       isLoading={false}
                       isDisabled={false}
                       disabledText={""}
                       loadingText={""}
                       handleButtonClick={handleFillFormData}
+                      customIcon={<FillIcon />}
                     />
                   )}
                 </div>
@@ -174,8 +176,9 @@ function UserEditFormModal({
                     <CustomButton
                       isLoading={false}
                       isDisabled={true}
-                      disabledText={"Fill data from passport"}
+                      disabledText={"Fill data"}
                       loadingText={""}
+                      customIcon={<FillIcon />}
                     />
                   )}
                 </div>

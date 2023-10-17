@@ -8,6 +8,7 @@ import CloseButton from "./CloseButton";
 import toast, { Toaster } from "react-hot-toast";
 import SaveIcon from "./SaveIcon";
 import ValidateIcon from "./ValidateIcon";
+import FillIcon from "./FillIcon";
 
 function UserFormModal({
   closeModal,
@@ -119,7 +120,7 @@ function UserFormModal({
       <div className="border-t-4 border-uniGreen bg-white rounded-2xl shadow dark:bg-white w-2/3 p-10 flex justify-evenly">
         <div className="flex flex-col space-y-8">
           <h2 className="font-bold text-3xl">Add new student</h2>
-          <div className="flex space-x-20 items-center">
+          <div className="flex space-x-10 items-center">
             <div className="flex-col space-y-8">
               <SimpleTextInput
                 type={"text"}
@@ -156,12 +157,13 @@ function UserFormModal({
                     <CustomButton isLoading={true} loadingText={"Filling..."} />
                   ) : (
                     <CustomButton
-                      text={"Fill data from passport"}
+                      text={"Fill data"}
                       isLoading={false}
                       isDisabled={false}
                       disabledText={""}
                       loadingText={""}
                       handleButtonClick={handleFillFormData}
+                      customIcon={<FillIcon />}
                     />
                   )}
                 </div>
@@ -178,8 +180,9 @@ function UserFormModal({
                     <CustomButton
                       isLoading={false}
                       isDisabled={true}
-                      disabledText={"Fill data from passport"}
+                      disabledText={"Fill data"}
                       loadingText={""}
+                      customIcon={<FillIcon />}
                     />
                   )}
                 </div>
