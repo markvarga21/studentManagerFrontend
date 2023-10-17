@@ -117,7 +117,7 @@ function UserFormModal({
       tabIndex="-1"
       className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75"
     >
-      <div className="border-t-4 border-uniGreen bg-white rounded-2xl shadow dark:bg-white w-2/3 p-10 flex justify-evenly">
+      <div className="border-t-8 border-uniGreen bg-white shadow w-2/3 p-10 flex justify-evenly">
         <div className="flex flex-col space-y-8">
           <h2 className="font-bold text-3xl">Add new student</h2>
           <div className="flex space-x-10 items-center">
