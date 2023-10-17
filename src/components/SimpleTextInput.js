@@ -57,7 +57,10 @@ const SimpleTextInput = ({
       {invalidField === true ? (
         <div>
           <div className="flex items-center justify-between">
-            <label for="input-label" class="block font-thin mb-2 text-red-500">
+            <label
+              for="input-label"
+              className="block font-thin mb-2 text-red-500"
+            >
               {labelText}
             </label>
             <button
@@ -71,7 +74,7 @@ const SimpleTextInput = ({
             required
             type={type}
             id={id}
-            class={errorInputStyle}
+            className={errorInputStyle}
             placeholder={placeholderValue}
             onChange={handleInputChange}
             value={customValue}
@@ -80,14 +83,17 @@ const SimpleTextInput = ({
         </div>
       ) : (
         <div>
-          <label for="input-label" class="block font-thin mb-2 text-gray-500">
+          <label
+            for="input-label"
+            className="block font-thin mb-2 text-gray-500"
+          >
             {labelText}
           </label>
           <input
             required
             type={type}
             id={id}
-            class={inputStyle}
+            className={inputStyle}
             placeholder={placeholderValue}
             onChange={handleInputChange}
             value={customValue}
