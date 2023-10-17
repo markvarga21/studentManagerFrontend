@@ -110,11 +110,10 @@ function UserEditFormModal({
       tabIndex="-1"
       className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75"
     >
-      <div className="border-t-8 border-uniGreen bg-white shadow w-2/3 p-10 flex justify-evenly">
+      <div className="flex border-t-8 border-uniGreen bg-white shadow lg:w-11/12 2xl:w-8/12 p-10 justify-evenly">
         <div className="flex flex-col space-y-8">
           <h2 className="font-bold text-3xl">{title}</h2>
-
-          <div className="flex space-x-10 items-center">
+          <div className="flex gap-x-5 items-center">
             <div className="flex-col space-y-8">
               <SimpleTextInput
                 type={"text"}
@@ -186,7 +185,7 @@ function UserEditFormModal({
             </div>
           </div>
 
-          <div className="flex space-x-8">
+          <div className="flex">
             <SimpleTextInput
               type={"text"}
               width={"72"}
@@ -428,7 +427,7 @@ function UserEditFormModal({
           <img
             src={photoToShowUrl}
             alt="User not known."
-            className="object-scale-down h-64 hover:scale-150 shadow-2xl hover:shadow-2xl transition duration-500 ease-in-out"
+            className="object-scale-down h-64 hover:scale-150 hover:shadow-2xl transition duration-300 ease-in-out"
           />
         </div>
         <Toaster />

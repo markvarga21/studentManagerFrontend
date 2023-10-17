@@ -1,5 +1,5 @@
-import { Spinner } from "@material-tailwind/react";
 import React, { useEffect } from "react";
+import SpinnerIcon from "./SpinnerIcon";
 
 const CustomButton = ({
   buttonType,
@@ -12,9 +12,9 @@ const CustomButton = ({
   customIcon,
 }) => {
   const disabledStyle =
-    "h-full text-white bg-gray-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:cursor-not-allowed";
+    "2xl:w-6/8 lg:w-4/8 text-white bg-gray-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:cursor-not-allowed";
   const normalStyle =
-    "h-full text-white bg-uniGreen hover:bg-darkUniGreen px-5 py-2.5 font-medium rounded-lg text-sm text-center focus:ring-4 ring-lightUniGreen transition duration-150 ease-in-out";
+    "2xl:w-6/8 lg:w-4/8 text-white bg-uniGreen hover:bg-darkUniGreen px-5 py-2.5 font-medium rounded-lg text-sm text-center focus:ring-4 ring-lightUniGreen transition duration-150 ease-in-out";
 
   const [buttonStyle, setButtonStyle] = React.useState(normalStyle);
 
@@ -33,8 +33,8 @@ const CustomButton = ({
         onClick={handleButtonClick}
       >
         {isLoading === true ? (
-          <div className="flex gap-3 hover:cursor-not-allowed">
-            <Spinner className="h-4 w-4" />
+          <div className="flex hover:cursor-not-allowed">
+            <SpinnerIcon />
             <p>{loadingText}</p>
           </div>
         ) : (
