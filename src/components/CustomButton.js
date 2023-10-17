@@ -40,7 +40,7 @@ const CustomButton = ({
         ) : (
           <div>
             {customIcon !== undefined ? (
-              <div className="flex gap-8 items-center">
+              <div className="flex gap-2 items-center">
                 {isDisabled === true ? <p>{disabledText}</p> : <p>{text}</p>}
                 {customIcon !== undefined ? customIcon : <div></div>}
               </div>

@@ -7,6 +7,7 @@ import RadioSelector from "./RadioSelector";
 import CloseButton from "./CloseButton";
 import toast, { Toaster } from "react-hot-toast";
 import SaveIcon from "./SaveIcon";
+import ValidateIcon from "./ValidateIcon";
 
 function UserFormModal({
   closeModal,
@@ -322,6 +323,7 @@ function UserFormModal({
                       disabledText={""}
                       loadingText={""}
                       handleButtonClick={validatePassport}
+                      customIcon={<ValidateIcon />}
                     />
                   )}
                 </div>
@@ -373,6 +375,7 @@ function UserFormModal({
                       disabledText={""}
                       loadingText={""}
                       handleButtonClick={handleSelfieValidation}
+                      customIcon={<ValidateIcon />}
                     />
                   )}
                 </div>

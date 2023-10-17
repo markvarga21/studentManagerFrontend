@@ -7,6 +7,7 @@ import RadioSelector from "./RadioSelector";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import SaveIcon from "./SaveIcon";
+import ValidateIcon from "./ValidateIcon";
 
 function UserEditFormModal({
   title,
@@ -325,6 +326,7 @@ function UserEditFormModal({
                       disabledText={""}
                       loadingText={""}
                       handleButtonClick={validatePassport}
+                      customIcon={<ValidateIcon />}
                     />
                   )}
                 </div>
@@ -376,6 +378,7 @@ function UserEditFormModal({
                       disabledText={""}
                       loadingText={""}
                       handleButtonClick={handleSelfieValidation}
+                      customIcon={<ValidateIcon />}
                     />
                   )}
                 </div>
