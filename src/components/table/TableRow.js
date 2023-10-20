@@ -15,7 +15,7 @@ const TableRow = ({
   handleDeleteUser,
 }) => {
   return (
-    <tr className="bg-whitehover:bg-lightUniGreen">
+    <tr className="bg-white text-black hover:bg-lightUniGreen">
       <td className="px-6 py-4">{id}</td>
       <td className="px-6 py-4">{firstName}</td>
       <td className="px-6 py-4">{lastName}</td>

@@ -37,8 +37,7 @@ function UserEditFormModal({
   handleEditFormChange,
 }) {
   const [isValidating, setIsValidating] = useState(false);
-  const staticPhotoUrl =
-    "https://www.gravatar.com/avatar/447eccb3e9777173f1efc80d8e100e96.jpg?size=240&d=https%3A%2F%2Fwww.artstation.com%2Fassets%2Fdefault_avatar.jpg";
+  const staticPhotoUrl = process.env.PUBLIC_URL + "/images/avatar.jpg";
   const [photoToShowUrl, setPhotoToShowUrl] = useState(
     selfiePhoto === null ? staticPhotoUrl : URL.createObjectURL(selfiePhoto)
   );
