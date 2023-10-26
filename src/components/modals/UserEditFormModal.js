@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import SimpleTextInput from "../inputs/SimpleTextInput";
 import GenderSelector from "../inputs/GenderSelector";
 import CustomButton from "../buttons/CustomButton";
@@ -56,6 +56,14 @@ function UserEditFormModal({
     }
     setPhotoToShowUrl(URL.createObjectURL(selfiePhoto));
   };
+
+  useEffect(() => {
+    if (selfiePhoto === null) {
+      setPhotoToShowUrl(staticPhotoUrl);
+    } else {
+      setPhotoToShowUrl(URL.createObjectURL(selfiePhoto));
+    }
+  }, [selfiePhoto, staticPhotoUrl]);
 
   const handleSelfieValidation = (event) => {
     event.preventDefault();

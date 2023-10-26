@@ -280,12 +280,17 @@ function App() {
           }
         )
         .then((res) => {
+          toast.success(`User with id '${userToEdit.id}' updated successfully!`);
           setIsErrorPresent(false);
           setIsSaving(false);
           setIsEditFormActive(false);
           setUserToEdit({});
           setIdPhoto(null);
           setSelfiePhoto(null);
+          setPassportIsValid(false);
+          setSelfieIsValid(false);
+          setFillingWasSuccessful(false);
+          setPassportIsValidating(false);
         })
         .catch((err) => {
           setIsSaving(false);
