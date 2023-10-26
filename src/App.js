@@ -238,6 +238,7 @@ function App() {
           setPassportIsValid(false);
           setSelfieIsValid(false);
           setFillingWasSuccessful(false);
+          setPassportIsValidating(false);
           toast.success("User saved successfully!");
         })
         .catch((err) => {
