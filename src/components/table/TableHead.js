@@ -10,7 +10,6 @@ const TableHead = ({
   sortItems,
 }) => {
   const handleSortByCriteria = (crit) => {
-    //event.preventDefault();
     const criteria = String(crit).substring(1);
     const newOrderObject = sortingOrder;
     newOrderObject[criteria] = -1 * newOrderObject[criteria];
@@ -91,6 +90,13 @@ const TableHead = ({
           sortingCriteria={sortingCriteria}
           columnName={"Date of Issue"}
           sortingOrder={sortingOrder.passportDateOfIssue}
+          handleSortByCriteria={handleSortByCriteria}
+        />
+        <TableHeadColumn
+          crit={"_valid"}
+          sortingCriteria={sortingCriteria}
+          columnName={"Validity"}
+          sortingOrder={sortingOrder.valid}
           handleSortByCriteria={handleSortByCriteria}
         />
         <th scope="col" className="px-6 py-3 select-none">

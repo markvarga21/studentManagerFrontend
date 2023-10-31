@@ -53,6 +53,7 @@ function App() {
     passportNumber: 1,
     passportDateOfExpiry: 1,
     passportDateOfIssue: 1,
+    valid: 1,
   });
   const [useWasDeleted, setUserWasDeleted] = useState(1);
 
@@ -214,8 +215,7 @@ function App() {
       console.log(`Saving ${logObject(userJson)}`);
 
       axios
-        .post("http://localhost:8080/api/v1/students", formData, {
-        })
+        .post("http://localhost:8080/api/v1/students", formData, {})
         .then((res) => {
           setIsErrorPresent(false);
           setIsSaving(false);
@@ -249,10 +249,7 @@ function App() {
     console.log(`Updating ${logObject(userJson)}`);
 
     axios
-      .put(
-        `http://localhost:8080/api/v1/students/${userToEdit.id}`,
-        userToEdit
-      )
+      .put(`http://localhost:8080/api/v1/students/${userToEdit.id}`, userToEdit)
       .then((res) => {
         toast.success(`User with id '${userToEdit.id}' updated successfully!`);
         setIsErrorPresent(false);
@@ -279,7 +276,6 @@ function App() {
           setIsErrorPresent(true);
         }
       });
-    
   };
 
   useEffect(() => {
@@ -663,6 +659,7 @@ function App() {
                     passportNumber={user.passportNumber}
                     passportDateOfExpiry={user.passportDateOfExpiry}
                     passportDateOfIssue={user.passportDateOfIssue}
+                    valid={user.valid}
                     handleEditUser={handleEditUser}
                     handleDeleteUser={handleDeleteUser}
                   />

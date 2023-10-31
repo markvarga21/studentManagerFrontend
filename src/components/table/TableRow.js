@@ -11,6 +11,7 @@ const TableRow = ({
   passportNumber,
   passportDateOfExpiry,
   passportDateOfIssue,
+  valid,
   handleEditUser,
   handleDeleteUser,
 }) => {
@@ -26,6 +27,7 @@ const TableRow = ({
       <td className="px-6 py-4">{passportNumber}</td>
       <td className="px-6 py-4">{passportDateOfExpiry}</td>
       <td className="px-6 py-4">{passportDateOfIssue}</td>
+      <td className="px-6 py-4">{valid ? "\u2705" : "\u274C"}</td>
       <td className="px-6 py-4">
         <div className="flex flex-col space-y-3">
           <a
