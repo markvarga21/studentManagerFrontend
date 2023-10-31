@@ -15,8 +15,11 @@ const TableRow = ({
   handleEditUser,
   handleDeleteUser,
 }) => {
+  const rowStyle = valid
+    ? "bg-white text-black hover:bg-lightUniGreen"
+    : "bg-red-200 text-black hover:bg-red-400";
   return (
-    <tr className="bg-white text-black hover:bg-lightUniGreen">
+    <tr className={rowStyle}>
       <td className="px-6 py-4">{id}</td>
       <td className="px-6 py-4">{firstName}</td>
       <td className="px-6 py-4">{lastName}</td>
