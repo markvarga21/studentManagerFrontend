@@ -303,102 +303,60 @@ function UserFormModal({
           />
           <div className="flex space-x-3">
             <div className="passportValidatorButton">
-              {idPhoto && !passportIsValid ? (
-                <div>
-                  {passportIsValidating === true ? (
-                    <CustomButton
-                      isLoading={true}
-                      loadingText={"Validating..."}
-                    />
-                  ) : (
-                    <CustomButton
-                      text={"Validate passport"}
-                      isLoading={false}
-                      isDisabled={false}
-                      disabledText={""}
-                      loadingText={""}
-                      handleButtonClick={validatePassport}
-                      customIcon={<ValidateIcon />}
-                    />
-                  )}
+              {idPhoto === null ? (
+                <div className="mt-2">
+                  {" "}
+                  <input
+                    className="hidden"
+                    type="file"
+                    id="idPhoto"
+                    onChange={handleIdPhotoChange}
+                  />
+                  <label
+                    for="idPhoto"
+                    className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-3 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
+                  >
+                    Upload passport
+                  </label>
                 </div>
               ) : (
-                <div>
-                  {passportIsValid ? (
-                    <div>
-                      {" "}
-                      <CustomButton
-                        isLoading={false}
-                        isDisabled={true}
-                        disabledText={"Passport is valid!"}
-                        loadingText={""}
-                      />
-                    </div>
-                  ) : (
-                    <div className="mt-2">
-                      {" "}
-                      <input
-                        className="hidden"
-                        type="file"
-                        id="idPhoto"
-                        onChange={handleIdPhotoChange}
-                      />
-                      <label
-                        for="idPhoto"
-                        className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-3 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
-                      >
-                        Upload passport
-                      </label>
-                    </div>
-                  )}
+                <div className="mt-2">
+                  {" "}
+                  <input className="hidden" />
+                  <label
+                    for="idPhoto"
+                    className="text-white bg-gray-500 font-medium rounded-lg text-sm px-5 py-3 text-center hover:cursor-not-allowed"
+                  >
+                    Upload passport
+                  </label>
                 </div>
               )}
             </div>
             <div className="selfieValidatorButton">
-              {selfiePhoto && !selfieIsValid ? (
-                <div>
-                  {isValidating ? (
-                    <CustomButton
-                      isLoading={true}
-                      loadingText={"Validating..."}
-                    />
-                  ) : (
-                    <CustomButton
-                      text={"Validate selfie"}
-                      isLoading={false}
-                      isDisabled={false}
-                      disabledText={""}
-                      loadingText={""}
-                      handleButtonClick={handleSelfieValidation}
-                      customIcon={<ValidateIcon />}
-                    />
-                  )}
+              {selfiePhoto === null ? (
+                <div className="mt-2">
+                  <input
+                    className="hidden"
+                    type="file"
+                    id="selfiePhoto"
+                    onChange={handleSelfiePhotoChange}
+                  />
+                  <label
+                    for="selfiePhoto"
+                    className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-3 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
+                  >
+                    Upload selfie
+                  </label>
                 </div>
               ) : (
-                <div>
-                  {selfieIsValid ? (
-                    <CustomButton
-                      isLoading={false}
-                      isDisabled={true}
-                      disabledText={"Selfie is valid!"}
-                      loadingText={""}
-                    />
-                  ) : (
-                    <div className="mt-2">
-                      <input
-                        className="hidden"
-                        type="file"
-                        id="selfiePhoto"
-                        onChange={handleSelfiePhotoChange}
-                      />
-                      <label
-                        for="selfiePhoto"
-                        className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-3 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
-                      >
-                        Upload selfie
-                      </label>
-                    </div>
-                  )}
+                <div className="mt-2">
+                  <input className="hidden" />
+                  <label
+                    for="selfiePhoto"
+                    className="text-white bg-gray-500 font-medium rounded-lg text-sm px-5 py-3 text-center hover:cursor-not-allowed"
+                  >
+                    Upload selfie
+                  </label>
                 </div>
               )}
             </div>
