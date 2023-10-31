@@ -7,7 +7,7 @@ import RadioSelector from "../inputs/RadioSelector";
 import CloseButton from "../buttons/CloseButton";
 import toast, { Toaster } from "react-hot-toast";
 import SaveIcon from "../icons/SaveIcon";
-import FillIcon from "../icons/FillIcon";
+import UploadIcon from "../icons/UploadIcon";
 
 function UserFormModal({
   closeModal,
@@ -260,7 +260,7 @@ function UserFormModal({
           <div className="flex space-x-3">
             <div className="passportValidatorButton">
               {idPhoto === null ? (
-                <div className="mt-2">
+                <div className="pr-2 flex bg-uniGreen justify-center content-center hover:bg-darkUniGreen rounded-lg">
                   {" "}
                   <input
                     className="hidden"
@@ -270,27 +270,31 @@ function UserFormModal({
                   />
                   <label
                     for="idPhoto"
-                    className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-3 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
+                    className="text-white font-medium text-sm pl-5 pr-2 py-3 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
                   >
                     Upload passport
                   </label>
+                  <UploadIcon isDisabled={false} />
                 </div>
               ) : (
-                <div className="mt-2">
-                  {" "}
-                  <input className="hidden" />
-                  <label
-                    for="idPhoto"
-                    className="text-white bg-gray-500 font-medium rounded-lg text-sm px-5 py-3 text-center hover:cursor-not-allowed"
-                  >
-                    Upload passport
-                  </label>
+                <div>
+                  <div className="pr-2 flex bg-gray-500 justify-center content-center rounded-lg">
+                    {" "}
+                    <input className="hidden" />
+                    <label
+                      for="idPhoto"
+                      className="text-white font-medium text-sm px-5 py-3 text-center hover:cursor-not-allowed"
+                    >
+                      Upload passport
+                    </label>
+                    <UploadIcon idDisabled={true} />
+                  </div>
                 </div>
               )}
             </div>
             <div className="selfieValidatorButton">
               {selfiePhoto === null ? (
-                <div className="mt-2">
+                <div className="pr-2 flex bg-uniGreen justify-center content-center hover:bg-darkUniGreen rounded-lg">
                   <input
                     className="hidden"
                     type="file"
@@ -299,20 +303,22 @@ function UserFormModal({
                   />
                   <label
                     for="selfiePhoto"
-                    className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-3 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
+                    className="text-white font-medium text-sm px-5 py-3 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
                   >
                     Upload selfie
                   </label>
+                  <UploadIcon isDisabled={false} />
                 </div>
               ) : (
-                <div className="mt-2">
+                <div className="pr-2 flex bg-gray-500 justify-center content-center rounded-lg">
                   <input className="hidden" />
                   <label
                     for="selfiePhoto"
-                    className="text-white bg-gray-500 font-medium rounded-lg text-sm px-5 py-3 text-center hover:cursor-not-allowed"
+                    className="text-white font-medium text-sm px-5 py-3 text-center hover:cursor-not-allowed"
                   >
                     Upload selfie
                   </label>
+                  <UploadIcon idDisabled={true} />
                 </div>
               )}
             </div>

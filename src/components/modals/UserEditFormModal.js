@@ -8,7 +8,6 @@ import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import SaveIcon from "../icons/SaveIcon";
 import ValidateIcon from "../icons/ValidateIcon";
-import FillIcon from "../icons/FillIcon";
 
 function UserEditFormModal({
   title,
