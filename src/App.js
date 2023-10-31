@@ -200,15 +200,9 @@ function App() {
     console.log("Saving form data!");
     if (idPhoto === null || selfiePhoto === null) {
       if (idPhoto == null) {
-        toast.error("Upload the passport!");
+        toast.error("Please upload the passport!");
       } else {
-        toast.error("Upload the selfie!");
-      }
-    } else if (!selfieIsValid || !passportIsValid) {
-      if (!selfieIsValid) {
-        toast.error("Selfie is invalid!");
-      } else {
-        toast.error("Passport is invalid!");
+        toast.error("Please upload the selfie!");
       }
     } else {
       setErrorMessage({});
@@ -219,14 +213,8 @@ function App() {
       const userJson = JSON.stringify(formData);
       console.log(`Saving ${logObject(userJson)}`);
 
-      const formToSend = new FormData();
-      formToSend.append("studentJson", userJson);
-
       axios
-        .post("http://localhost:8080/api/v1/students", formToSend, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+        .post("http://localhost:8080/api/v1/students", formData, {
         })
         .then((res) => {
           setIsErrorPresent(false);
@@ -254,58 +242,44 @@ function App() {
 
   const handleEditFormSubmit = (event) => {
     event.preventDefault();
-    console.log(userToEdit);
-    if (idPhoto === null || selfiePhoto === null) {
-      if (idPhoto == null) {
-        toast.error("Upload the passport!");
-      } else {
-        toast.error("Upload the selfie!");
-      }
-    } else {
-      setIsSaving(true);
-      const userJson = JSON.stringify(userToEdit);
-      console.log(`Saving ${logObject(userJson)}`);
+    console.log(`Updating user with id: ${userToEdit.id}`);
 
-      const formToSend = new FormData();
-      formToSend.append("studentJson", userJson);
+    setIsSaving(true);
+    const userJson = JSON.stringify(userToEdit);
+    console.log(`Updating ${logObject(userJson)}`);
 
-      axios
-        .put(
-          `http://localhost:8080/api/v1/students/${userToEdit.id}`,
-          formToSend,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        )
-        .then((res) => {
-          toast.success(`User with id '${userToEdit.id}' updated successfully!`);
-          setIsErrorPresent(false);
-          setIsSaving(false);
-          setIsEditFormActive(false);
-          setUserToEdit({});
-          setIdPhoto(null);
-          setSelfiePhoto(null);
-          setPassportIsValid(false);
-          setSelfieIsValid(false);
-          setFillingWasSuccessful(false);
-          setPassportIsValidating(false);
-        })
-        .catch((err) => {
-          setIsSaving(false);
-          console.error(err);
-          if (err.response != null) {
-            const errorMessage = err.response.data.message;
-            const errorOperationType = err.response.data.operationType;
-            setErrorMessage({
-              title: `${errorOperationType} ERROR`,
-              details: errorMessage,
-            });
-            setIsErrorPresent(true);
-          }
-        });
-    }
+    axios
+      .put(
+        `http://localhost:8080/api/v1/students/${userToEdit.id}`,
+        userToEdit
+      )
+      .then((res) => {
+        toast.success(`User with id '${userToEdit.id}' updated successfully!`);
+        setIsErrorPresent(false);
+        setIsSaving(false);
+        setIsEditFormActive(false);
+        setUserToEdit({});
+        setIdPhoto(null);
+        setSelfiePhoto(null);
+        setPassportIsValid(false);
+        setSelfieIsValid(false);
+        setFillingWasSuccessful(false);
+        setPassportIsValidating(false);
+      })
+      .catch((err) => {
+        setIsSaving(false);
+        console.error(err);
+        if (err.response != null) {
+          const errorMessage = err.response.data.message;
+          const errorOperationType = err.response.data.operationType;
+          setErrorMessage({
+            title: `${errorOperationType} ERROR`,
+            details: errorMessage,
+          });
+          setIsErrorPresent(true);
+        }
+      });
+    
   };
 
   useEffect(() => {
