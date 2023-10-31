@@ -15,7 +15,7 @@ const SimpleTextInput = ({
   passportData,
   setFormData,
 }) => {
-  const inputStyle = `py-3 px-4 block w-3/4 border-b-2 border-lightUniGreen focus:outline-none focus:border-uniGreen focus:border-b-2`;
+  const inputStyle = `py-3 px-4 block w-${width} border-b-2 border-lightUniGreen focus:outline-none focus:border-uniGreen focus:border-b-2`;
   const errorInputStyle = `py-3 bg-red-100 px-4 block w-3/4 border-b-2 border-red-500 focus:outline-none focus:border-red-500 focus:border-b-2`;
 
   const [invalidField, setInvalidField] = useState(false);

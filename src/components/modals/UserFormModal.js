@@ -7,7 +7,6 @@ import RadioSelector from "../inputs/RadioSelector";
 import CloseButton from "../buttons/CloseButton";
 import toast, { Toaster } from "react-hot-toast";
 import SaveIcon from "../icons/SaveIcon";
-import ValidateIcon from "../icons/ValidateIcon";
 import FillIcon from "../icons/FillIcon";
 
 function UserFormModal({
@@ -19,7 +18,6 @@ function UserFormModal({
   isSaving,
   idPhoto,
   selfiePhoto,
-  handleFillFormData,
   setSelfiePhoto,
   isFillingData,
   fillingWasSuccessful,
@@ -112,80 +110,38 @@ function UserFormModal({
       <div className="border-t-8 border-uniGreen bg-white shadow lg:w-11/12 2xl:w-8/12 p-10 flex justify-evenly">
         <div className="flex flex-col space-y-8">
           <h2 className="font-bold text-3xl">Add new student</h2>
-          <div className="flex gap-x-5 items-center">
-            <div className="flex-col space-y-8">
-              <SimpleTextInput
-                type={"text"}
-                width={"72"}
-                labelText={"First name"}
-                name={"firstName"}
-                id={"firstName"}
-                placeholderValue={"John"}
-                handleInputChange={handleFormChange}
-                invalidFields={invalidFields}
-                setInvalidFields={setInvalidFields}
-                passportData={passportData}
-                setFormData={setFormData}
-              />
-              <SimpleTextInput
-                type={"text"}
-                width={"72"}
-                labelText={"Last name"}
-                name={"lastName"}
-                id={"lastName"}
-                placeholderValue={"Doe"}
-                handleInputChange={handleFormChange}
-                invalidFields={invalidFields}
-                setInvalidFields={setInvalidFields}
-                passportData={passportData}
-                setFormData={setFormData}
-              />
-            </div>
 
-            <div className="fillingButton">
-              {idPhoto && !fillingWasSuccessful ? (
-                <div>
-                  {isFillingData ? (
-                    <CustomButton isLoading={true} loadingText={"Filling..."} />
-                  ) : (
-                    <CustomButton
-                      text={"Fill data"}
-                      isLoading={false}
-                      isDisabled={false}
-                      disabledText={""}
-                      loadingText={""}
-                      handleButtonClick={handleFillFormData}
-                      customIcon={<FillIcon />}
-                    />
-                  )}
-                </div>
-              ) : (
-                <div>
-                  {fillingWasSuccessful ? (
-                    <CustomButton
-                      isLoading={false}
-                      isDisabled={true}
-                      disabledText={"Successfully filled!"}
-                      loadingText={""}
-                    />
-                  ) : (
-                    <CustomButton
-                      isLoading={false}
-                      isDisabled={true}
-                      disabledText={"Fill data"}
-                      loadingText={""}
-                      customIcon={<FillIcon />}
-                    />
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
+          <SimpleTextInput
+            type={"text"}
+            width={"full"}
+            labelText={"First name"}
+            name={"firstName"}
+            id={"firstName"}
+            placeholderValue={"John"}
+            handleInputChange={handleFormChange}
+            invalidFields={invalidFields}
+            setInvalidFields={setInvalidFields}
+            passportData={passportData}
+            setFormData={setFormData}
+          />
+          <SimpleTextInput
+            type={"text"}
+            width={"full"}
+            labelText={"Last name"}
+            name={"lastName"}
+            id={"lastName"}
+            placeholderValue={"Doe"}
+            handleInputChange={handleFormChange}
+            invalidFields={invalidFields}
+            setInvalidFields={setInvalidFields}
+            passportData={passportData}
+            setFormData={setFormData}
+          />
 
           <div className="flex">
             <SimpleTextInput
               type={"text"}
-              width={"72"}
+              width={"3/4"}
               labelText={"Birthdate"}
               name={"birthDate"}
               id={"birthDate"}
@@ -198,7 +154,7 @@ function UserFormModal({
             />
             <GenderSelector
               type={"text"}
-              width={"72"}
+              width={"3/4"}
               labelText={"Gender"}
               placeholderValue={"Male"}
               id={"gender"}
@@ -212,7 +168,7 @@ function UserFormModal({
           </div>
           <SimpleTextInput
             type={"text"}
-            width={"36"}
+            width={"full"}
             labelText={"Place of Birth"}
             name={"placeOfBirth"}
             id={"placeOfBirth"}
@@ -250,7 +206,7 @@ function UserFormModal({
           <div className="h-8"></div>
           <SimpleTextInput
             type={"text"}
-            width={"72"}
+            width={"3/4"}
             labelText={"Country of citizenship"}
             placeholderValue={"Hungary"}
             id={"countryOfCitizenship"}
@@ -264,7 +220,7 @@ function UserFormModal({
 
           <SimpleTextInput
             type={"text"}
-            width={"72"}
+            width={"3/4"}
             labelText={"Passport number"}
             placeholderValue={"123456789"}
             id={"passportNumber"}
@@ -277,7 +233,7 @@ function UserFormModal({
           />
           <SimpleTextInput
             type={"text"}
-            width={"72"}
+            width={"3/4"}
             labelText={"Passport date of issue"}
             placeholderValue={"1979-12-31"}
             id={"passportDateOfIssue"}
@@ -290,7 +246,7 @@ function UserFormModal({
           />
           <SimpleTextInput
             type={"text"}
-            width={"72"}
+            width={"3/4"}
             labelText={"Passport date of expiry"}
             placeholderValue={"1979-12-31"}
             id={"passportDateOfExpiry"}

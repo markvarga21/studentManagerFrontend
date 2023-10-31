@@ -59,11 +59,15 @@ function App() {
 
   const [isFillingData, setIsFillingData] = useState(false);
   const [fillingWasSuccessful, setFillingWasSuccessful] = useState(false);
-  const handleFillFormData = (event) => {
-    event.preventDefault();
+  const [dataFromPassport, setDataFromPassport] = useState({});
+  const fillFormDataFromPassport = () => {
     setIsFillingData(true);
-    console.log("Filling form data!");
+    if (idPhoto === null) {
+      toast.error("Please upload the passport!");
+      return;
+    }
 
+    const loadingToast = toast.loading("Filling form data from passport...");
     const formToSend = new FormData();
     formToSend.append("passport", idPhoto);
 
@@ -74,9 +78,12 @@ function App() {
         },
       })
       .then((res) => {
+        toast.dismiss(loadingToast);
+        setIsDataFilled(true);
         setIsFillingData(false);
         setFillingWasSuccessful(true);
         const user = res.data;
+        setDataFromPassport(user);
         delete user["id"];
         const keys = Object.keys(user);
         for (const key of keys) {
@@ -89,12 +96,20 @@ function App() {
         toast.success("Data filled successfully!");
       })
       .catch((err) => {
+        toast.dismiss(loadingToast);
+        setIsDataFilled(true);
         setIsFillingData(false);
         setIdPhoto(null);
         toast.error("An error occured while filling the form!");
         console.error(err);
       });
   };
+
+  useEffect(() => {
+    if (idPhoto !== null && !isDataFilled) {
+      fillFormDataFromPassport();
+    }
+  }, idPhoto);
 
   const displayForm = () => {
     console.log("Displaying form!");
@@ -103,6 +118,8 @@ function App() {
   };
 
   const closeModal = () => {
+    setIsDataFilled(false);
+    setDataFromPassport({});
     setErrorMessage({});
     setUserToEdit({});
     setIsErrorPresent(false);
@@ -196,6 +213,7 @@ function App() {
     setUserToEdit(newFormData);
   };
 
+  const [isDataFilled, setIsDataFilled] = useState(false);
   const handleFormSubmit = (event) => {
     event.preventDefault();
     console.log("Saving form data!");
@@ -217,6 +235,7 @@ function App() {
       axios
         .post("http://localhost:8080/api/v1/students", formData, {})
         .then((res) => {
+          setIsDataFilled(false);
           setIsErrorPresent(false);
           setIsSaving(false);
           setIsFormActive(false);
@@ -227,14 +246,45 @@ function App() {
           setSelfieIsValid(false);
           setFillingWasSuccessful(false);
           setPassportIsValidating(false);
+
+          if (Object.keys(dataFromPassport).length !== 0) {
+            axios
+              .post(
+                "http://localhost:8080/api/v1/validations",
+                dataFromPassport
+              )
+              .then((res) => console.log(res.data))
+              .catch((err) => console.error(err));
+          }
+
+          const imageForm = new FormData();
+          imageForm.append("passport", idPhoto);
+          imageForm.append("selfie", selfiePhoto);
+          axios
+            .post(
+              `http://localhost:8080/api/v1/files/upload/${formData.passportNumber}`,
+              imageForm,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            )
+            .then((res) => console.log(res.data))
+            .catch((err) => console.error(err));
+
           toast.success("User saved successfully!");
         })
         .catch((err) => {
+          setIsDataFilled(true);
           setIsSaving(false);
           console.error(err);
           if (err.response != null) {
             const errorMessage = err.response.data.message;
-            toast.error(errorMessage);
+            const errWordCount = errorMessage.split(" ").length;
+            const errorPanelDuration = (errWordCount * 1000) / 3;
+            console.log(`Error panel duration: ${errorPanelDuration}`);
+            toast.error(errorMessage, { duration: errorPanelDuration });
           }
         });
     }
@@ -556,7 +606,6 @@ function App() {
               editUserInfo={userToEdit}
               idPhoto={idPhoto}
               selfiePhoto={selfiePhoto}
-              handleFillFormData={handleFillFormData}
               setSelfiePhoto={setSelfiePhoto}
               isFillingData={isFillingData}
               fillingWasSuccessful={fillingWasSuccessful}
@@ -586,7 +635,6 @@ function App() {
               errorMessage={errorMessage}
               idPhoto={idPhoto}
               selfiePhoto={selfiePhoto}
-              handleFillFormData={handleFillFormData}
               setSelfiePhoto={setSelfiePhoto}
               isFillingData={isFillingData}
               fillingWasSuccessful={fillingWasSuccessful}
