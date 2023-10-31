@@ -11,8 +11,9 @@ import Login from "./components/login/Login";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
 import CustomButton from "./components/buttons/CustomButton";
-import LogoutButton from "./components/login/LogoutButton";
 import AddIcon from "./components/icons/AddIcon";
+import ProfileIcon from "./components/icons/ProfileIcon";
+import LogoutIcon from "./components/icons/LogoutIcon";
 
 function App() {
   const [searchValue, setSearchValue] = useState("");
@@ -403,10 +404,6 @@ function App() {
       });
   };
 
-  const handleDropdownClick = () => {
-    setDropdownOpen(!isDropdownOpen);
-  };
-
   const handleLogout = (event) => {
     event.preventDefault();
     signOutUser();
@@ -574,21 +571,18 @@ function App() {
                 customIcon={<AddIcon />}
               />
             </div>
-            <div className="flex flex-row">
-              <div className="flex flex-col items-end px-5 relative">
-                <p className="text-lg font-thin text-gray-500 lg:text-xl">
-                  Currently logged in as
-                </p>
+            <div className="flex mr-5 gap-3">
+              <ProfileIcon email={loginEmail} />
+              <div className="flex-col">
                 <div
-                  className="hover:underline hover:text-uniGreen cursor-pointer"
-                  onClick={handleDropdownClick}
+                  className="flex gap-1 items-center hover:underline hover:cursor-pointer"
+                  onClick={handleLogout}
                 >
-                  <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-3xl dark:text-white">
-                    {loginEmail}
-                  </h1>
+                  <LogoutIcon />
+                  Logout
                 </div>
+                <div className="text-gray-500">{loginEmail}</div>
               </div>
-              <LogoutButton handleLogout={handleLogout} />
             </div>
           </div>
 
