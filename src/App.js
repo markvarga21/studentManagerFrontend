@@ -18,7 +18,6 @@ import LogoutIcon from "./components/icons/LogoutIcon";
 function App() {
   const [searchValue, setSearchValue] = useState("");
   const [loginEmail, setLoginEmail] = useState("");
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -107,7 +106,8 @@ function App() {
   };
 
   useEffect(() => {
-    if (idPhoto !== null && !isDataFilled) {
+    const editUserInfoKeyLength = Object.keys(userToEdit).length;
+    if (editUserInfoKeyLength === 0 && idPhoto !== null) {
       fillFormDataFromPassport();
     }
   }, idPhoto);
@@ -129,8 +129,6 @@ function App() {
     setSelfiePhoto(null);
     setFillingWasSuccessful(false);
     setSelfieIsValid(false);
-    setPassportIsValid(false);
-    setPassportIsValidating(false);
     setFormData({
       firstName: "",
       lastName: "",
@@ -177,8 +175,6 @@ function App() {
 
   const handleFormChange = (event) => {
     event.preventDefault();
-    setPassportIsValid(false);
-    setPassportIsValidating(false);
 
     const fieldName = event.target.getAttribute("name");
     const fieldValue = event.target.value;
@@ -243,12 +239,13 @@ function App() {
           setUserToEdit({});
           setIdPhoto(null);
           setSelfiePhoto(null);
-          setPassportIsValid(false);
           setSelfieIsValid(false);
           setFillingWasSuccessful(false);
-          setPassportIsValidating(false);
 
           if (Object.keys(dataFromPassport).length !== 0) {
+            console.log(
+              "Saving validation data: " + JSON.stringify(dataFromPassport)
+            );
             axios
               .post(
                 "http://localhost:8080/api/v1/validations",
@@ -290,9 +287,35 @@ function App() {
     }
   };
 
+  const passportDataEqualsForm = (passportData, formData) => {
+    console.log("Checking if passport data equals form data!");
+    const keys = Object.keys(passportData);
+    for (let i = 0; i < keys.length; i++) {
+      if (keys[i] === "id") {
+        continue;
+      }
+      let passValue = String(passportData[keys[i]]);
+      let formValue = String(formData[keys[i]]);
+
+      if (passValue === undefined || passValue === null) {
+        console.log("Pass value is undefined or null!");
+        return false;
+      }
+      if (passValue.toLowerCase() !== formValue.toLowerCase()) {
+        console.log(
+          `Pass value: ${passValue} and form value: ${formValue} are not equal!`
+        );
+        return false;
+      }
+    }
+    return true;
+  };
+
   const handleEditFormSubmit = (event) => {
     event.preventDefault();
-    console.log(`Updating user with id: ${userToEdit.id}`);
+    console.log(
+      `Updating user with passport number: ${userToEdit.passportNumber}`
+    );
 
     setIsSaving(true);
     const userJson = JSON.stringify(userToEdit);
@@ -308,10 +331,36 @@ function App() {
         setUserToEdit({});
         setIdPhoto(null);
         setSelfiePhoto(null);
-        setPassportIsValid(false);
         setSelfieIsValid(false);
         setFillingWasSuccessful(false);
-        setPassportIsValidating(false);
+        setInvalidFields({
+          firstName: false,
+          lastName: false,
+          birthDate: false,
+          placeOfBirth: false,
+          countryOfCitizenship: false,
+          gender: false,
+          passportNumber: false,
+          passportDateOfExpiry: false,
+          passportDateOfIssue: false,
+        });
+
+        if (passportDataEqualsForm(passportData, userToEdit)) {
+          axios
+            .post(
+              `http://localhost:8080/api/v1/validations/validateManually?passportNumber=${userToEdit.passportNumber}`
+            )
+            .then((response) => {
+              console.log("User validated successfully! " + response.data);
+              toast.success("User validated successfully!");
+              setUserWasValidated(-1 * userWasValidated);
+            })
+            .catch((err) => {
+              console.error(err);
+              // if the selfie is not similar to the passport photo
+              toast.error("An error occured while validating the user!");
+            });
+        }
       })
       .catch((err) => {
         setIsSaving(false);
@@ -369,6 +418,7 @@ function App() {
 
   const handleIdPhotoChange = (event) => {
     event.preventDefault();
+    setIsFillingData(true);
     const file = event.target.files[0];
     console.log(file + " " + typeof file);
     toast.success("Passport uploaded successfully!");
@@ -389,6 +439,7 @@ function App() {
     axios
       .delete(`http://localhost:8080/api/v1/students/${userToDeleteId}`)
       .then((res) => {
+        setIsFillingData(false);
         setUserWasDeleted(-1 * useWasDeleted);
         toast.success(
           `User with id: '${userToDeleteId}' deleted successfully!`
@@ -464,92 +515,22 @@ function App() {
   });
   const handleInvalidPassport = (passportData) => {
     console.log("Handling invalid passport!");
-    const keys = Object.keys(formData);
+    const keys = Object.keys(userToEdit);
 
     let newInvalidFields = { ...invalidFields };
     for (let i = 0; i < keys.length; i++) {
-      if (
-        formData[keys[i]].toLowerCase() !== passportData[keys[i]].toLowerCase()
-      ) {
+      let passValue = String(passportData[keys[i]]);
+      let editValue = String(userToEdit[keys[i]]);
+
+      if (passValue === undefined || passValue === null) {
+        newInvalidFields[keys[i]] = false;
+        continue;
+      }
+      if (editValue.toLowerCase() !== passValue.toLowerCase()) {
         newInvalidFields[keys[i]] = true;
       }
     }
     setInvalidFields(newInvalidFields);
-  };
-
-  const [passportIsValid, setPassportIsValid] = useState(false);
-  const [passportIsValidating, setPassportIsValidating] = useState(false);
-  const validatePassport = (e) => {
-    e.preventDefault();
-
-    setPassportIsValidating(true);
-
-    const formToSend = new FormData();
-    formToSend.append("passport", idPhoto);
-
-    const values = Object.values(formData);
-    const editUserInfoFields = Object.values(userToEdit);
-    if (values.includes("")) {
-      if (editUserInfoFields.includes("")) {
-        setPassportIsValidating(false);
-        toast.error("Please fill all the input fields!");
-        return;
-      } else {
-        formToSend.append("studentJson", JSON.stringify(userToEdit));
-      }
-    } else {
-      formToSend.append("studentJson", JSON.stringify(formData));
-    }
-
-    axios
-      .post("http://localhost:8080/api/v1/form/validate", formToSend, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        const response = res.data;
-        if (response.isValid) {
-          setPassportIsValid(true);
-          //setPassportIsValidating(false);
-          toast.success("Passport is valid!");
-          setInvalidFields({
-            firstName: false,
-            lastName: false,
-            birthDate: false,
-            placeOfBirth: false,
-            countryOfCitizenship: false,
-            gender: false,
-            passportNumber: false,
-            passportDateOfExpiry: false,
-            passportDateOfIssue: false,
-          });
-          setPassportData({
-            firstName: "",
-            lastName: "",
-            birthDate: "",
-            placeOfBirth: "",
-            countryOfCitizenship: "",
-            gender: "",
-            passportNumber: "",
-            passportDateOfExpiry: "",
-            passportDateOfIssue: "",
-          });
-        } else {
-          toast.error("Passport validation unsuccessful!");
-          const passportData = response.studentDto;
-          setPassportData(passportData);
-          handleInvalidPassport(passportData);
-          setPassportIsValid(false);
-          setPassportIsValidating(false);
-        }
-      })
-      .catch((err) => {
-        toast.error("An error occured while validating passport!");
-        console.error(err);
-        setPassportIsValid(false);
-        setPassportIsValidating(false);
-      });
   };
 
   useEffect(() => {
@@ -611,12 +592,9 @@ function App() {
               setSelfiePhoto={setSelfiePhoto}
               isFillingData={isFillingData}
               fillingWasSuccessful={fillingWasSuccessful}
-              validatePassport={validatePassport}
               actualUser={formData}
               setSelfieIsValid={setSelfieIsValid}
               selfieIsValid={selfieIsValid}
-              passportIsValidating={passportIsValidating}
-              passportIsValid={passportIsValid}
               invalidFields={invalidFields}
               setInvalidFields={setInvalidFields}
               passportData={passportData}
@@ -624,6 +602,11 @@ function App() {
               setIdPhoto={setIdPhoto}
               userWasValidated={userWasValidated}
               setUserWasValidated={setUserWasValidated}
+              formData={formData}
+              setPassportData={setPassportData}
+              handleInvalidPassport={handleInvalidPassport}
+              userToEdit={userToEdit}
+              setUserToEdit={setUserToEdit}
             />
           )}
 
@@ -643,12 +626,9 @@ function App() {
               setSelfiePhoto={setSelfiePhoto}
               isFillingData={isFillingData}
               fillingWasSuccessful={fillingWasSuccessful}
-              validatePassport={validatePassport}
               actualUser={formData}
               setSelfieIsValid={setSelfieIsValid}
               selfieIsValid={selfieIsValid}
-              passportIsValidating={passportIsValidating}
-              passportIsValid={passportIsValid}
               invalidFields={invalidFields}
               setInvalidFields={setInvalidFields}
               passportData={passportData}
@@ -722,11 +702,7 @@ function App() {
           <Toaster />
         </div>
       ) : (
-        <Login
-          setIsUserLogin={setIsUserLogin}
-          setLoginEmail={setLoginEmail}
-          setDropdownOpen={setDropdownOpen}
-        />
+        <Login setIsUserLogin={setIsUserLogin} setLoginEmail={setLoginEmail} />
       )}
     </div>
   );

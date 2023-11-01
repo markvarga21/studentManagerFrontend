@@ -13,50 +13,55 @@ const SimpleTextInput = ({
   invalidFields,
   setInvalidFields,
   passportData,
-  setFormData,
+  setEditFormData,
+  editFormData,
 }) => {
   const inputStyle = `py-3 px-4 block w-${width} border-b-2 border-lightUniGreen focus:outline-none focus:border-uniGreen focus:border-b-2`;
-  const errorInputStyle = `py-3 bg-red-100 px-4 block w-3/4 border-b-2 border-red-500 focus:outline-none focus:border-red-500 focus:border-b-2`;
+  const errorInputStyle = `py-3 bg-red-100 px-4 block w-${width} border-b-2 border-red-500 focus:outline-none focus:border-red-500 focus:border-b-2`;
 
   const [invalidField, setInvalidField] = useState(false);
-
-  const capitalizeFirstLetter = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
+  const [suggestion, setSuggestion] = useState("");
 
   const handleAcceptClick = () => {
+    const dataToUpdate = { ...editFormData, [name]: suggestion };
+    setEditFormData(dataToUpdate);
     setInvalidField(false);
-    setInvalidFields((prevInvalidFields) => ({
-      ...prevInvalidFields,
-      [name]: false,
-    }));
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: passportData[name],
-    }));
-    toast.success(
-      `Accepted '${capitalizeFirstLetter(
-        passportData[name]
-      )}' for field ${name.toLowerCase()}`
-    );
+    const message = `Accepted ${suggestion} instead of ${editFormData[name]}!`;
+    setInvalidFields({
+      firstName: false,
+      lastName: false,
+      birthDate: false,
+      placeOfBirth: false,
+      countryOfCitizenship: false,
+      gender: false,
+      passportNumber: false,
+      passportDateOfExpiry: false,
+      passportDateOfIssue: false,
+    });
+    toast.success(message);
   };
 
   useEffect(() => {
     if (name !== undefined) {
       const fieldStatus = invalidFields[name];
       if (fieldStatus === true) {
-        setInvalidField(true);
-        const element = document.getElementById(id);
-        element.value = capitalizeFirstLetter(passportData[name]);
+        const passValue = passportData[name];
+        if (passValue !== null) {
+          setInvalidField(true);
+          setSuggestion(`${passValue}`);
+        } else {
+          const message = `Field ${name} cannot be extracted from passport!\nPlease validate it manually`;
+          toast.error(message);
+        }
       }
     }
   }, [invalidFields, setInvalidFields, name, id, passportData]);
 
   return (
-    <div>
-      {invalidField === true ? (
-        <div>
-          <div className="flex items-center justify-between">
+    <div id="fullInput">
+      {invalidField ? (
+        <div id="invalidInput">
+          <div className="flex justify-between">
             <label
               htmlFor="input-label"
               className="block font-thin mb-2 text-red-500"
@@ -80,9 +85,16 @@ const SimpleTextInput = ({
             value={customValue}
             name={name}
           ></input>
+
+          <div className="flex items-center gap-1 mt-2">
+            <div className="text-sm">Suggesting: </div>
+            <div className="bg-uniGreen text-white p-1 rounded-lg text-sm font-thin">
+              {suggestion}
+            </div>
+          </div>
         </div>
       ) : (
-        <div>
+        <div id="validInput">
           <label
             htmlFor="input-label"
             className="block font-thin mb-2 text-gray-700"

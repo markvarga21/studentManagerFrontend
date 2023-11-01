@@ -7,8 +7,6 @@ import RadioSelector from "../inputs/RadioSelector";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import SaveIcon from "../icons/SaveIcon";
-import ValidateIcon from "../icons/ValidateIcon";
-import { setId } from "@material-tailwind/react/components/Tabs/TabsContext";
 
 function UserEditFormModal({
   title,
@@ -24,12 +22,10 @@ function UserEditFormModal({
   setSelfiePhoto,
   isFillingData,
   fillingWasSuccessful,
-  validatePassport,
   actualUser,
   setSelfieIsValid,
   selfieIsValid,
   passportIsValidating,
-  passportIsValid,
   invalidFields,
   setInvalidFields,
   passportData,
@@ -38,8 +34,12 @@ function UserEditFormModal({
   setIdPhoto,
   userWasValidated,
   setUserWasValidated,
+  formData,
+  setPassportData,
+  handleInvalidPassport,
+  userToEdit,
+  setUserToEdit,
 }) {
-  const [isValidating, setIsValidating] = useState(false);
   const staticPhotoUrl = process.env.PUBLIC_URL + "/images/avatar.jpg";
   const [photoToShowUrl, setPhotoToShowUrl] = useState(
     selfiePhoto === null ? staticPhotoUrl : URL.createObjectURL(selfiePhoto)
@@ -87,7 +87,6 @@ function UserEditFormModal({
     formToSend.append("firstName", actualUser.firstName);
     formToSend.append("lastName", actualUser.lastName);
 
-    setIsValidating(true);
     axios
       .post("http://localhost:8080/api/v1/faces/validate", formToSend, {
         headers: {
@@ -100,17 +99,14 @@ function UserEditFormModal({
         const confidence = Math.round(message.confidence * 100);
         if (isIdentical) {
           toast.success(`Photo is ${confidence}% similar!`);
-          setIsValidating(false);
           setSelfieIsValid(true);
         } else {
           toast.error(`Faces are not similar!\nConfidence: ${confidence}%`);
           setSelfiePhoto(null);
-          setIsValidating(false);
         }
       })
       .catch((err) => {
         toast.error("Something went wrong when validating the photo!");
-        setIsValidating(false);
         setSelfiePhoto(null);
         console.error(err);
       });
@@ -128,11 +124,28 @@ function UserEditFormModal({
       .then((res) => {
         if (res.data) {
           const blob = new Blob([res.data], { type: "image/jpeg" });
-          const imageUrl = URL.createObjectURL(blob);
-          console.log(imageUrl);
-          setPhotoToShowUrl(imageUrl);
+          setIdPhoto(blob);
         } else {
           toast.error(`No passport found for number '${passportNumber}'!`);
+        }
+      })
+      .catch((err) => console.error(err));
+
+    axios
+      .get(
+        `http://localhost:8080/api/v1/files/${passportNumber}?imageType=SELFIE`,
+        {
+          responseType: "arraybuffer",
+        }
+      )
+      .then((res) => {
+        if (res.data) {
+          const blob = new Blob([res.data], { type: "image/jpeg" });
+          setSelfiePhoto(blob);
+        } else {
+          toast.error(
+            `No selfie found for passport number '${passportNumber}'!`
+          );
         }
       })
       .catch((err) => console.error(err));
@@ -151,6 +164,89 @@ function UserEditFormModal({
       })
       .catch((err) => console.error(err));
   };
+
+  const [passportWasValidated, setPassportWasValidated] = useState(false);
+  const validatePassport = (e) => {
+    e.preventDefault();
+
+    console.log("Validating passport for user: " + JSON.stringify(userToEdit));
+
+    setPassportWasValidated(true);
+
+    const validationLoading = toast.loading("Validating passport...");
+    axios
+      .post("http://localhost:8080/api/v1/validations/validate", userToEdit)
+      .then((res) => {
+        const valid = res.data.isValid;
+        if (valid) {
+          toast.success("Passport is valid!");
+          toast.dismiss(validationLoading);
+
+          axios
+            .post(
+              `http://localhost:8080/api/v1/validations/validateManually?passportNumber=${userToEdit.passportNumber}`
+            )
+            .then(() => {
+              setUserWasValidated(-1 * userWasValidated);
+              closeModal();
+            });
+        } else {
+          toast.error("Passport is not valid!");
+          toast.dismiss(validationLoading);
+          const passportData = res.data.studentDto;
+          console.log(passportData);
+          setPassportData(passportData);
+          handleInvalidPassport(passportData);
+        }
+      })
+      .catch((err) => {
+        toast.dismiss(validationLoading);
+        const response = err.response.data;
+        const message = response.message;
+        const percentage = Math.round(100 * response.percentage);
+        toast.error(message + "\n" + percentage + "%");
+      });
+  };
+
+  const handleEditFormClose = (event) => {
+    setPassportWasValidated(false);
+    setInvalidFields({
+      firstName: false,
+      lastName: false,
+      birthDate: false,
+      placeOfBirth: false,
+      countryOfCitizenship: false,
+      gender: false,
+      passportNumber: false,
+      passportDateOfExpiry: false,
+      passportDateOfIssue: false,
+    });
+    closeModal();
+  };
+
+  const [faceValidityMessage, setFaceValidityMessage] = useState("");
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://localhost:8080/api/v1/facialValidations/${editUserInfo.passportNumber}`
+      )
+      .then((res) => {
+        const data = res.data;
+        const percentage = Math.round(100 * data.percentage);
+        const valid = data.isValid;
+        if (valid) {
+          const message = `\u2705 Photo is ${percentage}% similar!`;
+          setFaceValidityMessage(message);
+        } else {
+          const message = `\u274C Photos are only ${percentage}% similar!`;
+          setFaceValidityMessage(message);
+        }
+      })
+      .catch(() => {
+        setFaceValidityMessage("\u274C Photo is not yet validated!");
+      });
+  }, [editUserInfo]);
 
   return (
     <div
@@ -171,8 +267,9 @@ function UserEditFormModal({
             invalidFields={invalidFields}
             setInvalidFields={setInvalidFields}
             passportData={passportData}
-            setFormData={setFormData}
+            setEditFormData={setUserToEdit}
             customValue={editUserInfo.firstName}
+            editFormData={editUserInfo}
           />
           <SimpleTextInput
             type={"text"}
@@ -185,8 +282,9 @@ function UserEditFormModal({
             invalidFields={invalidFields}
             setInvalidFields={setInvalidFields}
             passportData={passportData}
-            setFormData={setFormData}
+            setEditFormData={setUserToEdit}
             customValue={editUserInfo.lastName}
+            editFormData={editUserInfo}
           />
           <div className="flex">
             <SimpleTextInput
@@ -200,8 +298,9 @@ function UserEditFormModal({
               invalidFields={invalidFields}
               setInvalidFields={setInvalidFields}
               passportData={passportData}
-              setFormData={setFormData}
+              setEditFormData={setUserToEdit}
               customValue={editUserInfo.birthDate}
+              editFormData={editUserInfo}
             />
             <GenderSelector
               type={"text"}
@@ -214,8 +313,9 @@ function UserEditFormModal({
               invalidFields={invalidFields}
               setInvalidFields={setInvalidFields}
               passportData={passportData}
-              setFormData={setFormData}
+              setEditFormData={setUserToEdit}
               selectedOption={editUserInfo.gender}
+              editFormData={editUserInfo}
             />
           </div>
           <SimpleTextInput
@@ -229,8 +329,9 @@ function UserEditFormModal({
             invalidFields={invalidFields}
             setInvalidFields={setInvalidFields}
             passportData={passportData}
-            setFormData={setFormData}
+            setEditFormData={setUserToEdit}
             customValue={editUserInfo.placeOfBirth}
+            editFormData={editUserInfo}
           />
 
           <div className="saveButton">
@@ -255,7 +356,7 @@ function UserEditFormModal({
           </div>
         </div>
 
-        <div className="flex flex-col space-y-8">
+        <div className="flex flex-col items-center space-y-8">
           <div className="h-8"></div>
           <SimpleTextInput
             type={"text"}
@@ -268,8 +369,9 @@ function UserEditFormModal({
             setInvalidFields={setInvalidFields}
             invalidFields={invalidFields}
             passportData={passportData}
-            setFormData={setFormData}
+            setEditFormData={setUserToEdit}
             customValue={editUserInfo.countryOfCitizenship}
+            editFormData={editUserInfo}
           />
 
           <SimpleTextInput
@@ -283,8 +385,9 @@ function UserEditFormModal({
             invalidFields={invalidFields}
             setInvalidFields={setInvalidFields}
             passportData={passportData}
-            setFormData={setFormData}
+            setEditFormData={setUserToEdit}
             customValue={editUserInfo.passportNumber}
+            editFormData={editUserInfo}
           />
           <SimpleTextInput
             type={"text"}
@@ -297,8 +400,9 @@ function UserEditFormModal({
             invalidFields={invalidFields}
             setInvalidFields={setInvalidFields}
             passportData={passportData}
-            setFormData={setFormData}
+            setEditFormData={setUserToEdit}
             customValue={editUserInfo.passportDateOfIssue}
+            editFormData={editUserInfo}
           />
           <SimpleTextInput
             type={"text"}
@@ -311,26 +415,40 @@ function UserEditFormModal({
             invalidFields={invalidFields}
             setInvalidFields={setInvalidFields}
             passportData={passportData}
-            setFormData={setFormData}
+            setEditFormData={setUserToEdit}
             customValue={editUserInfo.passportDateOfExpiry}
+            editFormData={editUserInfo}
           />
           <div className="flex flex-col items-center">
             <div className="autoValidation">
-              <CustomButton text={"Validate automatically"} />
+              {passportWasValidated || userToEdit.valid ? (
+                <CustomButton isDisabled={true} disabledText={"Validated!"} />
+              ) : (
+                <div>
+                  <CustomButton
+                    text={"Validate automatically"}
+                    handleButtonClick={validatePassport}
+                  />
+                </div>
+              )}
             </div>
             <div className="manualValidation">
-              <div
-                className="text-gray-700 italic hover:cursor-pointer hover:text-uniGreen hover:underline"
-                onClick={validateUserManually}
-              >
-                Manual validation
-              </div>
+              {!userToEdit.valid ? (
+                <div
+                  className="text-gray-700 italic hover:cursor-pointer hover:text-uniGreen hover:underline"
+                  onClick={validateUserManually}
+                >
+                  Manual validation
+                </div>
+              ) : (
+                <div></div>
+              )}
             </div>
           </div>
         </div>
         <div className="flex flex-col space-y-3 items-center">
           <div className="flex w-full justify-end">
-            <CloseButton onButtonClick={closeModal} />
+            <CloseButton onButtonClick={handleEditFormClose} />
           </div>
           <RadioSelector
             showSelfie={showSelfie}
@@ -343,6 +461,7 @@ function UserEditFormModal({
             alt="User not known."
             className="object-scale-down h-64 hover:scale-150 hover:shadow-2xl transition duration-300 ease-in-out"
           />
+          <div>{faceValidityMessage}</div>
         </div>
         <Toaster />
       </div>
