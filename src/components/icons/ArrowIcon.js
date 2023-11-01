@@ -14,8 +14,8 @@ const ArrowIcon = ({ arrowDirection }) => {
           d="M12 4V20M12 4L8 8M12 4L16 8"
           stroke="#FFFFFF"
           stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
     </div>
@@ -32,8 +32,8 @@ const ArrowIcon = ({ arrowDirection }) => {
           d="M12 4V20M12 20L8 16M12 20L16 16"
           stroke="#FFFFFF"
           stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
     </div>

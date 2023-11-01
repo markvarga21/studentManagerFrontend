@@ -8,6 +8,7 @@ import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import SaveIcon from "../icons/SaveIcon";
 import ValidateIcon from "../icons/ValidateIcon";
+import { setId } from "@material-tailwind/react/components/Tabs/TabsContext";
 
 function UserEditFormModal({
   title,
@@ -34,6 +35,9 @@ function UserEditFormModal({
   passportData,
   setFormData,
   handleEditFormChange,
+  setIdPhoto,
+  userWasValidated,
+  setUserWasValidated,
 }) {
   const [isValidating, setIsValidating] = useState(false);
   const staticPhotoUrl = process.env.PUBLIC_URL + "/images/avatar.jpg";
@@ -111,6 +115,43 @@ function UserEditFormModal({
         console.error(err);
       });
   };
+
+  useEffect(() => {
+    const passportNumber = editUserInfo.passportNumber;
+    axios
+      .get(
+        `http://localhost:8080/api/v1/files/${passportNumber}?imageType=PASSPORT`,
+        {
+          responseType: "arraybuffer",
+        }
+      )
+      .then((res) => {
+        if (res.data) {
+          const blob = new Blob([res.data], { type: "image/jpeg" });
+          const imageUrl = URL.createObjectURL(blob);
+          console.log(imageUrl);
+          setPhotoToShowUrl(imageUrl);
+        } else {
+          toast.error(`No passport found for number '${passportNumber}'!`);
+        }
+      })
+      .catch((err) => console.error(err));
+  }, [editUserInfo]);
+
+  const validateUserManually = (event) => {
+    axios
+      .post(
+        `http://localhost:8080/api/v1/validations/validateManually?passportNumber=${editUserInfo.passportNumber}`
+      )
+      .then((res) => {
+        console.log(res);
+        toast.success("User successfully validated manually!");
+        setUserWasValidated(-1 * userWasValidated);
+        closeModal();
+      })
+      .catch((err) => console.error(err));
+  };
+
   return (
     <div
       tabIndex="-1"
@@ -273,106 +314,17 @@ function UserEditFormModal({
             setFormData={setFormData}
             customValue={editUserInfo.passportDateOfExpiry}
           />
-          <div className="flex space-x-3">
-            <div className="passportValidatorButton">
-              {idPhoto && !passportIsValid ? (
-                <div>
-                  {passportIsValidating === true ? (
-                    <CustomButton
-                      isLoading={true}
-                      loadingText={"Validating..."}
-                    />
-                  ) : (
-                    <CustomButton
-                      text={"Validate passport"}
-                      isLoading={false}
-                      isDisabled={false}
-                      disabledText={""}
-                      loadingText={""}
-                      handleButtonClick={validatePassport}
-                      customIcon={<ValidateIcon />}
-                    />
-                  )}
-                </div>
-              ) : (
-                <div>
-                  {passportIsValid ? (
-                    <div>
-                      {" "}
-                      <CustomButton
-                        isLoading={false}
-                        isDisabled={true}
-                        disabledText={"Passport is valid!"}
-                        loadingText={""}
-                      />
-                    </div>
-                  ) : (
-                    <div className="mt-2">
-                      {" "}
-                      <input
-                        className="hidden"
-                        type="file"
-                        id="idPhoto"
-                        onChange={handleIdPhotoChange}
-                      />
-                      <label
-                        for="idPhoto"
-                        className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-3 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
-                      >
-                        Upload passport
-                      </label>
-                    </div>
-                  )}
-                </div>
-              )}
+          <div className="flex flex-col items-center">
+            <div className="autoValidation">
+              <CustomButton text={"Validate automatically"} />
             </div>
-            <div className="selfieValidatorButton">
-              {selfiePhoto && !selfieIsValid ? (
-                <div>
-                  {isValidating ? (
-                    <CustomButton
-                      isLoading={true}
-                      loadingText={"Validating..."}
-                    />
-                  ) : (
-                    <CustomButton
-                      text={"Validate selfie"}
-                      isLoading={false}
-                      isDisabled={false}
-                      disabledText={""}
-                      loadingText={""}
-                      handleButtonClick={handleSelfieValidation}
-                      customIcon={<ValidateIcon />}
-                    />
-                  )}
-                </div>
-              ) : (
-                <div>
-                  {selfieIsValid ? (
-                    <CustomButton
-                      isLoading={false}
-                      isDisabled={true}
-                      disabledText={"Selfie is valid!"}
-                      loadingText={""}
-                    />
-                  ) : (
-                    <div className="mt-2">
-                      <input
-                        className="hidden"
-                        type="file"
-                        id="selfiePhoto"
-                        onChange={handleSelfiePhotoChange}
-                      />
-                      <label
-                        for="selfiePhoto"
-                        className="text-white bg-uniGreen hover:bg-darkUniGreen font-medium rounded-lg text-sm px-5 py-3 text-center hover:cursor-pointer focus:ring-4 ring-lightUniGreen"
-                      >
-                        Upload selfie
-                      </label>
-                    </div>
-                  )}
-                </div>
-              )}
+            <div className="manualValidation">
+              <div
+                className="text-gray-700 italic hover:cursor-pointer hover:text-uniGreen hover:underline"
+                onClick={validateUserManually}
+              >
+                Manual validation
+              </div>
             </div>
           </div>
         </div>

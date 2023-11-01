@@ -284,7 +284,6 @@ function App() {
             const errorMessage = err.response.data.message;
             const errWordCount = errorMessage.split(" ").length;
             const errorPanelDuration = (errWordCount * 1000) / 3;
-            console.log(`Error panel duration: ${errorPanelDuration}`);
             toast.error(errorMessage, { duration: errorPanelDuration });
           }
         });
@@ -319,16 +318,14 @@ function App() {
         console.error(err);
         if (err.response != null) {
           const errorMessage = err.response.data.message;
-          const errorOperationType = err.response.data.operationType;
-          setErrorMessage({
-            title: `${errorOperationType} ERROR`,
-            details: errorMessage,
-          });
-          setIsErrorPresent(true);
+          const errWordCount = errorMessage.split(" ").length;
+          const errorPanelDuration = (errWordCount * 1000) / 3;
+          toast.error(errorMessage, { duration: errorPanelDuration });
         }
       });
   };
 
+  const [userWasValidated, setUserWasValidated] = useState(1);
   useEffect(() => {
     axios
       .get("http://localhost:8080/api/v1/students")
@@ -338,7 +335,7 @@ function App() {
       .catch((err) => {
         console.error(err);
       });
-  }, [formData, isSaving, useWasDeleted]);
+  }, [formData, isSaving, useWasDeleted, userWasValidated]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -365,6 +362,7 @@ function App() {
     event.preventDefault();
     const editId = Number(event.target.getAttribute("id"));
     const user = userList.find((user) => user.id === editId);
+    setIsFillingData(false);
     setUserToEdit(user);
     setIsEditFormActive(true);
   };
@@ -372,6 +370,7 @@ function App() {
   const handleIdPhotoChange = (event) => {
     event.preventDefault();
     const file = event.target.files[0];
+    console.log(file + " " + typeof file);
     toast.success("Passport uploaded successfully!");
     setIdPhoto(file);
   };
@@ -423,6 +422,15 @@ function App() {
   const sortItems = (criteria, order) => {
     try {
       const newSortedList = [...userList].sort((a, b) => {
+        if (criteria === "valid") {
+          if (a[criteria] === b[criteria]) {
+            return 0;
+          } else if (a[criteria] === true) {
+            return 1 * order;
+          } else {
+            return -1 * order;
+          }
+        }
         return a[criteria].localeCompare(b[criteria]) * order;
       });
       setUserList(newSortedList);
@@ -613,6 +621,9 @@ function App() {
               setInvalidFields={setInvalidFields}
               passportData={passportData}
               setFormData={setFormData}
+              setIdPhoto={setIdPhoto}
+              userWasValidated={userWasValidated}
+              setUserWasValidated={setUserWasValidated}
             />
           )}
 

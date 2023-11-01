@@ -58,7 +58,7 @@ const SimpleTextInput = ({
         <div>
           <div className="flex items-center justify-between">
             <label
-              for="input-label"
+              htmlFor="input-label"
               className="block font-thin mb-2 text-red-500"
             >
               {labelText}
@@ -84,7 +84,7 @@ const SimpleTextInput = ({
       ) : (
         <div>
           <label
-            for="input-label"
+            htmlFor="input-label"
             className="block font-thin mb-2 text-gray-700"
           >
             {labelText}
