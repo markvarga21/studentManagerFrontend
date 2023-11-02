@@ -7,6 +7,7 @@ import RadioSelector from "../inputs/RadioSelector";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import SaveIcon from "../icons/SaveIcon";
+import SecondaryButton from "../buttons/SecondaryButton";
 
 function UserEditFormModal({
   title,
@@ -257,6 +258,14 @@ function UserEditFormModal({
   const errorModalStyle =
     "flex border-t-8 border-red-700 bg-white shadow lg:w-11/12 2xl:w-8/12 p-10 justify-evenly";
 
+  const changeSelfieFile = () => {
+    console.log("Changing selfie file...");
+  };
+
+  const changePassportFile = () => {
+    console.log("Changing passport file...");
+  };
+
   return (
     <div
       tabIndex="-1"
@@ -447,12 +456,10 @@ function UserEditFormModal({
             {passportWasValidated || userToEdit.valid ? (
               <div className="flex gap-2">
                 <CustomButton isDisabled={true} disabledText={"Validated!"} />
-                <div
-                  className="bg-white border-2 border-uniGreen pt-1.5 pb-1.5 pl-3 pr-3 text-uniGreen rounded-lg hover:cursor-pointer hover:bg-uniGreen hover:text-white transition duration-200 ease-in-out"
+                <SecondaryButton
+                  title={"Validate manually"}
                   onClick={validateUserManually}
-                >
-                  Manual validation
-                </div>
+                />
               </div>
             ) : (
               <div className="flex gap-2">
@@ -460,12 +467,10 @@ function UserEditFormModal({
                   text={"Validate automatically"}
                   handleButtonClick={validatePassport}
                 />
-                <div
-                  className="bg-white border-2 border-uniGreen pt-1.5 pb-1.5 pl-3 pr-3 text-uniGreen rounded-lg hover:cursor-pointer hover:bg-uniGreen hover:text-white transition duration-200 ease-in-out"
+                <SecondaryButton
+                  title={"Validate manually"}
                   onClick={validateUserManually}
-                >
-                  Manual validation
-                </div>
+                />
               </div>
             )}
           </div>
@@ -486,6 +491,16 @@ function UserEditFormModal({
             className="object-scale-down h-64 hover:scale-150 hover:shadow-2xl transition duration-300 ease-in-out"
           />
           <div>{faceValidityMessage}</div>
+          <div className="flex gap-2">
+            <SecondaryButton
+              title={"Change selfie"}
+              handleButtonClick={changeSelfieFile}
+            />
+            <SecondaryButton
+              title={"Change passport"}
+              handleButtonClick={changePassportFile}
+            />
+          </div>
         </div>
         <Toaster />
       </div>
