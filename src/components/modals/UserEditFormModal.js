@@ -376,7 +376,7 @@ function UserEditFormModal({
               customValue={editUserInfo.birthDate}
               editFormData={editUserInfo}
             />
-            <GenderSelector
+            <SimpleTextInput
               type={"text"}
               width={"3/4"}
               labelText={"Gender"}
@@ -388,7 +388,7 @@ function UserEditFormModal({
               setInvalidFields={setInvalidFields}
               passportData={passportData}
               setEditFormData={setUserToEdit}
-              selectedOption={editUserInfo.gender}
+              customValue={editUserInfo.gender}
               editFormData={editUserInfo}
             />
           </div>

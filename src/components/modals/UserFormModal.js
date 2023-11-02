@@ -152,7 +152,7 @@ function UserFormModal({
               passportData={passportData}
               setFormData={setFormData}
             />
-            <GenderSelector
+            <SimpleTextInput
               type={"text"}
               width={"3/4"}
               labelText={"Gender"}

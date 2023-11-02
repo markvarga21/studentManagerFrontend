@@ -330,6 +330,8 @@ function App() {
     }
 
     setIsSaving(true);
+    const userGender = String(userToEdit.gender);
+    userToEdit.gender = userGender.toUpperCase();
     const userJson = JSON.stringify(userToEdit);
     console.log(`Updating ${logObject(userJson)}`);
 
