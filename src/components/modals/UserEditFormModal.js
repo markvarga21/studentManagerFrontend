@@ -113,6 +113,7 @@ function UserEditFormModal({
       });
   };
 
+  const [fileWasChanged, setFileWasChanged] = useState(1);
   useEffect(() => {
     const passportNumber = editUserInfo.passportNumber;
     axios
@@ -150,7 +151,7 @@ function UserEditFormModal({
         }
       })
       .catch((err) => console.error(err));
-  }, [editUserInfo]);
+  }, [editUserInfo, fileWasChanged]);
 
   const validateUserManually = (event) => {
     axios
@@ -258,12 +259,52 @@ function UserEditFormModal({
   const errorModalStyle =
     "flex border-t-8 border-red-700 bg-white shadow lg:w-11/12 2xl:w-8/12 p-10 justify-evenly";
 
-  const changeSelfieFile = () => {
-    console.log("Changing selfie file...");
+  const changeSelfieFile = (event) => {
+    event.preventDefault();
+    const updatingToast = toast.loading("Updating selfie...");
+    const file = event.target.files[0];
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    axios
+      .post(
+        `http://localhost:8080/api/v1/files/changeImage/${editUserInfo.passportNumber}/SELFIE`,
+        formData
+      )
+      .then((res) => {
+        setFileWasChanged(-1 * fileWasChanged);
+        toast.dismiss(updatingToast);
+        toast.success("Selfie successfully updated!");
+      })
+      .catch((err) => {
+        toast.dismiss(updatingToast);
+        toast.error("Something went wrong when updating the selfie!");
+      });
   };
 
-  const changePassportFile = () => {
-    console.log("Changing passport file...");
+  const changePassportFile = (event) => {
+    event.preventDefault();
+    const updatingToast = toast.loading("Updating passport...");
+    const file = event.target.files[0];
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    axios
+      .post(
+        `http://localhost:8080/api/v1/files/changeImage/${editUserInfo.passportNumber}/PASSPORT`,
+        formData
+      )
+      .then((res) => {
+        setFileWasChanged(-1 * fileWasChanged);
+        toast.dismiss(updatingToast);
+        toast.success("Passport successfully updated!");
+      })
+      .catch((err) => {
+        toast.dismiss(updatingToast);
+        toast.error("Something went wrong when updating the passport!");
+      });
   };
 
   return (
@@ -390,7 +431,7 @@ function UserEditFormModal({
         </div>
 
         <div className="flex flex-col items-center space-y-8">
-          <div className="h-8"></div>
+          <div className="h-14"></div>
           <SimpleTextInput
             type={"text"}
             width={"3/4"}
@@ -488,18 +529,38 @@ function UserEditFormModal({
           <img
             src={photoToShowUrl}
             alt="User not known."
-            className="object-scale-down h-64 hover:scale-150 hover:shadow-2xl transition duration-300 ease-in-out"
+            className="object-scale-down h-64 hover:scale-150 shadow-2xl transition duration-300 ease-in-out"
           />
           <div>{faceValidityMessage}</div>
           <div className="flex gap-2">
-            <SecondaryButton
-              title={"Change selfie"}
-              handleButtonClick={changeSelfieFile}
-            />
-            <SecondaryButton
-              title={"Change passport"}
-              handleButtonClick={changePassportFile}
-            />
+            <div id="passportChange">
+              <input
+                className="hidden"
+                type="file"
+                id="updatedPassport"
+                onChange={changePassportFile}
+              />
+              <label
+                for="updatedPassport"
+                className="bg-white border-2 border-uniGreen pt-1.5 pb-1.5 pl-3 pr-3 text-uniGreen rounded-lg hover:cursor-pointer hover:bg-uniGreen hover:text-white transition duration-200 ease-in-out"
+              >
+                Change passport
+              </label>
+            </div>
+            <div id="selfieChange">
+              <input
+                className="hidden"
+                type="file"
+                id="updatedSelfie"
+                onChange={changeSelfieFile}
+              />
+              <label
+                for="updatedSelfie"
+                className="bg-white border-2 border-uniGreen pt-1.5 pb-1.5 pl-3 pr-3 text-uniGreen rounded-lg hover:cursor-pointer hover:bg-uniGreen hover:text-white transition duration-200 ease-in-out"
+              >
+                Change selfie
+              </label>
+            </div>
           </div>
         </div>
         <Toaster />
