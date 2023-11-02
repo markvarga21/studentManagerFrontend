@@ -448,7 +448,7 @@ function UserEditFormModal({
               <div className="flex gap-2">
                 <CustomButton isDisabled={true} disabledText={"Validated!"} />
                 <div
-                  className="bg-white border-2 border-uniGreen p-1.5 text-uniGreen rounded-lg hover:cursor-pointer hover:bg-uniGreen hover:text-white transition duration-300 ease-in-out"
+                  className="bg-white border-2 border-uniGreen pt-1.5 pb-1.5 pl-3 pr-3 text-uniGreen rounded-lg hover:cursor-pointer hover:bg-uniGreen hover:text-white transition duration-200 ease-in-out"
                   onClick={validateUserManually}
                 >
                   Manual validation
@@ -461,7 +461,7 @@ function UserEditFormModal({
                   handleButtonClick={validatePassport}
                 />
                 <div
-                  className="bg-white border-2 border-uniGreen p-1.5 text-uniGreen rounded-lg hover:cursor-pointer hover:bg-uniGreen hover:text-white transition duration-300 ease-in-out"
+                  className="bg-white border-2 border-uniGreen pt-1.5 pb-1.5 pl-3 pr-3 text-uniGreen rounded-lg hover:cursor-pointer hover:bg-uniGreen hover:text-white transition duration-200 ease-in-out"
                   onClick={validateUserManually}
                 >
                   Manual validation
