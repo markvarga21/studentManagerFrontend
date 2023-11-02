@@ -163,6 +163,10 @@ function UserEditFormModal({
         closeModal();
       })
       .catch((err) => console.error(err));
+
+    axios.post(
+      `http://localhost:8080/api/v1/facialValidations/setFacialValidationDataToValid?passportNumber=${editUserInfo.passportNumber}`
+    );
   };
 
   const [passportWasValidated, setPassportWasValidated] = useState(false);
@@ -246,16 +250,36 @@ function UserEditFormModal({
       .catch(() => {
         setFaceValidityMessage("\u274C Photo is not yet validated!");
       });
-  }, [editUserInfo]);
+  }, [editUserInfo, invalidFields]);
+
+  const normalModalStyle =
+    "flex border-t-8 border-uniGreen bg-white shadow lg:w-11/12 2xl:w-8/12 p-10 justify-evenly";
+  const errorModalStyle =
+    "flex border-t-8 border-red-700 bg-white shadow lg:w-11/12 2xl:w-8/12 p-10 justify-evenly";
 
   return (
     <div
       tabIndex="-1"
       className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75"
     >
-      <div className="flex border-t-8 border-uniGreen bg-white shadow lg:w-11/12 2xl:w-8/12 p-10 justify-evenly">
+      <div className={editUserInfo.valid ? normalModalStyle : errorModalStyle}>
         <div className="flex flex-col space-y-8">
-          <h2 className="font-bold text-3xl">{title}</h2>
+          <div id="editModalTitle">
+            {editUserInfo.valid ? (
+              <div>
+                <h2 className="font-bold text-3xl">Edit student</h2>
+                <h2 className="font-bold text-uniGreen">(user is validated)</h2>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <h2 className="font-bold text-3xl">Edit student</h2>
+                <h2 className="font-bold text-red-700">
+                  (user is not validated)
+                </h2>
+              </div>
+            )}
+          </div>
+
           <SimpleTextInput
             type={"text"}
             width={"full"}
@@ -419,31 +443,31 @@ function UserEditFormModal({
             customValue={editUserInfo.passportDateOfExpiry}
             editFormData={editUserInfo}
           />
-          <div className="flex flex-col items-center">
-            <div className="autoValidation">
-              {passportWasValidated || userToEdit.valid ? (
+          <div id="validateButtons" className="flex items-center">
+            {passportWasValidated || userToEdit.valid ? (
+              <div className="flex gap-2">
                 <CustomButton isDisabled={true} disabledText={"Validated!"} />
-              ) : (
-                <div>
-                  <CustomButton
-                    text={"Validate automatically"}
-                    handleButtonClick={validatePassport}
-                  />
-                </div>
-              )}
-            </div>
-            <div className="manualValidation">
-              {!userToEdit.valid ? (
                 <div
-                  className="text-gray-700 italic hover:cursor-pointer hover:text-uniGreen hover:underline"
+                  className="bg-white border-2 border-uniGreen p-1.5 text-uniGreen rounded-lg hover:cursor-pointer hover:bg-uniGreen hover:text-white transition duration-300 ease-in-out"
                   onClick={validateUserManually}
                 >
                   Manual validation
                 </div>
-              ) : (
-                <div></div>
-              )}
-            </div>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <CustomButton
+                  text={"Validate automatically"}
+                  handleButtonClick={validatePassport}
+                />
+                <div
+                  className="bg-white border-2 border-uniGreen p-1.5 text-uniGreen rounded-lg hover:cursor-pointer hover:bg-uniGreen hover:text-white transition duration-300 ease-in-out"
+                  onClick={validateUserManually}
+                >
+                  Manual validation
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div className="flex flex-col space-y-3 items-center">

@@ -111,6 +111,7 @@ const SimpleTextInput = ({
             value={customValue}
             name={name}
           ></input>
+          <div className="h-8"></div>
         </div>
       )}
       <Toaster />

@@ -311,15 +311,29 @@ function App() {
     return true;
   };
 
+  const isEditUserTheSame = (user) => {
+    return (
+      userList.filter((u) => JSON.stringify(u) === JSON.stringify(user))
+        .length > 0
+    );
+  };
+
   const handleEditFormSubmit = (event) => {
     event.preventDefault();
     console.log(
       `Updating user with passport number: ${userToEdit.passportNumber}`
     );
 
+    if (isEditUserTheSame(userToEdit)) {
+      toast.error("Cannot update!\nCause: user data not modified.");
+      return;
+    }
+
     setIsSaving(true);
     const userJson = JSON.stringify(userToEdit);
     console.log(`Updating ${logObject(userJson)}`);
+
+    console.log(`Edit id: ${userToEdit.id}`);
 
     axios
       .put(`http://localhost:8080/api/v1/students/${userToEdit.id}`, userToEdit)
