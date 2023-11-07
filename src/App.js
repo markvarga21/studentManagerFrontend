@@ -90,13 +90,18 @@ function App() {
         setDataFromPassport(user);
         delete user["id"];
         const keys = Object.keys(user);
+        const temp = { ...formData };
         for (const key of keys) {
           const element = document.getElementById(key);
-          if (element !== null) {
+          if (element === null) {
+            continue;
+          }
+          if (formData[key] === "") {
             element.value = user[key];
+            temp[key] = user[key];
           }
         }
-        setFormData(user);
+        setFormData(temp);
         toast.success("Data filled successfully!");
       })
       .catch((err) => {
@@ -192,7 +197,6 @@ function App() {
     newFormData[fieldName] = fieldValue;
 
     setFormData(newFormData);
-    console.log(formData);
   };
 
   const handleEditFormChange = (event) => {
