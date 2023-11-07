@@ -40,6 +40,7 @@ function UserEditFormModal({
   userToEdit,
   setUserToEdit,
   userWasUpdated,
+  editWasClicked,
 }) {
   const staticPhotoUrl = process.env.PUBLIC_URL + "/images/avatar.jpg";
   const [photoToShowUrl, setPhotoToShowUrl] = useState(
@@ -107,7 +108,7 @@ function UserEditFormModal({
         }
       })
       .catch((err) => console.error(err));
-  }, [userWasUpdated, fileWasChanged]);
+  }, [userWasUpdated, fileWasChanged, editWasClicked]);
 
   const validateUserManually = (event) => {
     axios
@@ -127,17 +128,28 @@ function UserEditFormModal({
   };
 
   const [passportWasValidated, setPassportWasValidated] = useState(false);
+  const [passIsValidating, setPassIsValidating] = useState(false);
   const validatePassport = (e) => {
     e.preventDefault();
+    const studentJson = JSON.stringify(userToEdit);
+    console.log("Validating passport for user: " + studentJson);
 
-    console.log("Validating passport for user: " + JSON.stringify(userToEdit));
+    const formToSend = new FormData();
+    formToSend.append("passport", idPhoto);
+    formToSend.append("studentJson", studentJson);
 
     setPassportWasValidated(true);
+    setPassIsValidating(true);
 
     const validationLoading = toast.loading("Validating passport...");
     axios
-      .post("http://localhost:8080/api/v1/validations/validate", userToEdit)
+      .post("http://localhost:8080/api/v1/validations/validate", formToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((res) => {
+        setPassIsValidating(false);
         const valid = res.data.isValid;
         if (valid) {
           toast.success("Passport is valid!");
@@ -151,6 +163,7 @@ function UserEditFormModal({
               setUserWasValidated(-1 * userWasValidated);
             });
         } else {
+          setPassIsValidating(false);
           toast.error("Faces are not matching!");
           toast.dismiss(validationLoading);
           const passportData = res.data.studentDto;
@@ -161,6 +174,7 @@ function UserEditFormModal({
         }
       })
       .catch((err) => {
+        setPassIsValidating(false);
         toast.dismiss(validationLoading);
         const response = err.response.data;
         const message = response.message;
@@ -198,7 +212,7 @@ function UserEditFormModal({
         console.error(err);
         setSelfieIsValid(false);
       });
-  }, [userWasUpdated, userWasValidated]);
+  }, [userWasUpdated, userWasValidated, idPhoto, selfiePhoto]);
 
   const [faceValidityMessage, setFaceValidityMessage] = useState("");
   useEffect(() => {
@@ -281,6 +295,14 @@ function UserEditFormModal({
       tabIndex="-1"
       className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75"
     >
+      {passIsValidating ? (
+        <div
+          id="freezePanel"
+          className="bg-gray-800 bg-opacity-75 w-full h-full z-60 fixed"
+        ></div>
+      ) : (
+        <> </>
+      )}
       <div className={studentValidity ? normalModalStyle : errorModalStyle}>
         <div className="flex flex-col space-y-8">
           <div id="editModalTitle">

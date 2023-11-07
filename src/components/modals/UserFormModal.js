@@ -107,6 +107,15 @@ function UserFormModal({
       tabIndex="-1"
       className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75"
     >
+      {isFillingData ? (
+        <div
+          id="freezePanel"
+          className="bg-gray-800 bg-opacity-75 w-full h-full z-60 fixed"
+        ></div>
+      ) : (
+        <> </>
+      )}
+
       <div className="border-t-8 border-uniGreen bg-white shadow lg:w-11/12 2xl:w-8/12 p-10 flex justify-evenly">
         <div className="flex flex-col space-y-8">
           <h2 className="font-bold text-3xl">Add new student</h2>

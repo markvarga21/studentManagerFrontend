@@ -46,18 +46,18 @@ const RadioSelector = ({ showSelfie, selfiePhoto, showPassport, idPhoto }) => {
   }, [selfiePhoto, idPhoto]);
 
   return (
-    <div className="flex w-56">
+    <div className="flex w-72">
       <div
         className={passportStyle + " rounded-l-lg"}
         onClick={handlePassportClick}
       >
-        Passport
+        Show passport
       </div>
       <div
         className={selfieStyle + " rounded-r-lg"}
         onClick={handleSelfieClick}
       >
-        Selfie
+        Show selfie
       </div>
     </div>
   );

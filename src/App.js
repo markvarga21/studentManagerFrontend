@@ -72,11 +72,15 @@ function App() {
     formToSend.append("passport", idPhoto);
 
     axios
-      .post("http://localhost:8080/api/v1/form/extractData", formToSend, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .post(
+        `http://${process.env.REACT_APP_HOST}:8080/api/v1/form/extractData`,
+        formToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
       .then((res) => {
         toast.dismiss(loadingToast);
         setIsDataFilled(true);
@@ -229,7 +233,11 @@ function App() {
       console.log(`Saving ${logObject(userJson)}`);
 
       axios
-        .post("http://localhost:8080/api/v1/students", formData, {})
+        .post(
+          `http://${process.env.REACT_APP_HOST}:8080/api/v1/students`,
+          formData,
+          {}
+        )
         .then((res) => {
           setIsDataFilled(false);
           setIsErrorPresent(false);
@@ -247,7 +255,7 @@ function App() {
             );
             axios
               .post(
-                "http://localhost:8080/api/v1/validations",
+                `http://${process.env.REACT_APP_HOST}:8080/api/v1/validations`,
                 dataFromPassport
               )
               .then((res) => console.log(res.data))
@@ -259,7 +267,7 @@ function App() {
           imageForm.append("selfie", selfiePhoto);
           axios
             .post(
-              `http://localhost:8080/api/v1/files/upload/${formData.passportNumber}`,
+              `http://${process.env.REACT_APP_HOST}:8080/api/v1/files/upload/${formData.passportNumber}`,
               imageForm,
               {
                 headers: {
@@ -326,7 +334,10 @@ function App() {
     console.log(`Edit id: ${userToEdit.id}`);
 
     axios
-      .put(`http://localhost:8080/api/v1/students/${userToEdit.id}`, userToEdit)
+      .put(
+        `http://${process.env.REACT_APP_HOST}:8080/api/v1/students/${userToEdit.id}`,
+        userToEdit
+      )
       .then((res) => {
         toast.success(`User with id '${userToEdit.id}' updated successfully!`);
         setIsErrorPresent(false);
@@ -349,7 +360,7 @@ function App() {
         if (passportDataEqualsForm(passportData, userToEdit)) {
           axios
             .post(
-              `http://localhost:8080/api/v1/validations/validateManually?passportNumber=${userToEdit.passportNumber}`
+              `http://${process.env.REACT_APP_HOST}:8080/api/v1/validations/validateManually?passportNumber=${userToEdit.passportNumber}`
             )
             .then((response) => {
               console.log("User validated successfully! " + response.data);
@@ -378,7 +389,7 @@ function App() {
   const [userWasValidated, setUserWasValidated] = useState(1);
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/v1/students")
+      .get(`http://${process.env.REACT_APP_HOST}:8080/api/v1/students`)
       .then((res) => {
         setUserList(res.data);
       })
@@ -408,6 +419,7 @@ function App() {
     return formObj;
   };
 
+  const [editWasClicked, setEditWasClicked] = useState(1);
   const handleEditUser = (event) => {
     event.preventDefault();
     const editId = Number(event.target.getAttribute("id"));
@@ -415,6 +427,7 @@ function App() {
     setIsFillingData(false);
     setUserToEdit(user);
     setIsEditFormActive(true);
+    setEditWasClicked(-1 * editWasClicked);
   };
 
   const handleIdPhotoChange = (event) => {
@@ -438,7 +451,9 @@ function App() {
     const userToDeleteId = event.target.id;
 
     axios
-      .delete(`http://localhost:8080/api/v1/students/${userToDeleteId}`)
+      .delete(
+        `http://${process.env.REACT_APP_HOST}:8080/api/v1/students/${userToDeleteId}`
+      )
       .then((res) => {
         setIsFillingData(false);
         setUserWasDeleted(-1 * useWasDeleted);
@@ -609,6 +624,7 @@ function App() {
               userToEdit={userToEdit}
               setUserToEdit={setUserToEdit}
               userWasUpdated={userWasUpdated}
+              editWasClicked={editWasClicked}
             />
           )}
 
