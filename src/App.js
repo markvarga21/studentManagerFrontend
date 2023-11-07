@@ -358,22 +358,38 @@ function App() {
         });
         setUserWasUpdated(-1 * userWasUpdated);
 
-        if (passportDataEqualsForm(passportData, userToEdit)) {
-          axios
-            .post(
-              `http://${process.env.REACT_APP_HOST}:8080/api/v1/validations/validateManually?studentId=${userToEdit.id}`
-            )
-            .then((response) => {
-              console.log("Student validated successfully! " + response.data);
-              toast.success("Student validated successfully!");
-              setUserWasValidated(-1 * userWasValidated);
-            })
-            .catch((err) => {
-              console.error(err);
-              // if the selfie is not similar to the passport photo
-              toast.error("An error occured while validating the student!");
-            });
-        }
+        axios
+          .get(
+            `http://${process.env.REACT_APP_HOST}:8080/api/v1/validations/${userToEdit.passportNumber}`
+          )
+          .then((res) => {
+            const passportData = res.data;
+            if (res.data === null) {
+              console.log("Passport data is null!");
+              return;
+            }
+            if (passportDataEqualsForm(passportData, userToEdit)) {
+              console.log(
+                "Passport data equals form data, validating automatically!"
+              );
+              axios
+                .post(
+                  `http://${process.env.REACT_APP_HOST}:8080/api/v1/validations/validateManually?studentId=${userToEdit.id}`
+                )
+                .then((response) => {
+                  console.log(
+                    "Student validated successfully! " + response.data
+                  );
+                  toast.success("Student validated successfully!");
+                  setUserWasValidated(-1 * userWasValidated);
+                })
+                .catch((err) => {
+                  console.error(err);
+                  // if the selfie is not similar to the passport photo
+                  toast.error("An error occured while validating the student!");
+                });
+            }
+          });
       })
       .catch((err) => {
         setIsSaving(false);

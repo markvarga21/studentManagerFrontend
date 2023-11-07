@@ -237,8 +237,10 @@ function UserEditFormModal({
   const errorModalStyle =
     "flex border-t-8 border-red-700 bg-white shadow lg:w-11/12 2xl:w-8/12 p-10 justify-evenly";
 
+  const [selfieIsUpdating, setSelfieIsUpdating] = useState(false);
   const changeSelfieFile = (event) => {
     event.preventDefault();
+    setSelfieIsUpdating(true);
     const updatingToast = toast.loading("Updating selfie...");
     const file = event.target.files[0];
 
@@ -251,18 +253,22 @@ function UserEditFormModal({
         formData
       )
       .then((res) => {
+        setSelfieIsUpdating(false);
         setFileWasChanged(-1 * fileWasChanged);
         toast.dismiss(updatingToast);
         toast.success("Selfie successfully updated!");
       })
       .catch((err) => {
+        setSelfieIsUpdating(false);
         toast.dismiss(updatingToast);
         toast.error("Something went wrong when updating the selfie!");
       });
   };
 
+  const [passportIsUpdating, setPassportIsUpdating] = useState(false);
   const changePassportFile = (event) => {
     event.preventDefault();
+    setPassportIsUpdating(true);
     const updatingToast = toast.loading("Updating passport...");
     const file = event.target.files[0];
 
@@ -275,11 +281,13 @@ function UserEditFormModal({
         formData
       )
       .then((res) => {
+        setPassportIsUpdating(false);
         setFileWasChanged(-1 * fileWasChanged);
         toast.dismiss(updatingToast);
         toast.success("Passport successfully updated!");
       })
       .catch((err) => {
+        setPassportIsUpdating(false);
         toast.dismiss(updatingToast);
         toast.error("Something went wrong when updating the passport!");
       });
@@ -290,7 +298,7 @@ function UserEditFormModal({
       tabIndex="-1"
       className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75"
     >
-      {passIsValidating ? (
+      {passIsValidating || selfieIsUpdating || passportIsUpdating ? (
         <div
           id="freezePanel"
           className="bg-gray-800 bg-opacity-75 w-full h-full z-60 fixed"
@@ -302,12 +310,12 @@ function UserEditFormModal({
         <div className="flex flex-col space-y-8">
           <div id="editModalTitle">
             {studentValidity ? (
-              <div>
+              <div className="flex flex-col gap-2">
                 <h2 className="font-bold text-3xl">Edit student</h2>
                 <h2 className="font-bold text-uniGreen">(user is validated)</h2>
               </div>
             ) : (
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2">
                 <h2 className="font-bold text-3xl">Edit student</h2>
                 <h2 className="font-bold text-red-700">
                   (user is not validated)
