@@ -72,10 +72,10 @@ function UserEditFormModal({
 
   const [fileWasChanged, setFileWasChanged] = useState(1);
   useEffect(() => {
-    const passportNumber = editUserInfo.passportNumber;
+    const studentId = editUserInfo.id;
     axios
       .get(
-        `http://localhost:8080/api/v1/files/${passportNumber}?imageType=PASSPORT`,
+        `http://localhost:8080/api/v1/files/${studentId}?imageType=PASSPORT`,
         {
           responseType: "arraybuffer",
         }
@@ -85,26 +85,21 @@ function UserEditFormModal({
           const blob = new Blob([res.data], { type: "image/jpeg" });
           setIdPhoto(blob);
         } else {
-          toast.error(`No passport found for number '${passportNumber}'!`);
+          toast.error(`No passport found for user with id '${studentId}'!`);
         }
       })
       .catch((err) => console.error(err));
 
     axios
-      .get(
-        `http://localhost:8080/api/v1/files/${passportNumber}?imageType=SELFIE`,
-        {
-          responseType: "arraybuffer",
-        }
-      )
+      .get(`http://localhost:8080/api/v1/files/${studentId}?imageType=SELFIE`, {
+        responseType: "arraybuffer",
+      })
       .then((res) => {
         if (res.data) {
           const blob = new Blob([res.data], { type: "image/jpeg" });
           setSelfiePhoto(blob);
         } else {
-          toast.error(
-            `No selfie found for passport number '${passportNumber}'!`
-          );
+          toast.error(`No selfie found for user with id '${studentId}'!`);
         }
       })
       .catch((err) => console.error(err));
@@ -113,7 +108,7 @@ function UserEditFormModal({
   const validateUserManually = (event) => {
     axios
       .post(
-        `http://localhost:8080/api/v1/validations/validateManually?passportNumber=${editUserInfo.passportNumber}`
+        `http://localhost:8080/api/v1/validations/validateManually?studentId=${editUserInfo.id}`
       )
       .then((res) => {
         console.log(res);
@@ -157,7 +152,7 @@ function UserEditFormModal({
 
           axios
             .post(
-              `http://localhost:8080/api/v1/validations/validateManually?passportNumber=${userToEdit.passportNumber}`
+              `http://localhost:8080/api/v1/validations/validateManually?studentId=${userToEdit.id}`
             )
             .then(() => {
               setUserWasValidated(-1 * userWasValidated);
@@ -252,7 +247,7 @@ function UserEditFormModal({
 
     axios
       .post(
-        `http://localhost:8080/api/v1/files/changeImage/${editUserInfo.passportNumber}/SELFIE`,
+        `http://localhost:8080/api/v1/files/changeImage/${editUserInfo.id}/SELFIE`,
         formData
       )
       .then((res) => {
@@ -276,7 +271,7 @@ function UserEditFormModal({
 
     axios
       .post(
-        `http://localhost:8080/api/v1/files/changeImage/${editUserInfo.passportNumber}/PASSPORT`,
+        `http://localhost:8080/api/v1/files/changeImage/${editUserInfo.id}/PASSPORT`,
         formData
       )
       .then((res) => {

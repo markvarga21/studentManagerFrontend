@@ -265,9 +265,10 @@ function App() {
           const imageForm = new FormData();
           imageForm.append("passport", idPhoto);
           imageForm.append("selfie", selfiePhoto);
+          const savedUserId = res.data.id;
           axios
             .post(
-              `http://${process.env.REACT_APP_HOST}:8080/api/v1/files/upload/${formData.passportNumber}`,
+              `http://${process.env.REACT_APP_HOST}:8080/api/v1/files/upload/${savedUserId}`,
               imageForm,
               {
                 headers: {
@@ -360,7 +361,7 @@ function App() {
         if (passportDataEqualsForm(passportData, userToEdit)) {
           axios
             .post(
-              `http://${process.env.REACT_APP_HOST}:8080/api/v1/validations/validateManually?passportNumber=${userToEdit.passportNumber}`
+              `http://${process.env.REACT_APP_HOST}:8080/api/v1/validations/validateManually?studentId=${userToEdit.id}`
             )
             .then((response) => {
               console.log("User validated successfully! " + response.data);
