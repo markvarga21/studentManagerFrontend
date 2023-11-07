@@ -364,14 +364,14 @@ function App() {
               `http://${process.env.REACT_APP_HOST}:8080/api/v1/validations/validateManually?studentId=${userToEdit.id}`
             )
             .then((response) => {
-              console.log("User validated successfully! " + response.data);
-              toast.success("User validated successfully!");
+              console.log("Student validated successfully! " + response.data);
+              toast.success("Student validated successfully!");
               setUserWasValidated(-1 * userWasValidated);
             })
             .catch((err) => {
               console.error(err);
               // if the selfie is not similar to the passport photo
-              toast.error("An error occured while validating the user!");
+              toast.error("An error occured while validating the student!");
             });
         }
       })
