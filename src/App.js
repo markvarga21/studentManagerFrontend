@@ -193,7 +193,6 @@ function App() {
 
   const handleEditFormChange = (event) => {
     event.preventDefault();
-    console.log("Handling edit form change!");
 
     const fieldName = event.target.getAttribute("name");
     const fieldValue = event.target.value;
@@ -311,23 +310,12 @@ function App() {
     return true;
   };
 
-  const isEditUserTheSame = (user) => {
-    return (
-      userList.filter((u) => JSON.stringify(u) === JSON.stringify(user))
-        .length > 0
-    );
-  };
-
+  const [userWasUpdated, setUserWasUpdated] = useState(1);
   const handleEditFormSubmit = (event) => {
     event.preventDefault();
     console.log(
       `Updating user with passport number: ${userToEdit.passportNumber}`
     );
-
-    if (isEditUserTheSame(userToEdit)) {
-      toast.error("Cannot update!\nCause: user data not modified.");
-      return;
-    }
 
     setIsSaving(true);
     const userGender = String(userToEdit.gender);
@@ -343,10 +331,6 @@ function App() {
         toast.success(`User with id '${userToEdit.id}' updated successfully!`);
         setIsErrorPresent(false);
         setIsSaving(false);
-        setIsEditFormActive(false);
-        setUserToEdit({});
-        setIdPhoto(null);
-        setSelfiePhoto(null);
         setSelfieIsValid(false);
         setFillingWasSuccessful(false);
         setInvalidFields({
@@ -360,6 +344,7 @@ function App() {
           passportDateOfExpiry: false,
           passportDateOfIssue: false,
         });
+        setUserWasUpdated(-1 * userWasUpdated);
 
         if (passportDataEqualsForm(passportData, userToEdit)) {
           axios
@@ -623,6 +608,7 @@ function App() {
               handleInvalidPassport={handleInvalidPassport}
               userToEdit={userToEdit}
               setUserToEdit={setUserToEdit}
+              userWasUpdated={userWasUpdated}
             />
           )}
 

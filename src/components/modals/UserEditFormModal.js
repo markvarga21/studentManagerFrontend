@@ -1,6 +1,5 @@
 import { React, useEffect, useState } from "react";
 import SimpleTextInput from "../inputs/SimpleTextInput";
-import GenderSelector from "../inputs/GenderSelector";
 import CustomButton from "../buttons/CustomButton";
 import CloseButton from "../buttons/CloseButton";
 import RadioSelector from "../inputs/RadioSelector";
@@ -40,6 +39,7 @@ function UserEditFormModal({
   handleInvalidPassport,
   userToEdit,
   setUserToEdit,
+  userWasUpdated,
 }) {
   const staticPhotoUrl = process.env.PUBLIC_URL + "/images/avatar.jpg";
   const [photoToShowUrl, setPhotoToShowUrl] = useState(
@@ -68,50 +68,6 @@ function UserEditFormModal({
       setPhotoToShowUrl(URL.createObjectURL(selfiePhoto));
     }
   }, [selfiePhoto, staticPhotoUrl]);
-
-  const handleSelfieValidation = (event) => {
-    event.preventDefault();
-
-    if (idPhoto === null) {
-      toast.error("No passport uploaded yet.");
-      return;
-    }
-
-    if (editUserInfo.firstName === "" || editUserInfo.lastName === "") {
-      toast.error("No first or last name provided.");
-      return;
-    }
-
-    const formToSend = new FormData();
-    formToSend.append("passport", idPhoto);
-    formToSend.append("selfiePhoto", selfiePhoto);
-    formToSend.append("firstName", actualUser.firstName);
-    formToSend.append("lastName", actualUser.lastName);
-
-    axios
-      .post("http://localhost:8080/api/v1/faces/validate", formToSend, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        const message = res.data;
-        const isIdentical = message.isIdentical;
-        const confidence = Math.round(message.confidence * 100);
-        if (isIdentical) {
-          toast.success(`Photo is ${confidence}% similar!`);
-          setSelfieIsValid(true);
-        } else {
-          toast.error(`Faces are not similar!\nConfidence: ${confidence}%`);
-          setSelfiePhoto(null);
-        }
-      })
-      .catch((err) => {
-        toast.error("Something went wrong when validating the photo!");
-        setSelfiePhoto(null);
-        console.error(err);
-      });
-  };
 
   const [fileWasChanged, setFileWasChanged] = useState(1);
   useEffect(() => {
@@ -151,7 +107,7 @@ function UserEditFormModal({
         }
       })
       .catch((err) => console.error(err));
-  }, [editUserInfo, fileWasChanged]);
+  }, [userWasUpdated, fileWasChanged]);
 
   const validateUserManually = (event) => {
     axios
@@ -162,7 +118,6 @@ function UserEditFormModal({
         console.log(res);
         toast.success("User successfully validated manually!");
         setUserWasValidated(-1 * userWasValidated);
-        closeModal();
       })
       .catch((err) => console.error(err));
 
@@ -194,23 +149,23 @@ function UserEditFormModal({
             )
             .then(() => {
               setUserWasValidated(-1 * userWasValidated);
-              closeModal();
             });
         } else {
-          toast.error("Passport is not valid!");
+          toast.error("Faces are not matching!");
           toast.dismiss(validationLoading);
           const passportData = res.data.studentDto;
           console.log(passportData);
           setPassportData(passportData);
           handleInvalidPassport(passportData);
+          setUserWasValidated(-1 * userWasValidated);
         }
       })
       .catch((err) => {
         toast.dismiss(validationLoading);
         const response = err.response.data;
         const message = response.message;
-        const percentage = Math.round(100 * response.percentage);
-        toast.error(message + "\n" + percentage + "%");
+        const roundedPercent = Math.round(response.percentage * 100);
+        toast.error(message + "\n" + roundedPercent + "%");
       });
   };
 
@@ -230,8 +185,22 @@ function UserEditFormModal({
     closeModal();
   };
 
-  const [faceValidityMessage, setFaceValidityMessage] = useState("");
+  const [studentValidity, setStudentValidity] = useState(false);
+  useEffect(() => {
+    axios
+      .get(
+        `http://localhost:8080/api/v1/validations/isUserValid/${editUserInfo.passportNumber}`
+      )
+      .then((res) => {
+        setStudentValidity(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+        setSelfieIsValid(false);
+      });
+  }, [userWasUpdated, userWasValidated]);
 
+  const [faceValidityMessage, setFaceValidityMessage] = useState("");
   useEffect(() => {
     axios
       .get(
@@ -239,20 +208,20 @@ function UserEditFormModal({
       )
       .then((res) => {
         const data = res.data;
-        const percentage = Math.round(100 * data.percentage);
+        const roundedPercent = Math.round(data.percentage * 100);
         const valid = data.isValid;
         if (valid) {
-          const message = `\u2705 Photo is ${percentage}% similar!`;
+          const message = `\u2705 Photo is ${roundedPercent}% similar!`;
           setFaceValidityMessage(message);
         } else {
-          const message = `\u274C Photos are only ${percentage}% similar!`;
+          const message = `\u274C Photos are only ${roundedPercent}% similar!`;
           setFaceValidityMessage(message);
         }
       })
       .catch(() => {
         setFaceValidityMessage("\u274C Photo is not yet validated!");
       });
-  }, [editUserInfo, invalidFields]);
+  }, [editUserInfo.valid, fileWasChanged, userWasValidated]);
 
   const normalModalStyle =
     "flex border-t-8 border-uniGreen bg-white shadow lg:w-11/12 2xl:w-8/12 p-10 justify-evenly";
@@ -312,10 +281,10 @@ function UserEditFormModal({
       tabIndex="-1"
       className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75"
     >
-      <div className={editUserInfo.valid ? normalModalStyle : errorModalStyle}>
+      <div className={studentValidity ? normalModalStyle : errorModalStyle}>
         <div className="flex flex-col space-y-8">
           <div id="editModalTitle">
-            {editUserInfo.valid ? (
+            {studentValidity ? (
               <div>
                 <h2 className="font-bold text-3xl">Edit student</h2>
                 <h2 className="font-bold text-uniGreen">(user is validated)</h2>
@@ -494,26 +463,32 @@ function UserEditFormModal({
             editFormData={editUserInfo}
           />
           <div id="validateButtons" className="flex items-center">
-            {passportWasValidated || userToEdit.valid ? (
-              <div className="flex gap-2">
-                <CustomButton isDisabled={true} disabledText={"Validated!"} />
-                <SecondaryButton
-                  title={"Validate manually"}
-                  onClick={validateUserManually}
-                />
-              </div>
-            ) : (
-              <div className="flex gap-2">
-                <CustomButton
-                  text={"Validate automatically"}
-                  handleButtonClick={validatePassport}
-                />
-                <SecondaryButton
-                  title={"Validate manually"}
-                  onClick={validateUserManually}
-                />
-              </div>
-            )}
+            <div>
+              {studentValidity ? (
+                <div className="flex gap-2">
+                  <CustomButton
+                    text={"Validated!"}
+                    isDisabled={true}
+                    disabledText={"Validated!"}
+                  />
+                  <SecondaryButton
+                    title={"Validate manually"}
+                    onClick={validateUserManually}
+                  />
+                </div>
+              ) : (
+                <div className="flex gap-2">
+                  <CustomButton
+                    text={"Validate automatically"}
+                    handleButtonClick={validatePassport}
+                  />
+                  <SecondaryButton
+                    title={"Validate manually"}
+                    onClick={validateUserManually}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <div className="flex flex-col space-y-3 items-center">
