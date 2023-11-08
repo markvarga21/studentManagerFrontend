@@ -1,7 +1,5 @@
 import { React, useEffect, useState } from "react";
 import SimpleTextInput from "../inputs/SimpleTextInput";
-import GenderSelector from "../inputs/GenderSelector";
-import axios from "axios";
 import CustomButton from "../buttons/CustomButton";
 import RadioSelector from "../inputs/RadioSelector";
 import CloseButton from "../buttons/CloseButton";
@@ -32,7 +30,6 @@ function UserFormModal({
   passportData,
   setFormData,
 }) {
-  const [isValidating, setIsValidating] = useState(false);
   const staticPhotoUrl = process.env.PUBLIC_URL + "/images/avatar.jpg";
   const [photoToShowUrl, setPhotoToShowUrl] = useState(
     selfiePhoto === null ? staticPhotoUrl : URL.createObjectURL(selfiePhoto)
@@ -59,47 +56,6 @@ function UserFormModal({
       return;
     }
     setPhotoToShowUrl(URL.createObjectURL(selfiePhoto));
-  };
-
-  const handleSelfieValidation = (event) => {
-    event.preventDefault();
-
-    if (idPhoto === null) {
-      toast.error("No passport uploaded yet.");
-      return;
-    }
-
-    const formToSend = new FormData();
-    formToSend.append("passport", idPhoto);
-    formToSend.append("selfiePhoto", selfiePhoto);
-
-    setIsValidating(true);
-    axios
-      .post("http://localhost:8080/api/v1/faces/validate", formToSend, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        const message = res.data;
-        const isIdentical = message.isIdentical;
-        const confidence = Math.round(message.confidence * 100);
-        if (isIdentical) {
-          toast.success(`Photo is ${confidence}% similar!`);
-          setIsValidating(false);
-          setSelfieIsValid(true);
-        } else {
-          toast.error(`Faces are not similar!\nConfidence: ${confidence}%`);
-          setSelfiePhoto(null);
-          setIsValidating(false);
-        }
-      })
-      .catch((err) => {
-        toast.error("Something went wrong when validating the photo!");
-        setIsValidating(false);
-        setSelfiePhoto(null);
-        console.error(err);
-      });
   };
 
   return (

@@ -159,7 +159,6 @@ function UserEditFormModal({
             });
         } else {
           setPassIsValidating(false);
-          toast.error("Faces are not matching!");
           toast.dismiss(validationLoading);
           const passportData = res.data.studentDto;
           console.log(passportData);

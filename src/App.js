@@ -87,6 +87,7 @@ function App() {
         setIsFillingData(false);
         setFillingWasSuccessful(true);
         const user = res.data;
+        console.log(`User form passport: ${JSON.stringify(user)}`);
         setDataFromPassport(user);
         delete user["id"];
         const keys = Object.keys(user);
@@ -115,8 +116,7 @@ function App() {
   };
 
   useEffect(() => {
-    const editUserInfoKeyLength = Object.keys(userToEdit).length;
-    if (editUserInfoKeyLength === 0 && idPhoto !== null) {
+    if (idPhoto !== null && !isEditFormActive) {
       fillFormDataFromPassport();
     }
   }, idPhoto);
