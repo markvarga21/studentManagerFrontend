@@ -172,7 +172,7 @@ function UserEditFormModal({
         toast.dismiss(validationLoading);
         const response = err.response.data;
         const message = response.message;
-        const roundedPercent = Math.round(response.percentage * 100);
+        const roundedPercent = (response.percentage * 100).toFixed(2);
         toast.error(message + "\n" + roundedPercent + "%");
       });
   };
@@ -216,7 +216,7 @@ function UserEditFormModal({
       )
       .then((res) => {
         const data = res.data;
-        const roundedPercent = Math.round(data.percentage * 100);
+        const roundedPercent = (data.percentage * 100).toFixed(2);
         const valid = data.isValid;
         if (valid) {
           const message = `\u2705 Photo is ${roundedPercent}% similar!`;
