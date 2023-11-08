@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 
 const RadioSelector = ({ showSelfie, selfiePhoto, showPassport, idPhoto }) => {
   const activeStyle =
-    "bg-uniGreen text-white p-3 w-full hover:cursor-pointer text-center";
+    "bg-uniGreen text-white p-3 w-3/4 hover:cursor-pointer text-center";
   const inactiveStyle =
-    "bg-gray-400 text-gray-700 p-3 w-full hover:cursor-pointer text-center";
+    "bg-gray-400 text-gray-700 p-3 w-3/4 hover:cursor-pointer text-center";
 
   const [passportStyle, setPassportStyle] = useState(inactiveStyle);
   const [selfieStyle, setSelfieStyle] = useState(inactiveStyle);

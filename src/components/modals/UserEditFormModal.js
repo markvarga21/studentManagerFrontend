@@ -325,7 +325,7 @@ function UserEditFormModal({
 
           <SimpleTextInput
             type={"text"}
-            width={"full"}
+            width={"3/4"}
             labelText={"First name"}
             name={"firstName"}
             id={"firstName"}
@@ -340,7 +340,7 @@ function UserEditFormModal({
           />
           <SimpleTextInput
             type={"text"}
-            width={"full"}
+            width={"3/4"}
             labelText={"Last name"}
             name={"lastName"}
             id={"lastName"}
@@ -387,7 +387,7 @@ function UserEditFormModal({
           </div>
           <SimpleTextInput
             type={"text"}
-            width={"full"}
+            width={"3/4"}
             labelText={"Place of Birth"}
             name={"placeOfBirth"}
             id={"placeOfBirth"}
@@ -424,7 +424,7 @@ function UserEditFormModal({
         </div>
 
         <div className="flex flex-col items-center space-y-8">
-          <div className="h-14"></div>
+          <div className="h-16"></div>
           <SimpleTextInput
             type={"text"}
             width={"3/4"}
@@ -486,10 +486,10 @@ function UserEditFormModal({
             customValue={editUserInfo.passportDateOfExpiry}
             editFormData={editUserInfo}
           />
-          <div id="validateButtons" className="flex items-center">
+          <div id="validateButtons">
             <div>
               {studentValidity ? (
-                <div className="flex gap-2">
+                <div className="md:flex md:flex-col md:gap-3 lg:flex lg:flex-col lg:gap-3 items-center 2xl:flex 2xl:flex-row 2xl:gap-3">
                   <CustomButton
                     text={"Validated!"}
                     isDisabled={true}
@@ -515,7 +515,7 @@ function UserEditFormModal({
             </div>
           </div>
         </div>
-        <div className="flex flex-col space-y-3 items-center">
+        <div className="flex flex-col gap-3 items-center">
           <div className="flex w-full justify-end">
             <CloseButton onButtonClick={handleEditFormClose} />
           </div>
@@ -528,7 +528,7 @@ function UserEditFormModal({
           <img
             src={photoToShowUrl}
             alt="User not known."
-            className="object-scale-down h-64 hover:scale-150 shadow-2xl transition duration-300 ease-in-out"
+            className="object-scale-down md:h-48 lg:h-56 2xl:h-64 hover:scale-150 shadow-2xl transition duration-300 ease-in-out"
           />
           <div>{faceValidityMessage}</div>
           <div className="flex gap-2">

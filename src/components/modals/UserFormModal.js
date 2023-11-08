@@ -78,7 +78,7 @@ function UserFormModal({
 
           <SimpleTextInput
             type={"text"}
-            width={"full"}
+            width={"3/4"}
             labelText={"First name"}
             name={"firstName"}
             id={"firstName"}
@@ -91,7 +91,7 @@ function UserFormModal({
           />
           <SimpleTextInput
             type={"text"}
-            width={"full"}
+            width={"3/4"}
             labelText={"Last name"}
             name={"lastName"}
             id={"lastName"}
@@ -133,7 +133,7 @@ function UserFormModal({
           </div>
           <SimpleTextInput
             type={"text"}
-            width={"full"}
+            width={"3/4"}
             labelText={"Place of Birth"}
             name={"placeOfBirth"}
             id={"placeOfBirth"}
@@ -222,7 +222,7 @@ function UserFormModal({
             passportData={passportData}
             setFormData={setFormData}
           />
-          <div className="flex space-x-3">
+          <div className="md:flex md:flex-col lg:flex lg:flex-col 2xl:flex 2xl:flex-row gap-3">
             <div className="passportValidatorButton">
               {idPhoto === null ? (
                 <div className="pr-2 flex bg-uniGreen justify-center content-center hover:bg-darkUniGreen rounded-lg">
@@ -302,7 +302,7 @@ function UserFormModal({
           <img
             src={photoToShowUrl}
             alt="User not known."
-            className="object-scale-down h-64 hover:scale-150 shadow-2xl hover:shadow-2xl transition duration-500 ease-in-out"
+            className="object-scale-down md:h-48 lg:h-56 2xl:h-64 hover:scale-150 shadow-2xl hover:shadow-2xl transition duration-500 ease-in-out"
           />
         </div>
         <Toaster />
