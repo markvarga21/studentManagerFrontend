@@ -242,7 +242,7 @@ function App() {
           formData,
           {}
         )
-        .then((res) => {
+        .then((savePromiseResult) => {
           setIsDataFilled(false);
           setIsErrorPresent(false);
           setIsSaving(false);
@@ -252,6 +252,17 @@ function App() {
           setSelfiePhoto(null);
           setSelfieIsValid(false);
           setFillingWasSuccessful(false);
+          setFormData({
+            firstName: "",
+            lastName: "",
+            birthDate: "",
+            placeOfBirth: "",
+            countryOfCitizenship: "",
+            gender: "",
+            passportNumber: "",
+            passportDateOfExpiry: "",
+            passportDateOfIssue: "",
+          });
 
           if (Object.keys(dataFromPassport).length !== 0) {
             console.log(
@@ -262,14 +273,16 @@ function App() {
                 `http://${process.env.REACT_APP_HOST}:8080/api/v1/validations`,
                 dataFromPassport
               )
-              .then((res) => console.log(res.data))
+              .then(() => {})
               .catch((err) => console.error(err));
           }
 
           const imageForm = new FormData();
           imageForm.append("passport", idPhoto);
           imageForm.append("selfie", selfiePhoto);
-          const savedUserId = res.data.id;
+          const savedUserId = savePromiseResult.data.id;
+          console.log("Saved user id: " + savedUserId);
+
           axios
             .post(
               `http://${process.env.REACT_APP_HOST}:8080/api/v1/files/upload/${savedUserId}`,
@@ -280,7 +293,7 @@ function App() {
                 },
               }
             )
-            .then((res) => console.log(res.data))
+            .then(() => {})
             .catch((err) => console.error(err));
 
           toast.success("User saved successfully!");
