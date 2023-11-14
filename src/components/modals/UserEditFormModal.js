@@ -158,13 +158,19 @@ function UserEditFormModal({
               setUserWasValidated(-1 * userWasValidated);
             });
         } else {
-          setPassIsValidating(false);
-          toast.dismiss(validationLoading);
-          const passportData = res.data.studentDto;
-          console.log(passportData);
-          setPassportData(passportData);
-          handleInvalidPassport(passportData);
-          setUserWasValidated(-1 * userWasValidated);
+          if (res.data.studentDto === null) {
+            toast.dismiss(validationLoading);
+            setPassIsValidating(false);
+            setUserWasValidated(-1 * userWasValidated);
+            toast.error("Faces are not matching!");
+          } else {
+            setPassIsValidating(false);
+            toast.dismiss(validationLoading);
+            const passportData = res.data.studentDto;
+            setPassportData(passportData);
+            handleInvalidPassport(passportData);
+            setUserWasValidated(-1 * userWasValidated);
+          }
         }
       })
       .catch((err) => {
