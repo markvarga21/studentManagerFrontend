@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 
-const RadioSelector = ({ showSelfie, selfiePhoto, showPassport, idPhoto }) => {
+const RadioSelector = ({
+  showSelfie,
+  selfiePhoto,
+  showPassport,
+  idPhoto,
+  whatWasChanged,
+}) => {
   const activeStyle =
     "bg-uniGreen text-white p-3 w-3/4 hover:cursor-pointer text-center";
   const inactiveStyle =
@@ -41,7 +47,11 @@ const RadioSelector = ({ showSelfie, selfiePhoto, showPassport, idPhoto }) => {
     } else if (idPhoto === null && selfiePhoto !== null) {
       activateSelfieButton();
     } else if (idPhoto !== null && selfiePhoto !== null) {
-      activateSelfieButton();
+      if (whatWasChanged === "PASSPORT") {
+        activatePassportButton();
+      } else if (whatWasChanged === "SELFIE") {
+        activateSelfieButton();
+      }
     }
   }, [selfiePhoto, idPhoto]);
 

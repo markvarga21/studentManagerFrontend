@@ -171,6 +171,7 @@ function App() {
       passportDateOfExpiry: "",
       passportDateOfIssue: "",
     });
+    setWhatWasChanged("NOTHING");
   };
 
   const closeEditModal = () => {
@@ -180,6 +181,7 @@ function App() {
     setIsEditFormActive(false);
     setIdPhoto(null);
     setSelfiePhoto(null);
+    setWhatWasChanged("NOTHING");
   };
 
   const handleFormChange = (event) => {
@@ -421,6 +423,7 @@ function App() {
   };
 
   const [userWasValidated, setUserWasValidated] = useState(1);
+  const [fileWasChanged, setFileWasChanged] = useState(1);
   useEffect(() => {
     axios
       .get(`http://${process.env.REACT_APP_HOST}:8080/api/v1/students`)
@@ -430,7 +433,7 @@ function App() {
       .catch((err) => {
         console.error(err);
       });
-  }, [formData, isSaving, useWasDeleted, userWasValidated]);
+  }, [formData, isSaving, useWasDeleted, userWasValidated, fileWasChanged]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -464,6 +467,7 @@ function App() {
     setEditWasClicked(-1 * editWasClicked);
   };
 
+  const [whatWasChanged, setWhatWasChanged] = useState("NOTHING");
   const handleIdPhotoChange = (event) => {
     event.preventDefault();
     setIsFillingData(true);
@@ -471,6 +475,7 @@ function App() {
     console.log(file + " " + typeof file);
     toast.success("Passport uploaded successfully!");
     setIdPhoto(file);
+    setWhatWasChanged("PASSPORT");
   };
 
   const [selfieIsValid, setSelfieIsValid] = useState(false);
@@ -479,6 +484,7 @@ function App() {
     event.preventDefault();
     const file = event.target.files[0];
     setSelfiePhoto(file);
+    setWhatWasChanged("SELFIE");
   };
 
   const handleDeleteUser = (event) => {
@@ -659,6 +665,10 @@ function App() {
               setUserToEdit={setUserToEdit}
               userWasUpdated={userWasUpdated}
               editWasClicked={editWasClicked}
+              setWhatWasChanged={setWhatWasChanged}
+              whatWasChanged={whatWasChanged}
+              fileWasChanged={fileWasChanged}
+              setFileWasChanged={setFileWasChanged}
             />
           )}
 
@@ -685,6 +695,7 @@ function App() {
               setInvalidFields={setInvalidFields}
               passportData={passportData}
               setFormData={setFormData}
+              whatWasChanged={whatWasChanged}
             />
           )}
 

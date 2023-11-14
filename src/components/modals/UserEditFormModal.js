@@ -41,6 +41,10 @@ function UserEditFormModal({
   setUserToEdit,
   userWasUpdated,
   editWasClicked,
+  setWhatWasChanged,
+  whatWasChanged,
+  fileWasChanged,
+  setFileWasChanged,
 }) {
   const staticPhotoUrl = process.env.PUBLIC_URL + "/images/avatar.jpg";
   const [photoToShowUrl, setPhotoToShowUrl] = useState(
@@ -62,6 +66,7 @@ function UserEditFormModal({
     setPhotoToShowUrl(URL.createObjectURL(selfiePhoto));
   };
 
+  /*
   useEffect(() => {
     if (selfiePhoto === null) {
       setPhotoToShowUrl(staticPhotoUrl);
@@ -69,8 +74,8 @@ function UserEditFormModal({
       setPhotoToShowUrl(URL.createObjectURL(selfiePhoto));
     }
   }, [selfiePhoto, staticPhotoUrl]);
+  */
 
-  const [fileWasChanged, setFileWasChanged] = useState(1);
   useEffect(() => {
     const studentId = editUserInfo.id;
     axios
@@ -84,6 +89,7 @@ function UserEditFormModal({
         if (res.data) {
           const blob = new Blob([res.data], { type: "image/jpeg" });
           setIdPhoto(blob);
+          setWhatWasChanged("PASSPORT");
         } else {
           toast.error(`No passport found for user with id '${studentId}'!`);
         }
@@ -98,6 +104,7 @@ function UserEditFormModal({
         if (res.data) {
           const blob = new Blob([res.data], { type: "image/jpeg" });
           setSelfiePhoto(blob);
+          setWhatWasChanged("SELFIE");
         } else {
           toast.error(`No selfie found for user with id '${studentId}'!`);
         }
@@ -212,7 +219,7 @@ function UserEditFormModal({
         console.error(err);
         setSelfieIsValid(false);
       });
-  }, [userWasUpdated, userWasValidated, idPhoto, selfiePhoto]);
+  }, [userWasUpdated, userWasValidated, idPhoto, selfiePhoto, fileWasChanged]);
 
   const [faceValidityMessage, setFaceValidityMessage] = useState("");
   useEffect(() => {
@@ -530,11 +537,12 @@ function UserEditFormModal({
             selfiePhoto={selfiePhoto}
             showPassport={showPassport}
             idPhoto={idPhoto}
+            whatWasChanged={whatWasChanged}
           />
           <img
             src={photoToShowUrl}
             alt="User not known."
-            className="object-scale-down md:h-48 lg:h-56 2xl:h-64 hover:scale-150 shadow-2xl transition duration-300 ease-in-out"
+            className="object-scale-down md:h-48 lg:h-56 2xl:h-64 shadow-2xl transition duration-300 ease-in-out"
           />
           <div>{faceValidityMessage}</div>
           <div className="flex gap-2">

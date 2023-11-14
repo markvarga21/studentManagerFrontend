@@ -29,6 +29,7 @@ function UserFormModal({
   setInvalidFields,
   passportData,
   setFormData,
+  whatWasChanged,
 }) {
   const staticPhotoUrl = process.env.PUBLIC_URL + "/images/avatar.jpg";
   const [photoToShowUrl, setPhotoToShowUrl] = useState(
@@ -298,11 +299,12 @@ function UserFormModal({
             selfiePhoto={selfiePhoto}
             showPassport={showPassport}
             idPhoto={idPhoto}
+            whatWasChanged={whatWasChanged}
           />
           <img
             src={photoToShowUrl}
             alt="User not known."
-            className="object-scale-down md:h-48 lg:h-56 2xl:h-64 hover:scale-150 shadow-2xl hover:shadow-2xl transition duration-500 ease-in-out"
+            className="object-scale-down md:h-48 lg:h-56 2xl:h-64 shadow-2xl hover:shadow-2xl transition duration-500 ease-in-out"
           />
         </div>
         <Toaster />
