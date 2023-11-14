@@ -572,7 +572,7 @@ function App() {
       let passValue = String(passportData[keys[i]]);
       let editValue = String(userToEdit[keys[i]]);
 
-      if (passValue === undefined || passValue === null) {
+      if (passValue === undefined || passValue === null || passValue === "") {
         newInvalidFields[keys[i]] = false;
         continue;
       }
