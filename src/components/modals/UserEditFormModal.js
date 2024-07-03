@@ -239,8 +239,9 @@ function UserEditFormModal({
           setFaceValidityMessage(message);
         }
       })
-      .catch(() => {
+      .catch((err) => {
         setFaceValidityMessage("\u274C Photo is not yet validated!");
+        console.error(err);
       });
   }, [editUserInfo.valid, fileWasChanged, userWasValidated]);
 

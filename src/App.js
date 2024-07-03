@@ -55,7 +55,7 @@ function App() {
     passportDateOfIssue: 1,
     valid: 1,
   });
-  const [useWasDeleted, setUserWasDeleted] = useState(1);
+  const [userWasDeleted, setUserWasDeleted] = useState(1);
 
   const [isFillingData, setIsFillingData] = useState(false);
   const [fillingWasSuccessful, setFillingWasSuccessful] = useState(false);
@@ -433,7 +433,7 @@ function App() {
       .catch((err) => {
         console.error(err);
       });
-  }, [formData, isSaving, useWasDeleted, userWasValidated, fileWasChanged]);
+  }, [formData, isSaving, userWasDeleted, userWasValidated, fileWasChanged]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -496,7 +496,7 @@ function App() {
       )
       .then((res) => {
         setIsFillingData(false);
-        setUserWasDeleted(-1 * useWasDeleted);
+        setUserWasDeleted(-1 * userWasDeleted);
         toast.success(
           `User with id: '${userToDeleteId}' deleted successfully!`
         );
@@ -505,7 +505,7 @@ function App() {
         if (err.response != null) {
           const errorMessage = err.response.data.message;
           console.error(err);
-          toast.error(errorMessage);
+          //toast.error(errorMessage);
         }
       });
   };
