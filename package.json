@@ -20,6 +20,7 @@
     "react-datetime": "^3.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
+    "react-router-dom": "^6.24.1",
     "react-scripts": "5.0.1",
     "react-tailwindcss-datepicker": "^1.6.6",
     "redis": "^4.6.7",

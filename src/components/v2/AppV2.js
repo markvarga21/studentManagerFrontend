@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import MenuBar from "./MenuBar";
 import StudentListContent from "./StudentListContent";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import Home from "./Home";
+import Report from "./Report";
+import NotFound from "./NotFound";
+import LoginV2 from "./LoginV2";
+import RegisterV2 from "./RegisterV2";
+import Unauthorized from "./Unauthorized";
 
 const AppV2 = () => {
   const LIGHT_MODE = {
@@ -49,20 +56,53 @@ const AppV2 = () => {
   };
   const [currentTheme, setCurrentTheme] = useState("light");
   const [colorModeColors, setColorModeColors] = useState(LIGHT_MODE);
+
+  const mock_user = {
+    username: "john",
+    email: "john@domain.com",
+    roles: ["USER"],
+    token: "1234567890",
+  };
+  const [user, setUser] = useState(mock_user);
   return (
     <div className="flex h-[100vh]">
-      <MenuBar
-        colorModeColors={colorModeColors}
-        setColorModeColors={setColorModeColors}
-        lightMode={LIGHT_MODE}
-        darkMode={DARK_MODE}
-        currentTheme={currentTheme}
-        setCurrentTheme={setCurrentTheme}
-      />
-      <StudentListContent
-        colorModeColors={colorModeColors}
-        currentTheme={currentTheme}
-      />
+      <BrowserRouter>
+        <MenuBar
+          colorModeColors={colorModeColors}
+          setColorModeColors={setColorModeColors}
+          lightMode={LIGHT_MODE}
+          darkMode={DARK_MODE}
+          currentTheme={currentTheme}
+          setCurrentTheme={setCurrentTheme}
+          setUser={setUser}
+        />
+        <Routes>
+          <Route
+            path="/"
+            element={<Home user={user} colorModeColors={colorModeColors} />}
+          />
+          <Route
+            path="/students"
+            element={
+              <StudentListContent
+                colorModeColors={colorModeColors}
+                currentTheme={currentTheme}
+              />
+            }
+          />
+          <Route path="/report" element={<Report />} />
+          <Route path="/login" element={<LoginV2 />} />
+          <Route path="/register" element={<RegisterV2 />} />
+          <Route
+            path="/unauthorized"
+            element={<Unauthorized colorModeColors={colorModeColors} />}
+          />
+          <Route
+            path="*"
+            element={<NotFound colorModeColors={colorModeColors} />}
+          />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 };

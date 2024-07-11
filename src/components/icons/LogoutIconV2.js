@@ -1,6 +1,6 @@
 import React from "react";
 
-const LogoutIconV2 = ({ color, ICON_SIZES }) => {
+const LogoutIconV2 = ({ color, ICON_SIZES, handleLogout }) => {
   return (
     <svg
       style={{ height: ICON_SIZES / 75 + "vh", minHeight: "20px" }}
@@ -8,6 +8,7 @@ const LogoutIconV2 = ({ color, ICON_SIZES }) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       transform="matrix(-1, 0, 0, 1, 0, 0)"
+      onClick={handleLogout}
     >
       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
       <g
