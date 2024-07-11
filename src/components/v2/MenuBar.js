@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ModeNav from "../icons/ModeNav";
 import GearIcon from "../icons/GearIcon";
 import LogoutIconV2 from "../icons/LogoutIconV2";
@@ -17,6 +17,8 @@ const MenuBar = ({
   const navigate = useNavigate();
   const DEFAULT_ICON_COLOR = "#9a9a9a";
   const ACTIVE_ICON_COLOR = "#e1b77a";
+  const DEFAULT_BACKGROUND_COLOR = "transparent";
+  const ACTIVE_BACKGROUND_COLOR = "#554130";
   const navIds = ["homeNav", "studentListNav", "reportNav"];
   const ICON_SIZE_PERCENT = 0.8;
   const ICON_SIZES = ICON_SIZE_PERCENT * 315;
@@ -29,11 +31,30 @@ const MenuBar = ({
     modeNav: DEFAULT_ICON_COLOR,
     userNav: DEFAULT_ICON_COLOR,
   });
+
+  const [navBackColors, setNavBackColors] = useState({
+    homeNav: ACTIVE_BACKGROUND_COLOR,
+    studentListNav: DEFAULT_BACKGROUND_COLOR,
+    reportNav: DEFAULT_BACKGROUND_COLOR,
+  });
+
+  useEffect(() => {
+    const savedColors = localStorage.getItem("colors");
+    const savedBackColors = localStorage.getItem("backColors");
+    if (savedColors) {
+      setSvgColors(JSON.parse(savedColors));
+    }
+    if (navBackColors) {
+      setNavBackColors(JSON.parse(savedBackColors));
+    }
+  }, []);
+
   const handleNavClick = (event) => {
     const navElement = event.currentTarget;
     const nav = navElement.parentElement.id;
+    localStorage.setItem("activeNav", nav);
     if (nav !== "modeNav" && nav !== "burger" && nav !== "userNav") {
-      setSvgColors({
+      const colors = {
         ...svgColors,
         burger: DEFAULT_ICON_COLOR,
         homeNav: DEFAULT_ICON_COLOR,
@@ -42,25 +63,18 @@ const MenuBar = ({
         modeNav: DEFAULT_ICON_COLOR,
         userNav: DEFAULT_ICON_COLOR,
         [nav]: ACTIVE_ICON_COLOR,
-      });
-    }
-
-    const resetColors = () => {
-      navIds.forEach((navId) => {
-        const navElement = document.getElementById(navId);
-        const child = navElement.children[0];
-        const classList = child.classList;
-        if (classList.contains("bg-[#554130]")) {
-          classList.remove("bg-[#554130]");
-        }
-      });
-    };
-
-    const classList = navElement.classList;
-    if (nav !== "burger" && nav !== "userNav" && nav !== "modeNav") {
-      resetColors();
-
-      classList.add("bg-[#554130]");
+      };
+      const backColors = {
+        ...navBackColors,
+        homeNav: DEFAULT_BACKGROUND_COLOR,
+        studentListNav: DEFAULT_BACKGROUND_COLOR,
+        reportNav: DEFAULT_BACKGROUND_COLOR,
+        [nav]: ACTIVE_BACKGROUND_COLOR,
+      };
+      setNavBackColors(backColors);
+      setSvgColors(colors);
+      localStorage.setItem("backColors", JSON.stringify(backColors));
+      localStorage.setItem("colors", JSON.stringify(colors));
     }
 
     if (nav === "modeNav") {
@@ -148,7 +162,8 @@ const MenuBar = ({
             data-tooltip-place="right"
           >
             <div
-              class="inner p-3 rounded-md hover:cursor-pointer bg-[#554130]"
+              class="inner p-3 rounded-md hover:cursor-pointer"
+              style={{ backgroundColor: navBackColors.homeNav }}
               onClick={handleNavClick}
             >
               <svg
@@ -186,6 +201,7 @@ const MenuBar = ({
           >
             <div
               class="inner p-3 rounded-md hover:cursor-pointer"
+              style={{ backgroundColor: navBackColors.studentListNav }}
               onClick={handleNavClick}
             >
               <svg
@@ -222,6 +238,7 @@ const MenuBar = ({
           >
             <div
               class="inner p-3 rounded-md hover:cursor-pointer"
+              style={{ backgroundColor: navBackColors.reportNav }}
               onClick={handleNavClick}
             >
               <svg

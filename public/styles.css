@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  font-family: "Inter", sans-serif;
+}
+
 input[type="radio"]:checked + label[data-theme="light"] {
   background-color: #e1b77a;
   color: black;
@@ -55,8 +59,4 @@ input[type="radio"]:checked + label[data-theme="dark"] {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--scrollbar-thumb-hover-color);
-}
-
-:root {
-  font-family: "Inter", sans-serif;
 }

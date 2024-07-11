@@ -43,7 +43,6 @@ const StudentListContent = ({ colorModeColors, currentTheme }) => {
     axios.get("http://localhost:5000/students").then((response) => {
       setStudents(response.data);
     });
-    console.log("Loading students...");
   }, []);
   // useEffect(() => {
   //   const pages = Math.ceil(students.length / 10);
@@ -197,7 +196,7 @@ const StudentListContent = ({ colorModeColors, currentTheme }) => {
               style={{
                 borderColor: colorModeColors.buttonBorder,
                 backgroundColor: colorModeColors.buttonBackGround,
-                color: colorModeColors.buttonText,
+                color: colorModeColors.inputText,
               }}
               placeholder="Search for students"
               onChange={handleSearchChange}

@@ -31,6 +31,7 @@ const AppV2 = () => {
     activePageBorder: "none",
     activePageText: "#BB812A",
     inactivePageText: "rgba(72, 73, 74, 0.5)",
+    inputText: "#48494A",
   };
   const DARK_MODE = {
     bg: "#121212",
@@ -53,6 +54,7 @@ const AppV2 = () => {
     activePageBorder: "2px solid rgba(162, 162, 162, 0.3)",
     activePageText: "rgba(255, 255, 255, 0.5)",
     inactivePageText: "rgba(255, 255, 255, 0.3)",
+    inputText: "rgb(148, 163, 175)",
   };
   const [currentTheme, setCurrentTheme] = useState("light");
   const [colorModeColors, setColorModeColors] = useState(LIGHT_MODE);
@@ -90,7 +92,10 @@ const AppV2 = () => {
               />
             }
           />
-          <Route path="/report" element={<Report />} />
+          <Route
+            path="/report"
+            element={<Report colorModeColors={colorModeColors} />}
+          />
           <Route path="/login" element={<LoginV2 />} />
           <Route path="/register" element={<RegisterV2 />} />
           <Route
