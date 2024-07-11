@@ -23,6 +23,7 @@
     "react-router-dom": "^6.24.1",
     "react-scripts": "5.0.1",
     "react-tailwindcss-datepicker": "^1.6.6",
+    "react-tooltip": "^5.27.1",
     "redis": "^4.6.7",
     "web-vitals": "^2.1.4"
   },

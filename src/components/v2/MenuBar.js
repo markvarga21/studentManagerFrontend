@@ -3,6 +3,7 @@ import ModeNav from "../icons/ModeNav";
 import GearIcon from "../icons/GearIcon";
 import LogoutIconV2 from "../icons/LogoutIconV2";
 import { Link, useNavigate } from "react-router-dom";
+import { Tooltip } from "react-tooltip";
 
 const MenuBar = ({
   colorModeColors,
@@ -86,14 +87,18 @@ const MenuBar = ({
       id="menubar"
       class="flex flex-col bg-[#141414] w-20 items-center justify-between"
     >
+      <Tooltip id="navTooltip" />
+
       <div
         id="burger"
         class="flex justify-center items-center h-10 w-full mt-8"
       >
-        <div
-          id="asd"
+        <a
           class="inner hover:cursor-pointer"
           onClick={handleNavClick}
+          data-tooltip-id="navTooltip"
+          data-tooltip="Menu"
+          data-tooltip-place="right"
         >
           <svg
             viewBox="0 0 24 24"
@@ -128,16 +133,19 @@ const MenuBar = ({
               ></path>
             </g>
           </svg>
-        </div>
+        </a>
       </div>
       <nav
         id="navs"
         class="flex flex-col w-full h-[30vh] justify-between mb-36"
       >
         <Link to="/" style={{ textDecoration: "none" }}>
-          <div
+          <a
             id="homeNav"
             class="flex justify-center items-center h-10 w-full"
+            data-tooltip-id="navTooltip"
+            data-tooltip-content="Home"
+            data-tooltip-place="right"
           >
             <div
               class="inner p-3 rounded-md hover:cursor-pointer bg-[#554130]"
@@ -166,12 +174,15 @@ const MenuBar = ({
                 </g>
               </svg>
             </div>
-          </div>
+          </a>
         </Link>
         <Link to="/students" style={{ textDecoration: "none" }}>
-          <div
+          <a
             id="studentListNav"
             class="flex justify-center items-center h-10 w-full"
+            data-tooltip-id="navTooltip"
+            data-tooltip-content="Data"
+            data-tooltip-place="right"
           >
             <div
               class="inner p-3 rounded-md hover:cursor-pointer"
@@ -199,12 +210,15 @@ const MenuBar = ({
                 </g>
               </svg>
             </div>
-          </div>
+          </a>
         </Link>
         <Link to="/report" style={{ textDecoration: "none" }}>
-          <div
+          <a
             id="reportNav"
             class="flex justify-center items-center h-10 w-full"
+            data-tooltip-id="navTooltip"
+            data-tooltip-content="Report"
+            data-tooltip-place="right"
           >
             <div
               class="inner p-3 rounded-md hover:cursor-pointer"
@@ -233,13 +247,13 @@ const MenuBar = ({
                 </g>
               </svg>
             </div>
-          </div>
+          </a>
         </Link>
       </nav>
-      <div
+      <a
         class="flex-col justify-center inner p-3 rounded-md hover:cursor-pointer"
         onClick={(e) => {
-          e.stopPropagation(); // Prevent click from bubbling to parent elements
+          e.stopPropagation();
           setSettingsAreOpen(!settingsAreOpen);
         }}
       >
@@ -270,7 +284,7 @@ const MenuBar = ({
           )}
           <GearIcon color={svgColors.userNav} ICON_SIZES={ICON_SIZES} />
         </div>
-      </div>
+      </a>
     </div>
   );
 };

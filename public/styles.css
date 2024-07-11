@@ -30,15 +30,15 @@ input[type="radio"]:checked + label[data-theme="dark"] {
 }
 
 :root {
-  --scrollbar-track-color: #f1f1f1; /* Light theme track color */
-  --scrollbar-thumb-color: #b2b2b2; /* Light theme thumb color */
-  --scrollbar-thumb-hover-color: #939393; /* Light theme thumb hover color */
+  --scrollbar-track-color: #f1f1f1;
+  --scrollbar-thumb-color: #b2b2b2;
+  --scrollbar-thumb-hover-color: #939393;
 }
 
 [data-theme="dark"] {
-  --scrollbar-track-color: #2e2e2e; /* Dark theme track color */
-  --scrollbar-thumb-color: #414141; /* Dark theme thumb color */
-  --scrollbar-thumb-hover-color: #4d4d4d; /* Dark theme thumb hover color */
+  --scrollbar-track-color: #2e2e2e;
+  --scrollbar-thumb-color: #414141;
+  --scrollbar-thumb-hover-color: #4d4d4d;
 }
 
 ::-webkit-scrollbar {
@@ -55,4 +55,8 @@ input[type="radio"]:checked + label[data-theme="dark"] {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--scrollbar-thumb-hover-color);
+}
+
+:root {
+  font-family: "Inter", sans-serif;
 }
