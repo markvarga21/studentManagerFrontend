@@ -1,0 +1,58 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input[type="radio"]:checked + label[data-theme="light"] {
+  background-color: #e1b77a;
+  color: black;
+  border-color: #e1b77a;
+  font-weight: 600;
+}
+
+input[type="radio"] + label[data-theme="light"] {
+  color: #9b9d9f;
+  border: 2px solid #d4d7d9;
+}
+
+input[type="radio"] + label[data-theme="dark"] {
+  border: 2px solid rgba(162, 162, 162, 0.3);
+  color: rgba(255, 255, 255, 0.4);
+  background-color: none;
+}
+
+input[type="radio"]:checked + label[data-theme="dark"] {
+  background-color: #404040;
+  color: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(162, 162, 162, 0.8);
+  font-weight: 600;
+}
+
+:root {
+  --scrollbar-track-color: #f1f1f1; /* Light theme track color */
+  --scrollbar-thumb-color: #b2b2b2; /* Light theme thumb color */
+  --scrollbar-thumb-hover-color: #939393; /* Light theme thumb hover color */
+}
+
+[data-theme="dark"] {
+  --scrollbar-track-color: #2e2e2e; /* Dark theme track color */
+  --scrollbar-thumb-color: #414141; /* Dark theme thumb color */
+  --scrollbar-thumb-hover-color: #4d4d4d; /* Dark theme thumb hover color */
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover-color);
+}

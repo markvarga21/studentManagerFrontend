@@ -1,0 +1,421 @@
+import React, { useEffect, useState } from "react";
+import PlusIcon from "../icons/PlusIcon";
+import SearchIcon from "../icons/SearchIcon";
+import Validity from "./Validity";
+import EditIcon from "../icons/EditIcon";
+import DeleteIcon from "../icons/DeleteIcon";
+import Pagination from "../icons/Pagination";
+import axios from "axios";
+import ExportIcon from "../icons/ImportIcon";
+
+const StudentListContent = ({ colorModeColors, currentTheme }) => {
+  const [filter, setFilter] = useState("All");
+  const [activePage, setActivePage] = useState(1);
+  const [numberOfPages, setNumberOfPages] = useState(10);
+  const handleStatusChange = (event) => {
+    setFilter(event.target.value);
+  };
+  const [students, setStudents] = useState([]);
+  const MONTHS = {
+    "01": "Jan",
+    "02": "Feb",
+    "03": "Mar",
+    "04": "Apr",
+    "05": "May",
+    "06": "Jun",
+    "07": "Jul",
+    "08": "Aug",
+    "09": "Sep",
+    10: "Oct",
+    11: "Nov",
+    12: "Dec",
+  };
+  const mapDateToVerboseString = (date) => {
+    const components = date.split("-");
+    const year = components[0];
+    const month = MONTHS[components[1]];
+    const day = String(components[2]).startsWith("0")
+      ? components[2][1]
+      : components[2];
+    return `${month} ${day}, ${year}`;
+  };
+  useEffect(() => {
+    axios.get("http://localhost:5000/students").then((response) => {
+      setStudents(response.data);
+    });
+    console.log("Loading students...");
+  }, []);
+  // useEffect(() => {
+  //   const pages = Math.ceil(students.length / 10);
+  //   console.log(pages);
+  //   setNumberOfPages(pages);
+  // }, [students]);
+
+  const handleExportClick = () => {
+    console.log("Exporting students...");
+    const filteredStudents = students.filter((student) => {
+      if (filter === "All") {
+        return student;
+      } else if (filter === "Valid") {
+        return student.validity;
+      } else {
+        return !student.validity;
+      }
+    });
+    const dataStr = JSON.stringify(filteredStudents);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "students.json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const [searchCriteria, setSearchCriteria] = useState("");
+  const handleSearchChange = () => {
+    const crit = document.getElementById("table-search-users").value;
+    const normalized = crit.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    setSearchCriteria(normalized);
+  };
+
+  return (
+    <div
+      className="w-full h-full"
+      style={{ backgroundColor: colorModeColors.bg }}
+    >
+      <div className="flex h-24 mt-4 w-full">
+        <div
+          id="titleAndAdd"
+          className="flex justify-between w-full items-center"
+        >
+          <div
+            id="title"
+            className="pl-14 text-4xl font-inter font-bold select-none"
+            style={{ color: colorModeColors.title }}
+          >
+            List of students
+          </div>
+          <div className="flex gap-3">
+            <div
+              id="exportButton"
+              className="flex items-center gap-2 pt-2 pb-2 pl-4 pr-4 border-2 rounded-xl hover:cursor-pointer"
+              style={{
+                borderColor: colorModeColors.buttonBorder,
+                backgroundColor: colorModeColors.buttonBackGround,
+              }}
+              onClick={handleExportClick}
+            >
+              <ExportIcon color={colorModeColors.icon} />
+              <spam
+                className="font-inter font-semibold select-none"
+                style={{ color: colorModeColors.buttonText }}
+              >
+                Export
+              </spam>
+            </div>
+            <div
+              id="addButton"
+              className="flex items-center gap-2 mr-20 pt-2 pb-2 pl-4 pr-4 bg-creme rounded-xl hover:cursor-pointer shadow-xl"
+            >
+              <PlusIcon />
+              <spam className="font-inter font-semibold select-none">
+                Add student
+              </spam>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        id="filtering"
+        className="w-full h-20 flex justify-between items-start"
+      >
+        <div className="flex gap-3 pl-14">
+          <input
+            type="radio"
+            id="all"
+            name="status"
+            value="All"
+            className="hidden"
+            defaultChecked
+            onChange={handleStatusChange}
+          />
+          <label
+            htmlFor="all"
+            className="select-none pt-2 pb-2 pl-6 pr-6 rounded-xl font-inter font-medium shadow-md cursor-pointer"
+            data-theme={currentTheme}
+          >
+            All
+          </label>
+          <input
+            type="radio"
+            id="valid"
+            name="status"
+            value="Valid"
+            className="hidden"
+            onChange={handleStatusChange}
+          />
+          <label
+            htmlFor="valid"
+            className="select-none pt-2 pb-2 pl-6 pr-6 rounded-xl font-inter font-medium shadow-md cursor-pointer"
+            data-theme={currentTheme}
+          >
+            Valid
+          </label>
+          <input
+            type="radio"
+            id="invalid"
+            name="status"
+            value="Invalid"
+            className="hidden"
+            onChange={handleStatusChange}
+          />
+          <label
+            htmlFor="invalid"
+            className="select-none pt-2 pb-2 pl-6 pr-6 rounded-xl font-inter font-medium shadow-md cursor-pointer"
+            data-theme={currentTheme}
+          >
+            Invalid
+          </label>
+        </div>
+        <div className="flex items-center justify-between pr-20">
+          <div className="relative">
+            <div className="pl-5">
+              <label htmlFor="table-search" className="sr-only">
+                Search
+              </label>
+            </div>
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <SearchIcon color={colorModeColors.icon} />
+            </div>
+            <input
+              type="text"
+              id="table-search-users"
+              className="block p-3 pl-9 text-sm font-inter font-medium text-gray-900 border-2 border-gray rounded-lg w-80"
+              style={{
+                borderColor: colorModeColors.buttonBorder,
+                backgroundColor: colorModeColors.buttonBackGround,
+                color: colorModeColors.buttonText,
+              }}
+              placeholder="Search for students"
+              onChange={handleSearchChange}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="pl-14 pr-10 max-h-[68vh] overflow-y-auto">
+        <table
+          class="w-full border-2 rounded-xl border-separate border-spacing-0"
+          style={{ borderColor: colorModeColors.tableBorder }}
+        >
+          <thead style={{ backgroundColor: colorModeColors.tableHeader }}>
+            <tr className="select-none border-b-2 border-gray">
+              <th className="text-left text-sm text-tableTextColor pl-5 font-inter font-semibold">
+                ID
+              </th>
+              <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
+                First name
+              </th>
+              <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
+                Last name
+              </th>
+              <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
+                Date of birth
+              </th>
+              <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
+                Place of birth
+              </th>
+              <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
+                Country of citizenship
+              </th>
+              <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
+                Gender
+              </th>
+              <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
+                Passport number
+              </th>
+              <th className="text-left text-sm text-tableTextColor p-3 2xl:block xl:hidden font-inter font-semibold">
+                Date of issue
+              </th>
+              <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
+                Date of expiry
+              </th>
+              <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
+                Status
+              </th>
+              <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {students
+              .filter((student) => {
+                if (filter === "All") {
+                  return student;
+                } else if (filter === "Valid") {
+                  return student.validity;
+                } else {
+                  return !student.validity;
+                }
+              })
+              .filter((user) => {
+                if (searchCriteria === "") {
+                  return true;
+                }
+                const normalizedFullNameInternationalFormat =
+                  `${user.firstName} ${user.lastName}`
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "");
+
+                const normalizedFullNameHungarianFormat =
+                  `${user.lastName} ${user.firstName}`
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "");
+
+                const normalizedFirstName = user.firstName
+                  .normalize("NFD")
+                  .replace(/[\u0300-\u036f]/g, "");
+
+                const normalizedLastName = user.lastName
+                  .normalize("NFD")
+                  .replace(/[\u0300-\u036f]/g, "");
+                return (
+                  normalizedFirstName.toLowerCase().includes(searchCriteria) ||
+                  normalizedLastName.toLowerCase().includes(searchCriteria) ||
+                  normalizedFullNameInternationalFormat
+                    .toLowerCase()
+                    .includes(searchCriteria) ||
+                  normalizedFullNameHungarianFormat
+                    .toLowerCase()
+                    .includes(searchCriteria)
+                );
+              })
+              .map((student) => (
+                <tr key={student.id}>
+                  <td
+                    className="p-5 border-b-2 font-bold font-inter h-18"
+                    style={{
+                      borderColor: colorModeColors.tableBorder,
+                      color: colorModeColors.tableContent,
+                    }}
+                  >
+                    {student.id}
+                  </td>
+                  <td
+                    className="p-5 border-b-2 font-inter h-18"
+                    style={{
+                      borderColor: colorModeColors.tableBorder,
+                      color: colorModeColors.tableContent,
+                    }}
+                  >
+                    {student.firstName}
+                  </td>
+                  <td
+                    className="p-5 border-b-2 font-inter h-18"
+                    style={{
+                      borderColor: colorModeColors.tableBorder,
+                      color: colorModeColors.tableContent,
+                    }}
+                  >
+                    {student.lastName}
+                  </td>
+                  <td
+                    className="p-5 border-b-2 font-inter h-18"
+                    style={{
+                      borderColor: colorModeColors.tableBorder,
+                      color: colorModeColors.tableContent,
+                    }}
+                  >
+                    {mapDateToVerboseString(student.birthDate)}
+                  </td>
+                  <td
+                    className="p-5 border-b-2 font-inter h-18"
+                    style={{
+                      borderColor: colorModeColors.tableBorder,
+                      color: colorModeColors.tableContent,
+                    }}
+                  >
+                    {student.placeOfBirth}
+                  </td>
+                  <td
+                    className="p-5 border-b-2 font-inter h-18"
+                    style={{
+                      borderColor: colorModeColors.tableBorder,
+                      color: colorModeColors.tableContent,
+                    }}
+                  >
+                    {student.countryOfCitizenship}
+                  </td>
+                  <td
+                    className="p-5 border-b-2 font-inter h-18"
+                    style={{
+                      borderColor: colorModeColors.tableBorder,
+                      color: colorModeColors.tableContent,
+                    }}
+                  >
+                    {student.gender}
+                  </td>
+                  <td
+                    className="p-5 border-b-2 font-inter h-18"
+                    style={{
+                      borderColor: colorModeColors.tableBorder,
+                      color: colorModeColors.tableContent,
+                    }}
+                  >
+                    {student.passportNumber}
+                  </td>
+                  <td
+                    className="p-5 border-b-2 2xl:block xl:hidden font-inter h-18"
+                    style={{
+                      borderColor: colorModeColors.tableBorder,
+                      color: colorModeColors.tableContent,
+                    }}
+                  >
+                    {mapDateToVerboseString(student.dateOfIssue)}
+                  </td>
+                  <td
+                    className="p-5 border-b-2 font-inter h-18"
+                    style={{
+                      borderColor: colorModeColors.tableBorder,
+                      color: colorModeColors.tableContent,
+                    }}
+                  >
+                    {mapDateToVerboseString(student.dateOfExpiry)}
+                  </td>
+                  <td
+                    className="p-3 border-b-2"
+                    style={{ borderColor: colorModeColors.tableBorder }}
+                  >
+                    <Validity
+                      validity={student.validity}
+                      colorModeColors={colorModeColors}
+                    />
+                  </td>
+                  <td
+                    className="border-b-2 h-18"
+                    style={{ borderColor: colorModeColors.tableBorder }}
+                  >
+                    <div className="flex gap-3 h-full items-center">
+                      <EditIcon color={colorModeColors.icon} />
+                      <DeleteIcon color={colorModeColors.icon} />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
+      <Pagination
+        numberOfPages={numberOfPages}
+        colorModeColors={colorModeColors}
+        activePage={activePage}
+        setActivePage={setActivePage}
+      />
+    </div>
+  );
+};
+
+export default StudentListContent;
