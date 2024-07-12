@@ -112,21 +112,21 @@ const MenuBar = ({
   };
 
   const [settingsAreOpen, setSettingsAreOpen] = useState(false);
-
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
     <div
       id="menubar"
-      class="flex flex-col bg-[#141414] w-20 items-center justify-between"
+      class="flex flex-col bg-[#141414] items-center justify-between"
+      data-isopen={isMenuOpen}
     >
       <Tooltip id="navTooltip" />
-
       <div
         id="burger"
-        class="flex justify-center items-center h-10 w-full mt-8"
+        class="flex justify-start pl-5 items-center h-10 w-full mt-8"
       >
         <a
           class="inner hover:cursor-pointer"
-          onClick={handleNavClick}
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
           data-tooltip-id="navTooltip"
           data-tooltip="Menu"
           data-tooltip-place="right"
@@ -173,7 +173,7 @@ const MenuBar = ({
         <Link to="/" style={{ textDecoration: "none" }}>
           <a
             id="homeNav"
-            class="flex justify-center items-center h-10 w-full"
+            class="flex justify-start items-center h-10 w-full gap-5 pl-3"
             data-tooltip-id="navTooltip"
             data-tooltip-content="Home"
             data-tooltip-place="right"
@@ -206,12 +206,19 @@ const MenuBar = ({
                 </g>
               </svg>
             </div>
+            <div
+              className="font-semibold select-none"
+              style={{ color: svgColors.homeNav }}
+              onClick={handleNavClick}
+            >
+              Home
+            </div>
           </a>
         </Link>
         <Link to="/students" style={{ textDecoration: "none" }}>
           <a
             id="studentListNav"
-            class="flex justify-center items-center h-10 w-full"
+            class="flex justify-start items-center h-10 w-full gap-5 pl-3"
             data-tooltip-id="navTooltip"
             data-tooltip-content="Data"
             data-tooltip-place="right"
@@ -243,12 +250,19 @@ const MenuBar = ({
                 </g>
               </svg>
             </div>
+            <div
+              className="font-semibold select-none"
+              style={{ color: svgColors.studentListNav }}
+              onClick={handleNavClick}
+            >
+              Students
+            </div>
           </a>
         </Link>
         <Link to="/report" style={{ textDecoration: "none" }}>
           <a
             id="reportNav"
-            class="flex justify-center items-center h-10 w-full"
+            class="flex justify-start items-center h-10 w-full gap-5 pl-3"
             data-tooltip-id="navTooltip"
             data-tooltip-content="Report"
             data-tooltip-place="right"
@@ -281,11 +295,18 @@ const MenuBar = ({
                 </g>
               </svg>
             </div>
+            <div
+              className="font-semibold select-none"
+              style={{ color: svgColors.reportNav }}
+              onClick={handleNavClick}
+            >
+              Report
+            </div>
           </a>
         </Link>
       </nav>
       <a
-        class="flex-col justify-center inner p-3 rounded-md hover:cursor-pointer"
+        class="flex-col inner p-3 rounded-md hover:cursor-pointer"
         onClick={(e) => {
           e.stopPropagation();
           setSettingsAreOpen(!settingsAreOpen);

@@ -60,3 +60,17 @@ input[type="radio"]:checked + label[data-theme="dark"] {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--scrollbar-thumb-hover-color);
 }
+
+#menubar[data-isopen="false"] {
+  transition: width 0.5s ease;
+  width: 5rem;
+}
+
+#menubar[data-isopen="true"] {
+  transition: width 0.5s ease;
+  width: 12rem;
+}
+
+#menubar {
+  overflow: hidden;
+}
