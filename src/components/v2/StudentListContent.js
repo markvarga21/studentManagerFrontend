@@ -200,6 +200,7 @@ const StudentListContent = ({ colorModeColors, currentTheme }) => {
               }}
               placeholder="Search for students"
               onChange={handleSearchChange}
+              autoComplete="off"
             />
           </div>
         </div>

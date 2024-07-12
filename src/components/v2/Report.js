@@ -47,6 +47,7 @@ const Report = ({ colorModeColors }) => {
             }}
             placeholder="Subject"
             onChange={handleSubjectChange}
+            autoComplete="off"
           />
           <label htmlFor="report-description" className="sr-only">
             Description
@@ -61,9 +62,10 @@ const Report = ({ colorModeColors }) => {
             }}
             placeholder="Description"
             onChange={handleDescriptionChange}
+            autoComplete="off"
           ></textarea>
           <button
-            className="mt-5 pt-2 pb-2 pl-4 pr-4 bg-darkCreme rounded-xl hover:cursor-pointer shadow-xl text-black text-base"
+            className="mt-5 pt-2 pb-2 pl-4 pr-4 bg-creme rounded-xl hover:cursor-pointer shadow-xl text-black text-base"
             type="submit"
           >
             Submit

@@ -96,8 +96,14 @@ const AppV2 = () => {
             path="/report"
             element={<Report colorModeColors={colorModeColors} />}
           />
-          <Route path="/login" element={<LoginV2 />} />
-          <Route path="/register" element={<RegisterV2 />} />
+          <Route
+            path="/login"
+            element={<LoginV2 colorModeColors={colorModeColors} />}
+          />
+          <Route
+            path="/register"
+            element={<RegisterV2 colorModeColors={colorModeColors} />}
+          />
           <Route
             path="/unauthorized"
             element={<Unauthorized colorModeColors={colorModeColors} />}

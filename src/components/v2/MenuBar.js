@@ -91,6 +91,23 @@ const MenuBar = ({
     setUser(null);
     // remove from local storage
     // localStorage.removeItem("user");
+    const colors = {
+      burger: DEFAULT_ICON_COLOR,
+      homeNav: ACTIVE_ICON_COLOR,
+      studentListNav: DEFAULT_ICON_COLOR,
+      reportNav: DEFAULT_ICON_COLOR,
+      modeNav: DEFAULT_ICON_COLOR,
+      userNav: DEFAULT_ICON_COLOR,
+    };
+    const backColors = {
+      homeNav: ACTIVE_BACKGROUND_COLOR,
+      studentListNav: DEFAULT_BACKGROUND_COLOR,
+      reportNav: DEFAULT_BACKGROUND_COLOR,
+    };
+    setNavBackColors(backColors);
+    setSvgColors(colors);
+    localStorage.setItem("backColors", JSON.stringify(backColors));
+    localStorage.setItem("colors", JSON.stringify(colors));
     navigate("/");
   };
 
