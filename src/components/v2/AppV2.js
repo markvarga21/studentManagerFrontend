@@ -8,6 +8,7 @@ import NotFound from "./NotFound";
 import LoginV2 from "./LoginV2";
 import RegisterV2 from "./RegisterV2";
 import Unauthorized from "./Unauthorized";
+import UserModalV2 from "./UserModalV2";
 
 const AppV2 = () => {
   const LIGHT_MODE = {
@@ -95,6 +96,10 @@ const AppV2 = () => {
           <Route
             path="/report"
             element={<Report colorModeColors={colorModeColors} />}
+          />
+          <Route
+            path="/temp"
+            element={<UserModalV2 colorModeColors={colorModeColors} />}
           />
           <Route
             path="/login"
