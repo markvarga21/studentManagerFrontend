@@ -4,17 +4,13 @@ const Report = ({ colorModeColors }) => {
   const [subject, setSubject] = useState("");
   const [description, setDescription] = useState("");
   const handleSubjectChange = (e) => {
-    console.log(e.target.value);
     setSubject(e.target.value);
   };
   const handleDescriptionChange = (e) => {
-    console.log(e.target.value);
     setDescription(e.target.value);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Subject: ", subject);
-    console.log("Description: ", description);
     setSubject("");
     setDescription("");
   };

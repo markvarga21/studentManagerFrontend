@@ -15,7 +15,7 @@ const Validity = ({ validity, colorModeColors }) => {
           }}
         >
           <CheckIcon />
-          <spam>Valid</spam>
+          <span>Valid</span>
         </div>
       ) : (
         <div
@@ -27,7 +27,7 @@ const Validity = ({ validity, colorModeColors }) => {
           }}
         >
           <CrossIcon />
-          <spam>Invalid</spam>
+          <span>Invalid</span>
         </div>
       )}
     </div>

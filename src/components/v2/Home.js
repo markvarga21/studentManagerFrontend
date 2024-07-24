@@ -20,9 +20,9 @@ const Home = ({ user, colorModeColors }) => {
       >
         Welcome
         {user && user !== undefined ? (
-          <spam>
-            , <spam className="text-darkCreme">{user.username}</spam>!
-          </spam>
+          <span>
+            , <span className="text-darkCreme">{user.username}</span>!
+          </span>
         ) : (
           "!"
         )}

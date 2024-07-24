@@ -7,9 +7,9 @@ const SaveButtonV2 = ({ buttonTitle }) => {
       id="saveButton"
       className=" w-1/3 xl:w-auto flex items-center justify-center gap-1 pt-2 pb-2 pl-4 pr-4 bg-creme rounded-xl hover:cursor-pointer shadow-xl"
     >
-      <spam className="font-inter font-semibold select-none 2xl:text-base xl:text-base md:text-sm">
+      <span className="font-inter font-semibold select-none 2xl:text-base xl:text-base md:text-sm">
         {buttonTitle}
-      </spam>
+      </span>
       <SaveIconV2 />
     </button>
   );

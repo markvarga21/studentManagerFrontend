@@ -67,7 +67,7 @@ const Pagination = ({
         }}
       >
         <LeftIcon color={colorModeColors.icon} />
-        <spam>Previous</spam>
+        <span>Previous</span>
       </button>
       <div id="pages" className="flex gap-1">
         {pages.map((page) => (
@@ -93,7 +93,7 @@ const Pagination = ({
           }
         }}
       >
-        <spam>Next</spam>
+        <span>Next</span>
         <RightIcon color={colorModeColors.icon} />
       </button>
     </div>

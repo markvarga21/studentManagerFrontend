@@ -94,11 +94,9 @@ const MenuBar = ({
   };
 
   const handleLogout = () => {
-    console.log(`User in state: ${JSON.stringify(user)}`);
-    console.log(`User in local storage: ${localStorage.getItem("user")}`);
     axios
       .post(
-        `${API_URL}auth/logout`,
+        `${API_URL}/auth/logout`,
         {},
         {
           headers: {
@@ -242,95 +240,99 @@ const MenuBar = ({
             </div>
           </a>
         </Link>
-        <Link to="/students" style={{ textDecoration: "none" }}>
-          <a
-            id="studentListNav"
-            class="flex justify-start items-center h-10 w-full gap-5 pl-3"
-            data-tooltip-id="navTooltip"
-            data-tooltip-content="Data"
-            data-tooltip-place="right"
-          >
-            <div
-              class="inner p-3 rounded-md hover:cursor-pointer"
-              style={{ backgroundColor: navBackColors.studentListNav }}
-              onClick={handleNavClick}
+        {user && (
+          <Link to="/data" style={{ textDecoration: "none" }}>
+            <a
+              id="studentListNav"
+              class="flex justify-start items-center h-10 w-full gap-5 pl-3"
+              data-tooltip-id="navTooltip"
+              data-tooltip-content="Data"
+              data-tooltip-place="right"
             >
-              <svg
-                viewBox="0 0 1024 1024"
-                style={{ height: ICON_SIZES / 90 + "vh", minHeight: "23px" }}
-                class="icon"
-                version="1.1"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="#000000"
+              <div
+                class="inner p-3 rounded-md hover:cursor-pointer"
+                style={{ backgroundColor: navBackColors.studentListNav }}
+                onClick={handleNavClick}
               >
-                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                <g
-                  id="SVGRepo_tracerCarrier"
-                  stroke-linecap="round"
-                  strokeLinejoin="round"
-                ></g>
-                <g id="SVGRepo_iconCarrier">
-                  <path
-                    d="M978.578286 900.461714l-108.617143-108.617143c30.134857-39.570286 48.274286-88.795429 48.274286-142.189714a235.739429 235.739429 0 0 0-235.52-235.373714 235.739429 235.739429 0 0 0-235.373715 235.373714 235.739429 235.739429 0 0 0 235.446857 235.52c53.467429 0 102.692571-18.139429 142.189715-48.274286l108.617143 108.544a31.524571 31.524571 0 0 0 44.836571 0 31.744 31.744 0 0 0 0.146286-44.982857zM510.902857 649.654857a172.105143 172.105143 0 0 1 171.885714-171.885714 171.885714 171.885714 0 0 1 0 343.771428 172.178286 172.178286 0 0 1-171.885714-171.885714z m270.262857-378.514286c0 17.554286-14.262857 31.744-31.817143 31.744H431.396571a31.744 31.744 0 0 1 0-63.488h317.952c17.554286 0 31.817143 14.189714 31.817143 31.744z m-609.426285 620.032h211.968a31.890286 31.890286 0 0 1 0 63.634286H171.739429c-58.368 0-106.057143-47.542857-106.057143-106.057143V283.062857c0-14.262857 5.12-28.086857 14.262857-39.058286L240.420571 53.101714a57.417143 57.417143 0 0 1 43.885715-20.48h517.997714c58.441143 0 106.057143 47.542857 106.057143 106.057143V366.445714a31.744 31.744 0 0 1-63.634286 0V138.605714a42.422857 42.422857 0 0 0-42.276571-42.349714H336.018286V280.137143a50.688 50.688 0 0 1-50.980572 50.176H129.389714v518.509714c0 23.332571 19.017143 42.349714 42.349715 42.349714zM272.457143 113.810286l-128.512 152.868571h128.512v-152.868571z m79.506286 476.16a31.744 31.744 0 0 0 0-63.634286H240.64a31.744 31.744 0 0 0 0 63.634286h111.323429z m0 146.066285a31.744 31.744 0 0 0 0-63.561142H240.64a31.744 31.744 0 0 0 0 63.561142h111.323429z m31.744-353.206857H240.64a31.744 31.744 0 0 0 0 63.561143h143.067429a31.744 31.744 0 0 0 0-63.561143z"
-                    fill={svgColors.studentListNav}
-                  ></path>
-                </g>
-              </svg>
-            </div>
-            <div
-              className="font-semibold select-none"
-              style={{ color: svgColors.studentListNav }}
-              onClick={handleNavClick}
-            >
-              Students
-            </div>
-          </a>
-        </Link>
-        <Link to="/report" style={{ textDecoration: "none" }}>
-          <a
-            id="reportNav"
-            class="flex justify-start items-center h-10 w-full gap-5 pl-3"
-            data-tooltip-id="navTooltip"
-            data-tooltip-content="Report"
-            data-tooltip-place="right"
-          >
-            <div
-              class="inner p-3 rounded-md hover:cursor-pointer"
-              style={{ backgroundColor: navBackColors.reportNav }}
-              onClick={handleNavClick}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                style={{ height: ICON_SIZES / 75 + "vh", minHeight: "25px" }}
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                <g
-                  id="SVGRepo_tracerCarrier"
-                  stroke-linecap="round"
-                  strokeLinejoin="round"
-                ></g>
-                <g id="SVGRepo_iconCarrier">
-                  <path
-                    d="M5 21V3.90002C5 3.90002 5.875 3 8.5 3C11.125 3 12.875 4.8 15.5 4.8C18.125 4.8 19 3.9 19 3.9V14.7C19 14.7 18.125 15.6 15.5 15.6C12.875 15.6 11.125 13.8 8.5 13.8C5.875 13.8 5 14.7 5 14.7"
-                    stroke={svgColors.reportNav}
-                    strokeWidth="1.6"
+                <svg
+                  viewBox="0 0 1024 1024"
+                  style={{ height: ICON_SIZES / 90 + "vh", minHeight: "23px" }}
+                  class="icon"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="#000000"
+                >
+                  <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
                     stroke-linecap="round"
                     strokeLinejoin="round"
-                  ></path>
-                </g>
-              </svg>
-            </div>
-            <div
-              className="font-semibold select-none"
-              style={{ color: svgColors.reportNav }}
-              onClick={handleNavClick}
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      d="M978.578286 900.461714l-108.617143-108.617143c30.134857-39.570286 48.274286-88.795429 48.274286-142.189714a235.739429 235.739429 0 0 0-235.52-235.373714 235.739429 235.739429 0 0 0-235.373715 235.373714 235.739429 235.739429 0 0 0 235.446857 235.52c53.467429 0 102.692571-18.139429 142.189715-48.274286l108.617143 108.544a31.524571 31.524571 0 0 0 44.836571 0 31.744 31.744 0 0 0 0.146286-44.982857zM510.902857 649.654857a172.105143 172.105143 0 0 1 171.885714-171.885714 171.885714 171.885714 0 0 1 0 343.771428 172.178286 172.178286 0 0 1-171.885714-171.885714z m270.262857-378.514286c0 17.554286-14.262857 31.744-31.817143 31.744H431.396571a31.744 31.744 0 0 1 0-63.488h317.952c17.554286 0 31.817143 14.189714 31.817143 31.744z m-609.426285 620.032h211.968a31.890286 31.890286 0 0 1 0 63.634286H171.739429c-58.368 0-106.057143-47.542857-106.057143-106.057143V283.062857c0-14.262857 5.12-28.086857 14.262857-39.058286L240.420571 53.101714a57.417143 57.417143 0 0 1 43.885715-20.48h517.997714c58.441143 0 106.057143 47.542857 106.057143 106.057143V366.445714a31.744 31.744 0 0 1-63.634286 0V138.605714a42.422857 42.422857 0 0 0-42.276571-42.349714H336.018286V280.137143a50.688 50.688 0 0 1-50.980572 50.176H129.389714v518.509714c0 23.332571 19.017143 42.349714 42.349715 42.349714zM272.457143 113.810286l-128.512 152.868571h128.512v-152.868571z m79.506286 476.16a31.744 31.744 0 0 0 0-63.634286H240.64a31.744 31.744 0 0 0 0 63.634286h111.323429z m0 146.066285a31.744 31.744 0 0 0 0-63.561142H240.64a31.744 31.744 0 0 0 0 63.561142h111.323429z m31.744-353.206857H240.64a31.744 31.744 0 0 0 0 63.561143h143.067429a31.744 31.744 0 0 0 0-63.561143z"
+                      fill={svgColors.studentListNav}
+                    ></path>
+                  </g>
+                </svg>
+              </div>
+              <div
+                className="font-semibold select-none"
+                style={{ color: svgColors.studentListNav }}
+                onClick={handleNavClick}
+              >
+                Students
+              </div>
+            </a>
+          </Link>
+        )}
+        {user && (
+          <Link to="/report" style={{ textDecoration: "none" }}>
+            <a
+              id="reportNav"
+              class="flex justify-start items-center h-10 w-full gap-5 pl-3"
+              data-tooltip-id="navTooltip"
+              data-tooltip-content="Report"
+              data-tooltip-place="right"
             >
-              Report
-            </div>
-          </a>
-        </Link>
+              <div
+                class="inner p-3 rounded-md hover:cursor-pointer"
+                style={{ backgroundColor: navBackColors.reportNav }}
+                onClick={handleNavClick}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  style={{ height: ICON_SIZES / 75 + "vh", minHeight: "25px" }}
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    strokeLinejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      d="M5 21V3.90002C5 3.90002 5.875 3 8.5 3C11.125 3 12.875 4.8 15.5 4.8C18.125 4.8 19 3.9 19 3.9V14.7C19 14.7 18.125 15.6 15.5 15.6C12.875 15.6 11.125 13.8 8.5 13.8C5.875 13.8 5 14.7 5 14.7"
+                      stroke={svgColors.reportNav}
+                      strokeWidth="1.6"
+                      stroke-linecap="round"
+                      strokeLinejoin="round"
+                    ></path>
+                  </g>
+                </svg>
+              </div>
+              <div
+                className="font-semibold select-none"
+                style={{ color: svgColors.reportNav }}
+                onClick={handleNavClick}
+              >
+                Report
+              </div>
+            </a>
+          </Link>
+        )}
       </nav>
       <a
         class="flex-col inner p-3 rounded-md hover:cursor-pointer"
@@ -357,11 +359,15 @@ const MenuBar = ({
                 currentTheme={currentTheme}
                 ICON_SIZES={ICON_SIZES}
               />
-              <LogoutIconV2
-                color={svgColors.userNav}
-                ICON_SIZES={ICON_SIZES}
-                handleLogout={handleLogout}
-              />
+              {user ? (
+                <LogoutIconV2
+                  color={svgColors.userNav}
+                  ICON_SIZES={ICON_SIZES}
+                  handleLogout={handleLogout}
+                />
+              ) : (
+                <></>
+              )}
             </div>
           )}
           <GearIcon color={svgColors.userNav} ICON_SIZES={ICON_SIZES} />

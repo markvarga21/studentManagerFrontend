@@ -1,8 +1,9 @@
+import axios from "axios";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-const RegisterV2 = ({ colorModeColors }) => {
+const RegisterV2 = ({ colorModeColors, API_URL }) => {
   const navigate = useNavigate();
   const [userRegisterDetails, setUserRegisterDetails] = useState({
     username: "",
@@ -42,21 +43,29 @@ const RegisterV2 = ({ colorModeColors }) => {
       return;
     }
 
-    console.log(JSON.stringify(userRegisterDetails));
-    toast.success("Registration successful! Now please log in.");
-    setUserRegisterDetails({
-      username: "",
-      email: "",
-      firstName: "",
-      lastName: "",
-      password: "",
-    });
-
-    setIsWaiting(true);
-    setTimeout(() => {
-      navigate("/login");
-      setIsWaiting(false);
-    }, 2000);
+    axios
+      .post(`${API_URL}/auth/register`, userRegisterDetails)
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(JSON.stringify(res.data));
+          toast.success("Registration successful! Now please log in.");
+          setUserRegisterDetails({
+            username: "",
+            email: "",
+            firstName: "",
+            lastName: "",
+            password: "",
+          });
+          setIsWaiting(true);
+          setTimeout(() => {
+            navigate("/login");
+            setIsWaiting(false);
+          }, 2000);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <div

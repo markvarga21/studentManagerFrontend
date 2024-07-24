@@ -8,7 +8,7 @@ import Pagination from "../icons/Pagination";
 import axios from "axios";
 import ExportIcon from "../icons/ImportIcon";
 import UserModalV2 from "./UserModalV2";
-import { exportJson, exportXml } from "./exportutils";
+import { exportJson, exportXml } from "./exportUtils";
 
 const StudentListContent = ({
   colorModeColors,
@@ -17,6 +17,8 @@ const StudentListContent = ({
   setStudentId,
   isEditActive,
   setIsEditActive,
+  user,
+  API_URL,
 }) => {
   const [filter, setFilter] = useState("All");
   const [activePage, setActivePage] = useState(1);
@@ -55,32 +57,8 @@ const StudentListContent = ({
   }, []);
   // useEffect(() => {
   //   const pages = Math.ceil(students.length / 10);
-  //   console.log(pages);
   //   setNumberOfPages(pages);
   // }, [students]);
-
-  const handleExportClick = () => {
-    console.log("Exporting students...");
-    const filteredStudents = students.filter((student) => {
-      if (filter === "All") {
-        return student;
-      } else if (filter === "Valid") {
-        return student.validity;
-      } else {
-        return !student.validity;
-      }
-    });
-    const dataStr = JSON.stringify(filteredStudents);
-    const blob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "students.json";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
 
   const [searchCriteria, setSearchCriteria] = useState("");
   const handleSearchChange = () => {
@@ -95,11 +73,11 @@ const StudentListContent = ({
   };
 
   const handleExportXml = () => {
-    exportXml(students);
+    exportXml(students, user.token, API_URL);
   };
 
   const handleExportJson = () => {
-    exportJson(students);
+    exportJson(students, user.token, API_URL);
   };
 
   return (
@@ -143,12 +121,12 @@ const StudentListContent = ({
               onClick={toggleDropdown}
             >
               <ExportIcon color={colorModeColors.icon} />
-              <spam
+              <span
                 className="font-inter font-semibold select-none"
                 style={{ color: colorModeColors.buttonText }}
               >
                 Export
-              </spam>
+              </span>
               {isDropdownVisible && (
                 <div
                   className="absolute mt-36 py-2 w-48 rounded-md shadow-xl z-10"
@@ -177,9 +155,9 @@ const StudentListContent = ({
               className="flex items-center gap-2 mr-20 pt-2 pb-2 pl-4 pr-4 bg-creme rounded-xl hover:cursor-pointer shadow-xl"
             >
               <PlusIcon />
-              <spam className="font-inter font-semibold select-none">
+              <span className="font-inter font-semibold select-none">
                 Add student
-              </spam>
+              </span>
             </div>
           </div>
         </div>

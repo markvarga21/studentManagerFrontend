@@ -26,7 +26,7 @@ const LoginV2 = ({
       return;
     }
     axios
-      .post(`${API_URL}auth/login`, loginDetails)
+      .post(`${API_URL}/auth/login`, loginDetails)
       .then((res) => {
         if (res.status === 200) {
           setLoginDetails({

@@ -108,7 +108,7 @@ const UserModalV2 = ({
         setStudent(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   }, [studentId]);
 

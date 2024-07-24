@@ -9,6 +9,9 @@ import LoginV2 from "./LoginV2";
 import RegisterV2 from "./RegisterV2";
 import Unauthorized from "./Unauthorized";
 import UserModalV2 from "./UserModalV2";
+import StudentData from "./StudentData";
+import { useIdleTimer } from "react-idle-timer";
+import { jwtDecode } from "jwt-decode";
 
 const AppV2 = () => {
   const LIGHT_MODE = {
@@ -70,13 +73,41 @@ const AppV2 = () => {
   const [studentId, setStudentId] = useState(null);
   const [isEditActive, setIsEditActive] = useState(false);
 
-  const API_URL = "http://127.0.0.1:8080/api/v1/";
+  const API_URL = "http://127.0.0.1:8080/api/v1";
   const [userWasModified, setUserWasModified] = useState(1);
 
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("user")));
-    console.log(user);
   }, [userWasModified]);
+
+  const handleUserTimeout = () => {
+    console.log("Checking user timeout");
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      const decoded = jwtDecode(user.token);
+      console.log("User exists");
+      console.log(`Issued at: ${decoded.iat}`);
+      const expirationTime = new Date(decoded.exp * 1000);
+      const now = new Date(Date.now());
+      console.log("Expires at: ", expirationTime);
+      console.log("Now time: ", now);
+      if (now > expirationTime) {
+        console.log("User timed out");
+        localStorage.removeItem("user");
+        setUser(null);
+        window.location.href = "/login";
+      }
+    }
+  };
+
+  const CHECK_PERIOD_MINUTES = 5;
+  const TIMEOUT = CHECK_PERIOD_MINUTES * 60 * 1000;
+  const DEBOUNCE_TIME = CHECK_PERIOD_MINUTES * 100;
+  useIdleTimer({
+    timeout: TIMEOUT,
+    debounce: DEBOUNCE_TIME,
+    onIdle: handleUserTimeout,
+  });
 
   return (
     <div className="flex h-[100vh]">
@@ -100,21 +131,37 @@ const AppV2 = () => {
             element={<Home user={user} colorModeColors={colorModeColors} />}
           />
           <Route
-            path="/students"
+            path="/data"
             element={
-              <StudentListContent
-                colorModeColors={colorModeColors}
-                currentTheme={currentTheme}
-                studentId={studentId}
-                setStudentId={setStudentId}
-                isEditActive={isEditActive}
-                setIsEditActive={setIsEditActive}
-              />
+              user ? (
+                user.roles.includes("ROLE_ADMIN") ? (
+                  <StudentListContent
+                    colorModeColors={colorModeColors}
+                    currentTheme={currentTheme}
+                    studentId={studentId}
+                    setStudentId={setStudentId}
+                    isEditActive={isEditActive}
+                    setIsEditActive={setIsEditActive}
+                    user={user}
+                    API_URL={API_URL}
+                  />
+                ) : (
+                  <StudentData colorModeColors={colorModeColors} user={user} />
+                )
+              ) : (
+                <Unauthorized colorModeColors={colorModeColors} />
+              )
             }
           />
           <Route
             path="/report"
-            element={<Report colorModeColors={colorModeColors} />}
+            element={
+              user ? (
+                <Report colorModeColors={colorModeColors} />
+              ) : (
+                <Unauthorized colorModeColors={colorModeColors} />
+              )
+            }
           />
           <Route
             path="/login"
@@ -129,7 +176,9 @@ const AppV2 = () => {
           />
           <Route
             path="/register"
-            element={<RegisterV2 colorModeColors={colorModeColors} />}
+            element={
+              <RegisterV2 colorModeColors={colorModeColors} API_URL={API_URL} />
+            }
           />
           <Route
             path="/unauthorized"
