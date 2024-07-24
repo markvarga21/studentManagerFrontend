@@ -4,7 +4,12 @@ import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-const LoginV2 = ({ colorModeColors, API_URL }) => {
+const LoginV2 = ({
+  colorModeColors,
+  API_URL,
+  userWasModified,
+  setUserWasModified,
+}) => {
   const navigate = useNavigate();
   const [loginDetails, setLoginDetails] = useState({
     username: "",
@@ -36,7 +41,9 @@ const LoginV2 = ({ colorModeColors, API_URL }) => {
             token: token,
           };
           localStorage.setItem("user", JSON.stringify(user));
+          setUserWasModified(-1 * userWasModified);
           toast.success("Login successful!");
+          navigate("/");
         }
       })
       .catch((err) => {

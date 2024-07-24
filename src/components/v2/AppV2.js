@@ -66,17 +66,17 @@ const AppV2 = () => {
   const [currentTheme, setCurrentTheme] = useState("light");
   const [colorModeColors, setColorModeColors] = useState(LIGHT_MODE);
 
-  const mock_user = {
-    username: "john",
-    email: "john@domain.com",
-    roles: ["USER"],
-    token: "1234567890",
-  };
-  const [user, setUser] = useState(mock_user);
+  const [user, setUser] = useState(null);
   const [studentId, setStudentId] = useState(null);
   const [isEditActive, setIsEditActive] = useState(false);
 
-  const API_URL = "http://localhost:8080/api/v1/";
+  const API_URL = "http://127.0.0.1:8080/api/v1/";
+  const [userWasModified, setUserWasModified] = useState(1);
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("user")));
+    console.log(user);
+  }, [userWasModified]);
 
   return (
     <div className="flex h-[100vh]">
@@ -88,7 +88,11 @@ const AppV2 = () => {
           darkMode={DARK_MODE}
           currentTheme={currentTheme}
           setCurrentTheme={setCurrentTheme}
+          user={user}
           setUser={setUser}
+          API_URL={API_URL}
+          userWasModified={userWasModified}
+          setUserWasModified={setUserWasModified}
         />
         <Routes>
           <Route
@@ -113,19 +117,14 @@ const AppV2 = () => {
             element={<Report colorModeColors={colorModeColors} />}
           />
           <Route
-            path="/temp"
-            element={
-              <UserModalV2
-                colorModeColors={colorModeColors}
-                studentId={studentId}
-                setStudentId={setStudentId}
-              />
-            }
-          />
-          <Route
             path="/login"
             element={
-              <LoginV2 colorModeColors={colorModeColors} API_URL={API_URL} />
+              <LoginV2
+                colorModeColors={colorModeColors}
+                API_URL={API_URL}
+                userWasModified={userWasModified}
+                setUserWasModified={setUserWasModified}
+              />
             }
           />
           <Route

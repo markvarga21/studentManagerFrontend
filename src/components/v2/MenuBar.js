@@ -4,6 +4,8 @@ import GearIcon from "../icons/GearIcon";
 import LogoutIconV2 from "../icons/LogoutIconV2";
 import { Link, useNavigate } from "react-router-dom";
 import { Tooltip } from "react-tooltip";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const MenuBar = ({
   colorModeColors,
@@ -12,7 +14,11 @@ const MenuBar = ({
   darkMode,
   currentTheme,
   setCurrentTheme,
+  user,
   setUser,
+  API_URL,
+  userWasModified,
+  setUserWasModified,
 }) => {
   const navigate = useNavigate();
   const DEFAULT_ICON_COLOR = "#9a9a9a";
@@ -88,9 +94,30 @@ const MenuBar = ({
   };
 
   const handleLogout = () => {
-    setUser(null);
-    // remove from local storage
-    // localStorage.removeItem("user");
+    console.log(`User in state: ${JSON.stringify(user)}`);
+    console.log(`User in local storage: ${localStorage.getItem("user")}`);
+    axios
+      .post(
+        `${API_URL}auth/logout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          localStorage.removeItem("user");
+          setUserWasModified(-1 * userWasModified);
+          toast.success("Logout successful!");
+          navigate("/");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
     const colors = {
       burger: DEFAULT_ICON_COLOR,
       homeNav: ACTIVE_ICON_COLOR,
@@ -108,7 +135,6 @@ const MenuBar = ({
     setSvgColors(colors);
     localStorage.setItem("backColors", JSON.stringify(backColors));
     localStorage.setItem("colors", JSON.stringify(colors));
-    navigate("/");
   };
 
   const [settingsAreOpen, setSettingsAreOpen] = useState(false);
@@ -119,6 +145,7 @@ const MenuBar = ({
       class="flex flex-col bg-[#141414] items-center justify-between h-full w-1/4 z-50"
       data-isopen={isMenuOpen}
     >
+      <Toaster />
       <Tooltip id="navTooltip" />
       <div
         id="burger"
