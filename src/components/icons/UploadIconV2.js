@@ -6,7 +6,7 @@ const UploadIconV2 = () => {
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      style={{ height: "2.5vh", minHeight: "18px" }}
+      style={{ height: "2vh", minHeight: "18px" }}
       className="2xl:block xl:hidden lg:hidden md:hidden sm:hidden"
     >
       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>

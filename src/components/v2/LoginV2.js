@@ -1,8 +1,10 @@
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-const LoginV2 = ({ colorModeColors }) => {
+const LoginV2 = ({ colorModeColors, API_URL }) => {
   const navigate = useNavigate();
   const [loginDetails, setLoginDetails] = useState({
     username: "",
@@ -18,12 +20,28 @@ const LoginV2 = ({ colorModeColors }) => {
       toast.error("Please fill in all fields.");
       return;
     }
-    setLoginDetails({
-      username: "",
-      password: "",
-    });
-    toast.success("Login successful!");
-    navigate("/students");
+    axios
+      .post(`${API_URL}auth/login`, loginDetails)
+      .then((res) => {
+        if (res.status === 200) {
+          setLoginDetails({
+            username: "",
+            password: "",
+          });
+          const token = res.data;
+          const decoded = jwtDecode(token);
+          const user = {
+            username: decoded.sub,
+            roles: decoded.roles,
+            token: token,
+          };
+          localStorage.setItem("user", JSON.stringify(user));
+          toast.success("Login successful!");
+        }
+      })
+      .catch((err) => {
+        toast.error("Invalid credentials. Please try again.");
+      });
   };
   const navigateToRegister = () => {
     setLoginDetails({

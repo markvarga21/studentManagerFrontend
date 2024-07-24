@@ -33,6 +33,9 @@ const AppV2 = () => {
     activePageText: "#BB812A",
     inactivePageText: "rgba(72, 73, 74, 0.5)",
     inputText: "#48494A",
+    modalBack: "white",
+    radioBack: "#D4D7D9",
+    radioText: "black",
   };
   const DARK_MODE = {
     bg: "#121212",
@@ -56,6 +59,9 @@ const AppV2 = () => {
     activePageText: "rgba(255, 255, 255, 0.5)",
     inactivePageText: "rgba(255, 255, 255, 0.3)",
     inputText: "rgb(148, 163, 175)",
+    modalBack: "rgba(0, 0, 0, 0.5)",
+    radioBack: "#363535",
+    radioText: "#6B6B6B",
   };
   const [currentTheme, setCurrentTheme] = useState("light");
   const [colorModeColors, setColorModeColors] = useState(LIGHT_MODE);
@@ -67,6 +73,11 @@ const AppV2 = () => {
     token: "1234567890",
   };
   const [user, setUser] = useState(mock_user);
+  const [studentId, setStudentId] = useState(null);
+  const [isEditActive, setIsEditActive] = useState(false);
+
+  const API_URL = "http://localhost:8080/api/v1/";
+
   return (
     <div className="flex h-[100vh]">
       <BrowserRouter>
@@ -90,6 +101,10 @@ const AppV2 = () => {
               <StudentListContent
                 colorModeColors={colorModeColors}
                 currentTheme={currentTheme}
+                studentId={studentId}
+                setStudentId={setStudentId}
+                isEditActive={isEditActive}
+                setIsEditActive={setIsEditActive}
               />
             }
           />
@@ -99,11 +114,19 @@ const AppV2 = () => {
           />
           <Route
             path="/temp"
-            element={<UserModalV2 colorModeColors={colorModeColors} />}
+            element={
+              <UserModalV2
+                colorModeColors={colorModeColors}
+                studentId={studentId}
+                setStudentId={setStudentId}
+              />
+            }
           />
           <Route
             path="/login"
-            element={<LoginV2 colorModeColors={colorModeColors} />}
+            element={
+              <LoginV2 colorModeColors={colorModeColors} API_URL={API_URL} />
+            }
           />
           <Route
             path="/register"

@@ -3,7 +3,7 @@ import React from "react";
 const SaveIconV2 = () => {
   return (
     <svg
-      style={{ height: "2.5vh", minWidth: "28px" }}
+      style={{ height: "2vh", minWidth: "28px" }}
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

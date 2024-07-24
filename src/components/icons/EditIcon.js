@@ -1,6 +1,10 @@
 import React from "react";
 
-const EditIcon = ({ color }) => {
+const EditIcon = ({ color, studentId, setStudentId, setIsEditActive }) => {
+  const handleEditClick = () => {
+    setStudentId(studentId);
+    setIsEditActive(true);
+  };
   return (
     <div className="hover:cursor-pointer h-full">
       <svg
@@ -8,6 +12,7 @@ const EditIcon = ({ color }) => {
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        onClick={handleEditClick}
       >
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
         <g

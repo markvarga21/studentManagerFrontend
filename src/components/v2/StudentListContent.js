@@ -7,8 +7,17 @@ import DeleteIcon from "../icons/DeleteIcon";
 import Pagination from "../icons/Pagination";
 import axios from "axios";
 import ExportIcon from "../icons/ImportIcon";
+import UserModalV2 from "./UserModalV2";
+import { exportJson, exportXml } from "./exportutils";
 
-const StudentListContent = ({ colorModeColors, currentTheme }) => {
+const StudentListContent = ({
+  colorModeColors,
+  currentTheme,
+  studentId,
+  setStudentId,
+  isEditActive,
+  setIsEditActive,
+}) => {
   const [filter, setFilter] = useState("All");
   const [activePage, setActivePage] = useState(1);
   const [numberOfPages, setNumberOfPages] = useState(10);
@@ -80,11 +89,37 @@ const StudentListContent = ({ colorModeColors, currentTheme }) => {
     setSearchCriteria(normalized);
   };
 
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const toggleDropdown = () => {
+    setIsDropdownVisible(!isDropdownVisible);
+  };
+
+  const handleExportXml = () => {
+    exportXml(students);
+  };
+
+  const handleExportJson = () => {
+    exportJson(students);
+  };
+
   return (
     <div
       className="w-full h-full"
       style={{ backgroundColor: colorModeColors.bg }}
     >
+      <div>
+        {isEditActive && (
+          <UserModalV2
+            colorModeColors={colorModeColors}
+            studentId={studentId}
+            setStudentId={setStudentId}
+            modalTitle={"Edit student"}
+            buttonTitle={"Save changes"}
+            isEditActive={isEditActive}
+            setIsEditActive={setIsEditActive}
+          />
+        )}
+      </div>
       <div className="flex h-24 mt-4 w-full">
         <div
           id="titleAndAdd"
@@ -105,7 +140,7 @@ const StudentListContent = ({ colorModeColors, currentTheme }) => {
                 borderColor: colorModeColors.buttonBorder,
                 backgroundColor: colorModeColors.buttonBackGround,
               }}
-              onClick={handleExportClick}
+              onClick={toggleDropdown}
             >
               <ExportIcon color={colorModeColors.icon} />
               <spam
@@ -114,6 +149,28 @@ const StudentListContent = ({ colorModeColors, currentTheme }) => {
               >
                 Export
               </spam>
+              {isDropdownVisible && (
+                <div
+                  className="absolute mt-36 py-2 w-48 rounded-md shadow-xl z-10"
+                  style={{
+                    backgroundColor: colorModeColors.buttonBackGround,
+                    color: colorModeColors.buttonText,
+                  }}
+                >
+                  <div
+                    className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                    onClick={handleExportJson}
+                  >
+                    Export as JSON
+                  </div>
+                  <div
+                    className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                    onClick={handleExportXml}
+                  >
+                    Export as XML
+                  </div>
+                </div>
+              )}
             </div>
             <div
               id="addButton"
@@ -282,7 +339,15 @@ const StudentListContent = ({ colorModeColors, currentTheme }) => {
                 const normalizedLastName = user.lastName
                   .normalize("NFD")
                   .replace(/[\u0300-\u036f]/g, "");
+
+                const normalizedPassportNumber = user.passportNumber
+                  .normalize("NFD")
+                  .replace(/[\u0300-\u036f]/g, "");
+
                 return (
+                  normalizedPassportNumber
+                    .toLowerCase()
+                    .includes(searchCriteria) ||
                   normalizedFirstName.toLowerCase().includes(searchCriteria) ||
                   normalizedLastName.toLowerCase().includes(searchCriteria) ||
                   normalizedFullNameInternationalFormat
@@ -399,7 +464,12 @@ const StudentListContent = ({ colorModeColors, currentTheme }) => {
                     style={{ borderColor: colorModeColors.tableBorder }}
                   >
                     <div className="flex gap-3 h-full items-center">
-                      <EditIcon color={colorModeColors.icon} />
+                      <EditIcon
+                        color={colorModeColors.icon}
+                        studentId={student.id}
+                        setStudentId={setStudentId}
+                        setIsEditActive={setIsEditActive}
+                      />
                       <DeleteIcon color={colorModeColors.icon} />
                     </div>
                   </td>

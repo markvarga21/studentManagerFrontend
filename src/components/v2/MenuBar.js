@@ -116,7 +116,7 @@ const MenuBar = ({
   return (
     <div
       id="menubar"
-      class="flex flex-col bg-[#141414] items-center justify-between"
+      class="flex flex-col bg-[#141414] items-center justify-between h-full w-1/4 z-50"
       data-isopen={isMenuOpen}
     >
       <Tooltip id="navTooltip" />

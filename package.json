@@ -15,8 +15,10 @@
     "firebase": "^10.1.0",
     "flowbite": "^1.8.1",
     "flowbite-datepicker": "^1.2.2",
+    "jwt-decode": "^4.0.0",
+    "path-browserify": "^1.0.1",
     "react": "^18.2.0",
-    "react-datepicker": "^4.20.0",
+    "react-datepicker": "^4.25.0",
     "react-datetime": "^3.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
@@ -25,7 +27,10 @@
     "react-tailwindcss-datepicker": "^1.6.6",
     "react-tooltip": "^5.27.1",
     "redis": "^4.6.7",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "xml-formatter": "^3.6.3",
+    "xsd-schema-validator": "^0.9.0",
+    "xsd-validator": "^1.1.1"
   },
   "scripts": {
     "start": "react-scripts start --host 0.0.0.0",

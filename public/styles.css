@@ -74,3 +74,16 @@ input[type="radio"]:checked + label[data-theme="dark"] {
 #menubar {
   overflow: hidden;
 }
+
+input[type="date"]:in-range::-webkit-datetime-edit-year-field,
+input[type="date"]:in-range::-webkit-datetime-edit-month-field,
+input[type="date"]:in-range::-webkit-datetime-edit-day-field,
+input[type="date"]:in-range::-webkit-datetime-edit-text,
+option#gender {
+  color: rgb(162 162 163);
+}
+
+::selection {
+  color: black;
+  background: #e1b77a;
+}
