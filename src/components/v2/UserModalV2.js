@@ -23,6 +23,7 @@ const UserModalV2 = ({
   isAddStudentActive,
   setIsAddStudentActive,
   API_URL,
+  setUser,
 }) => {
   const [student, setStudent] = useState({
     id: studentId,
@@ -51,6 +52,18 @@ const UserModalV2 = ({
 
   const handleCloseClick = () => {
     setPassportData({
+      firstName: "",
+      lastName: "",
+      birthDate: "",
+      placeOfBirth: "",
+      countryOfCitizenship: "",
+      gender: "",
+      passportNumber: "",
+      passportDateOfIssue: "",
+      passportDateOfExpiry: "",
+    });
+    setStudent({
+      id: studentId,
       firstName: "",
       lastName: "",
       birthDate: "",
@@ -182,10 +195,11 @@ const UserModalV2 = ({
   const checkEmptyFields = () => {
     for (const key in student) {
       if (student[key] === "") {
+        console.log(`Empty field: ${key}`);
         return true;
       }
     }
-    if (studentImages.portrait === null && studentImages.passport === null) {
+    if (studentImages.portrait === null || studentImages.passport === null) {
       return true;
     }
     return false;
@@ -194,36 +208,110 @@ const UserModalV2 = ({
   const handleSaveClick = (e) => {
     e.preventDefault();
     if (checkEmptyFields()) {
-      toast.error("Please fill in all fields.");
+      toast.error("Please fill in all fields, and upload both pictures.");
       return;
     }
-    console.log(`Saving student: ${JSON.stringify(student)}`);
-    console.log(`Images: ${JSON.stringify(studentImages)}`);
-    setPassportWasChanged(0);
-    setStudent({
-      id: studentId,
-      firstName: "",
-      lastName: "",
-      birthDate: "",
-      placeOfBirth: "",
-      countryOfCitizenship: "",
-      gender: "",
-      passportNumber: "",
-      passportDateOfIssue: "",
-      passportDateOfExpiry: "",
-    });
-    setPassportData({
-      firstName: "",
-      lastName: "",
-      birthDate: "",
-      placeOfBirth: "",
-      countryOfCitizenship: "",
-      gender: "",
-      passportNumber: "",
-      passportDateOfIssue: "",
-      passportDateOfExpiry: "",
-    });
-    setModified(false);
+    setLoadingText("Saving data");
+    setIsLoading(true);
+
+    // Saving student
+    axios
+      .post(`${API_URL}/students`, student, {
+        headers: {
+          Authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("user")).token
+          }`,
+        },
+      })
+      .then((userRes) => {
+        // Saving passport validation
+        axios
+          .post(`${API_URL}/validations`, passportData, {
+            headers: {
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("user")).token
+              }`,
+            },
+          })
+          .then(() => {
+            // Saving images
+            const imageForm = new FormData();
+            if (studentImages.passport) {
+              console.log(`Passport is ${studentImages.passport}`);
+              imageForm.append("passport", studentImages.passport);
+            } else {
+              console.error("Passport image is missing");
+            }
+
+            if (studentImages.portrait) {
+              console.log(`Portrait is ${studentImages.portrait}`);
+              imageForm.append("selfie", studentImages.portrait);
+            } else {
+              console.error("Portrait image is missing");
+            }
+
+            console.log(imageForm);
+
+            const studentId = userRes.data.id;
+            const url = `${API_URL}/files/upload/${studentId}`;
+            console.log(`Saving images for student with id: ${studentId}`);
+            console.log(`URL: ${url}`);
+            axios
+              .post(`${API_URL}/files/upload/${studentId}`, imageForm, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("user")).token
+                  }`,
+                },
+              })
+              .then(() => {
+                setIsLoading(false);
+                setPassportWasChanged(-1 * passportWasChanged);
+                setStudent({
+                  id: studentId,
+                  firstName: "",
+                  lastName: "",
+                  birthDate: "",
+                  placeOfBirth: "",
+                  countryOfCitizenship: "",
+                  gender: "",
+                  passportNumber: "",
+                  passportDateOfIssue: "",
+                  passportDateOfExpiry: "",
+                });
+                setPassportData({
+                  firstName: "",
+                  lastName: "",
+                  birthDate: "",
+                  placeOfBirth: "",
+                  countryOfCitizenship: "",
+                  gender: "",
+                  passportNumber: "",
+                  passportDateOfIssue: "",
+                  passportDateOfExpiry: "",
+                });
+                setModified(false);
+                const savedStudentId = userRes.data.id;
+                toast.success(`Student with id '${savedStudentId}' saved!`);
+              })
+              .catch((err) => {
+                console.error(err);
+                console.log("Error saving images");
+                setIsLoading(false);
+              });
+          })
+          .catch((err) => {
+            console.error(err);
+            console.log("Error saving passport validation");
+            setIsLoading(false);
+          });
+      })
+      .catch((err) => {
+        console.error(err);
+        console.log("Error saving student");
+        setIsLoading(false);
+      });
   };
 
   const [isLoading, setIsLoading] = useState(false);
@@ -378,6 +466,8 @@ const UserModalV2 = ({
               setLoadingText={setLoadingText}
               modified={modified}
               setModified={setModified}
+              student={student}
+              setStudent={setStudent}
             />
             <UploadPortraitButton
               studentImages={studentImages}

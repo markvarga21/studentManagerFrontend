@@ -16,6 +16,8 @@ const UploadPassportButton = ({
   setLoadingText,
   modified,
   setModified,
+  student,
+  setStudent,
 }) => {
   const fileInputRef = useRef(null);
 
@@ -26,9 +28,6 @@ const UploadPassportButton = ({
   const handleFileChange = (event) => {
     try {
       const file = event.target.files[0];
-      if (studentImages.passport) {
-        setModified(true);
-      }
       setStudentImages({
         ...studentImages,
         passport: URL.createObjectURL(file),
@@ -62,11 +61,17 @@ const UploadPassportButton = ({
         }
         fillFormDataFromPassport(res.data);
         setPassportData(res.data);
+        const studentCopy = { ...res.data };
+        delete studentCopy.id;
+        delete studentCopy.valid;
+        setStudent(studentCopy);
+        console.log(student);
         setIsLoading(false);
         toast.success("Data extracted from passport successfully!");
       })
       .catch((err) => {
         console.error(err);
+        setIsLoading(false);
         toast.error("Failed to extract data from passport!");
       });
   };
@@ -83,11 +88,12 @@ const UploadPassportButton = ({
       "passportDateOfExpiry",
       "passportDateOfIssue",
     ];
+    console.log(`Modified: ${modified}`);
     for (const fieldId of fieldIdsToFill) {
       const inputElement = document.getElementById(fieldId);
-      if ((inputElement != null && inputElement.value === "") || !modified) {
-        inputElement.value = data[fieldId];
-      }
+      // if ((inputElement.value === "" && !modified) || modified) {
+      inputElement.value = data[fieldId];
+      // }
     }
   };
 

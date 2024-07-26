@@ -111,6 +111,7 @@ const StudentListContent = ({
             isEditActive={isEditActive}
             setIsEditActive={setIsEditActive}
             API_URL={API_URL}
+            setUser={setUser}
           />
         )}
         {isAddStudentActive && (
@@ -122,6 +123,7 @@ const StudentListContent = ({
             isAddStudentActive={isAddStudentActive}
             setIsAddStudentActive={setIsAddStudentActive}
             API_URL={API_URL}
+            setUser={setUser}
           />
         )}
       </div>

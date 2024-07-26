@@ -8,7 +8,6 @@ import NotFound from "./NotFound";
 import LoginV2 from "./LoginV2";
 import RegisterV2 from "./RegisterV2";
 import Unauthorized from "./Unauthorized";
-import UserModalV2 from "./UserModalV2";
 import StudentData from "./StudentData";
 import { useIdleTimer } from "react-idle-timer";
 import { jwtDecode } from "jwt-decode";
