@@ -9,6 +9,8 @@ import GenderSelectV2 from "./GenderSelectV2";
 import RadioButtonGroupV2 from "./RadioButtonGroupV2";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { ClipLoader } from "react-spinners";
+import Loading from "./Loading";
 
 const UserModalV2 = ({
   mode,
@@ -97,7 +99,6 @@ const UserModalV2 = ({
     setIsEditActive(false);
   };
 
-  const modalRef = useRef();
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === "Escape") {
@@ -186,6 +187,10 @@ const UserModalV2 = ({
     console.log(`Saving student: ${JSON.stringify(student)}`);
     console.log(`Images: ${JSON.stringify(studentImages)}`);
   };
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadingText, setLoadingText] = useState("Loading");
+
   return (
     <div
       id="outer"
@@ -202,6 +207,7 @@ const UserModalV2 = ({
           backgroundColor: colorModeColors.tableHeader,
         }}
       >
+        {isLoading ? <Loading text={loadingText} /> : <></>}
         <div
           id="editTitle"
           className="font-bold 2xl:text-4xl xl:text-3xl lg:text-2xl md:text-xl flex justify-between items-center"
