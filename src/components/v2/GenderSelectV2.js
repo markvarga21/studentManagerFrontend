@@ -20,10 +20,10 @@ const GenderSelectV2 = ({ id, label, colorModeColors, onChange }) => {
         <option id="gender" style={{ color: colorModeColors.inputText }}>
           -
         </option>
-        <option key="male" value="Male">
+        <option key="male" value="MALE">
           Male
         </option>
-        <option key="female" value="Female">
+        <option key="female" value="FEMALE">
           Female
         </option>
       </select>

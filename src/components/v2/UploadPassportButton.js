@@ -1,5 +1,7 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import UploadIconV2 from "../icons/UploadIconV2";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const UploadPassportButton = ({
   studentImages,
@@ -7,6 +9,13 @@ const UploadPassportButton = ({
   setSelectedOption,
   passportWasChanged,
   setPassportWasChanged,
+  passportData,
+  setPassportData,
+  API_URL,
+  setIsLoading,
+  setLoadingText,
+  modified,
+  setModified,
 }) => {
   const fileInputRef = useRef(null);
 
@@ -17,14 +26,68 @@ const UploadPassportButton = ({
   const handleFileChange = (event) => {
     try {
       const file = event.target.files[0];
+      if (studentImages.passport) {
+        setModified(true);
+      }
       setStudentImages({
         ...studentImages,
         passport: URL.createObjectURL(file),
       });
       setSelectedOption("passport");
       setPassportWasChanged(-1 * passportWasChanged);
+      extractDataFromPassport(file);
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const extractDataFromPassport = (passport) => {
+    setLoadingText("Extracting data from passport");
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append("passport", passport);
+    axios
+      .post(`${API_URL}/form/extractData`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("user")).token
+          }`,
+        },
+      })
+      .then((res) => {
+        if (res.status !== 200) {
+          toast.error("Failed to extract data from passport!");
+          return;
+        }
+        fillFormDataFromPassport(res.data);
+        setPassportData(res.data);
+        setIsLoading(false);
+        toast.success("Data extracted from passport successfully!");
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error("Failed to extract data from passport!");
+      });
+  };
+
+  const fillFormDataFromPassport = (data) => {
+    const fieldIdsToFill = [
+      "firstName",
+      "lastName",
+      "gender",
+      "birthDate",
+      "placeOfBirth",
+      "countryOfCitizenship",
+      "passportNumber",
+      "passportDateOfExpiry",
+      "passportDateOfIssue",
+    ];
+    for (const fieldId of fieldIdsToFill) {
+      const inputElement = document.getElementById(fieldId);
+      if ((inputElement != null && inputElement.value === "") || !modified) {
+        inputElement.value = data[fieldId];
+      }
     }
   };
 
@@ -37,6 +100,7 @@ const UploadPassportButton = ({
         style={{ display: "none" }}
         accept="image/*"
       />
+      <Toaster />
       <button
         id="uploadPassportButton"
         className="w-1/3 xl:w-auto flex items-center justify-center gap-2 pt-2 pb-2 pl-4 pr-4 bg-creme rounded-xl hover:cursor-pointer shadow-xl"

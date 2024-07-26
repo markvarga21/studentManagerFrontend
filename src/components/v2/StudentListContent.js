@@ -18,11 +18,12 @@ const StudentListContent = ({
   isEditActive,
   setIsEditActive,
   user,
+  setUser,
   API_URL,
 }) => {
   const [filter, setFilter] = useState("All");
   const [activePage, setActivePage] = useState(1);
-  const [numberOfPages, setNumberOfPages] = useState(10);
+  const [numberOfPages, setNumberOfPages] = useState(1);
   const handleStatusChange = (event) => {
     setFilter(event.target.value);
   };
@@ -51,12 +52,25 @@ const StudentListContent = ({
     return `${month} ${day}, ${year}`;
   };
   useEffect(() => {
-    // Get students from the API
+    axios
+      .get(`${API_URL}/students`, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      })
+      .then((res) => {
+        const numberOfPages = Math.ceil(
+          res.data.totalPages === 0 ? 1 : res.data.totalPages
+        );
+        setNumberOfPages(numberOfPages);
+        setStudents(res.data.content);
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          localStorage.removeItem("user");
+          setUser(null);
+          window.location.href = "/login";
+        }
+      });
   }, []);
-  // useEffect(() => {
-  //   const pages = Math.ceil(students.length / 10);
-  //   setNumberOfPages(pages);
-  // }, [students]);
 
   const [searchCriteria, setSearchCriteria] = useState("");
   const handleSearchChange = () => {
@@ -96,6 +110,7 @@ const StudentListContent = ({
             buttonTitle={"Save changes"}
             isEditActive={isEditActive}
             setIsEditActive={setIsEditActive}
+            API_URL={API_URL}
           />
         )}
         {isAddStudentActive && (
@@ -106,6 +121,7 @@ const StudentListContent = ({
             buttonTitle={"Save"}
             isAddStudentActive={isAddStudentActive}
             setIsAddStudentActive={setIsAddStudentActive}
+            API_URL={API_URL}
           />
         )}
       </div>
@@ -473,6 +489,9 @@ const StudentListContent = ({
         colorModeColors={colorModeColors}
         activePage={activePage}
         setActivePage={setActivePage}
+        setStudents={setStudents}
+        setUser={setUser}
+        API_URL={API_URL}
       />
     </div>
   );

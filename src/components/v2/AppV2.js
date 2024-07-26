@@ -143,6 +143,7 @@ const AppV2 = () => {
                     isEditActive={isEditActive}
                     setIsEditActive={setIsEditActive}
                     user={user}
+                    setUser={setUser}
                     API_URL={API_URL}
                   />
                 ) : (

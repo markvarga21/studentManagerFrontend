@@ -2,22 +2,67 @@ import React, { useEffect, useState } from "react";
 import LeftIcon from "./LeftIcon";
 import RightIcon from "./RightIcon";
 import PageNumber from "./PageNumber";
+import axios from "axios";
 
 const Pagination = ({
   numberOfPages,
   colorModeColors,
   activePage,
   setActivePage,
+  setStudents,
+  setUser,
+  API_URL,
 }) => {
   const [pages, setPages] = useState([]);
   const handlePageClick = (e) => {
     const page = e.target.id.split("-")[1];
+    axios
+      .get(`${API_URL}/students?page=${page === 1 ? 0 : page - 1}`, {
+        headers: {
+          Authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("user")).token
+          }`,
+        },
+      })
+      .then((res) => {
+        setStudents(res.data.content);
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          localStorage.removeItem("user");
+          setUser(null);
+          window.location.href = "/login";
+        }
+      });
     if (page !== "...") {
       setActivePage(parseInt(e.target.id.split("-")[1]));
     }
   };
+  useEffect(() => {
+    axios
+      .get(
+        `${API_URL}/students?page=${activePage === 1 ? 0 : activePage - 1}`,
+        {
+          headers: {
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("user")).token
+            }`,
+          },
+        }
+      )
+      .then((res) => {
+        setStudents(res.data.content);
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          localStorage.removeItem("user");
+          setUser(null);
+          window.location.href = "/login";
+        }
+      });
+  }, [activePage, setActivePage]);
   const populatePages = () => {
-    const newPages = []; // Initialize a new array to hold the page numbers
+    const newPages = [];
     if (numberOfPages < 5) {
       for (let i = 1; i <= numberOfPages; i++) {
         newPages.push(i);
@@ -45,7 +90,7 @@ const Pagination = ({
         );
       }
     }
-    setPages(newPages); // Update the state with the new array
+    setPages(newPages);
   };
   useEffect(() => {
     populatePages();

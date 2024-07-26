@@ -22,6 +22,7 @@ const UserModalV2 = ({
   setIsEditActive,
   isAddStudentActive,
   setIsAddStudentActive,
+  API_URL,
 }) => {
   const [student, setStudent] = useState({
     id: studentId,
@@ -49,6 +50,18 @@ const UserModalV2 = ({
   );
 
   const handleCloseClick = () => {
+    setPassportData({
+      firstName: "",
+      lastName: "",
+      birthDate: "",
+      placeOfBirth: "",
+      countryOfCitizenship: "",
+      gender: "",
+      passportNumber: "",
+      passportDateOfIssue: "",
+      passportDateOfExpiry: "",
+    });
+    setModified(false);
     if (mode === "edit") {
       editCleanup();
     } else {
@@ -113,7 +126,7 @@ const UserModalV2 = ({
   }, []);
 
   const [selectedOption, setSelectedOption] = useState("passport");
-  const [passportWasChanged, setPassportWasChanged] = useState(1);
+  const [passportWasChanged, setPassportWasChanged] = useState(0);
   const [portraitWasChanged, setPortraitWasChanged] = useState(1);
   const [closeWasClicked, setCloseWasClicked] = useState(1);
 
@@ -186,10 +199,48 @@ const UserModalV2 = ({
     }
     console.log(`Saving student: ${JSON.stringify(student)}`);
     console.log(`Images: ${JSON.stringify(studentImages)}`);
+    setPassportWasChanged(0);
+    setStudent({
+      id: studentId,
+      firstName: "",
+      lastName: "",
+      birthDate: "",
+      placeOfBirth: "",
+      countryOfCitizenship: "",
+      gender: "",
+      passportNumber: "",
+      passportDateOfIssue: "",
+      passportDateOfExpiry: "",
+    });
+    setPassportData({
+      firstName: "",
+      lastName: "",
+      birthDate: "",
+      placeOfBirth: "",
+      countryOfCitizenship: "",
+      gender: "",
+      passportNumber: "",
+      passportDateOfIssue: "",
+      passportDateOfExpiry: "",
+    });
+    setModified(false);
   };
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("Loading");
+
+  const [passportData, setPassportData] = useState({
+    firstName: "",
+    lastName: "",
+    birthDate: "",
+    placeOfBirth: "",
+    countryOfCitizenship: "",
+    gender: "",
+    passportNumber: "",
+    passportDateOfIssue: "",
+    passportDateOfExpiry: "",
+  });
+  const [modified, setModified] = useState(false);
 
   return (
     <div
@@ -320,6 +371,13 @@ const UserModalV2 = ({
               setSelectedOption={setSelectedOption}
               passportWasChanged={passportWasChanged}
               setPassportWasChanged={setPassportWasChanged}
+              passportData={passportData}
+              setPassportData={setPassportData}
+              API_URL={API_URL}
+              setIsLoading={setIsLoading}
+              setLoadingText={setLoadingText}
+              modified={modified}
+              setModified={setModified}
             />
             <UploadPortraitButton
               studentImages={studentImages}
