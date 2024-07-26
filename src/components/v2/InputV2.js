@@ -1,6 +1,6 @@
 import React from "react";
 
-const InputV2 = ({ colorModeColors, id, label, placeholder }) => {
+const InputV2 = ({ colorModeColors, id, label, placeholder, onChange }) => {
   return (
     <div className="w-full">
       <label htmlFor={id} className="text-base font-normal text-tableTextColor">
@@ -17,6 +17,7 @@ const InputV2 = ({ colorModeColors, id, label, placeholder }) => {
         }}
         autoComplete="off"
         placeholder={placeholder}
+        onChange={onChange}
       />
     </div>
   );

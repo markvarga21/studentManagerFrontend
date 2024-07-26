@@ -1,6 +1,6 @@
 import React from "react";
 
-const GenderSelectV2 = ({ id, label, colorModeColors }) => {
+const GenderSelectV2 = ({ id, label, colorModeColors, onChange }) => {
   return (
     <div className="w-full">
       <label htmlFor={id} className="text-base font-normal text-tableTextColor">
@@ -15,6 +15,7 @@ const GenderSelectV2 = ({ id, label, colorModeColors }) => {
           color: colorModeColors.inputText,
         }}
         defaultValue={""}
+        onChange={onChange}
       >
         <option id="gender" style={{ color: colorModeColors.inputText }}>
           -

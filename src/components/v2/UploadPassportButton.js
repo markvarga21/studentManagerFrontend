@@ -43,7 +43,7 @@ const UploadPassportButton = ({
         onClick={handleButtonClick}
       >
         <span className="font-inter font-semibold select-none 2xl:text-base xl:text-base md:text-sm">
-          Upload passport
+          {studentImages.passport ? "Change Passport" : "Upload Passport"}
         </span>
         <UploadIconV2 />
       </button>

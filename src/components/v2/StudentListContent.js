@@ -51,9 +51,7 @@ const StudentListContent = ({
     return `${month} ${day}, ${year}`;
   };
   useEffect(() => {
-    axios.get("http://localhost:5000/students").then((response) => {
-      setStudents(response.data);
-    });
+    // Get students from the API
   }, []);
   // useEffect(() => {
   //   const pages = Math.ceil(students.length / 10);
@@ -80,6 +78,8 @@ const StudentListContent = ({
     exportJson(students, user.token, API_URL);
   };
 
+  const [isAddStudentActive, setIsAddStudentActive] = useState(false);
+
   return (
     <div
       className="w-full h-full"
@@ -88,6 +88,7 @@ const StudentListContent = ({
       <div>
         {isEditActive && (
           <UserModalV2
+            mode={"edit"}
             colorModeColors={colorModeColors}
             studentId={studentId}
             setStudentId={setStudentId}
@@ -95,6 +96,16 @@ const StudentListContent = ({
             buttonTitle={"Save changes"}
             isEditActive={isEditActive}
             setIsEditActive={setIsEditActive}
+          />
+        )}
+        {isAddStudentActive && (
+          <UserModalV2
+            mode={"add"}
+            colorModeColors={colorModeColors}
+            modalTitle={"Add student"}
+            buttonTitle={"Save"}
+            isAddStudentActive={isAddStudentActive}
+            setIsAddStudentActive={setIsAddStudentActive}
           />
         )}
       </div>
@@ -153,6 +164,7 @@ const StudentListContent = ({
             <div
               id="addButton"
               className="flex items-center gap-2 mr-20 pt-2 pb-2 pl-4 pr-4 bg-creme rounded-xl hover:cursor-pointer shadow-xl"
+              onClick={() => setIsAddStudentActive(true)}
             >
               <PlusIcon />
               <span className="font-inter font-semibold select-none">

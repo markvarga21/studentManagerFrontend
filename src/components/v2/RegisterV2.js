@@ -29,6 +29,9 @@ const RegisterV2 = ({ colorModeColors, API_URL }) => {
     });
     navigate("/login");
   };
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
   const [isWaiting, setIsWaiting] = useState(false);
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
@@ -42,7 +45,15 @@ const RegisterV2 = ({ colorModeColors, API_URL }) => {
       toast.error("Please fill in all fields.");
       return;
     }
-
+    for (const key in userRegisterDetails) {
+      userRegisterDetails[key] = userRegisterDetails[key].trim();
+    }
+    userRegisterDetails.firstName = capitalizeFirstLetter(
+      userRegisterDetails.firstName
+    );
+    userRegisterDetails.lastName = capitalizeFirstLetter(
+      userRegisterDetails.lastName
+    );
     axios
       .post(`${API_URL}/auth/register`, userRegisterDetails)
       .then((res) => {

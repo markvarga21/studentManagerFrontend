@@ -8,14 +8,18 @@ import DatePickerV2 from "./DatePickerV2";
 import GenderSelectV2 from "./GenderSelectV2";
 import RadioButtonGroupV2 from "./RadioButtonGroupV2";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const UserModalV2 = ({
+  mode,
   colorModeColors,
   studentId,
   setStudentId,
   modalTitle,
   buttonTitle,
   setIsEditActive,
+  isAddStudentActive,
+  setIsAddStudentActive,
 }) => {
   const [student, setStudent] = useState({
     id: studentId,
@@ -26,8 +30,8 @@ const UserModalV2 = ({
     countryOfCitizenship: "",
     gender: "",
     passportNumber: "",
-    dateOfIssue: "",
-    dateOfExpiry: "",
+    passportDateOfIssue: "",
+    passportDateOfExpiry: "",
   });
   const [studentImages, setStudentImages] = useState({
     portrait: null,
@@ -43,6 +47,35 @@ const UserModalV2 = ({
   );
 
   const handleCloseClick = () => {
+    if (mode === "edit") {
+      editCleanup();
+    } else {
+      addCleanup();
+    }
+  };
+
+  const addCleanup = () => {
+    setStudentImages({
+      portrait: null,
+      passport: null,
+    });
+    setStudent({
+      id: studentId,
+      firstName: "",
+      lastName: "",
+      gender: "",
+      birthDate: "",
+      placeOfBirth: "",
+      countryOfCitizenship: "",
+      passportNumber: "",
+      passportDateOfIssue: "",
+      passportDateOfExpiry: "",
+    });
+    setCloseWasClicked(-1 * closeWasClicked);
+    setIsAddStudentActive(false);
+  };
+
+  const editCleanup = () => {
     setStudentId(null);
     setStudentImages({
       portrait: null,
@@ -58,8 +91,8 @@ const UserModalV2 = ({
       countryOfCitizenship: "",
       gender: "",
       passportNumber: "",
-      dateOfIssue: "",
-      dateOfExpiry: "",
+      passportDateOfIssue: "",
+      passportDateOfExpiry: "",
     });
     setIsEditActive(false);
   };
@@ -102,18 +135,23 @@ const UserModalV2 = ({
   }, [portraitWasChanged, closeWasClicked]);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/students/${studentId}`)
-      .then((res) => {
-        setStudent(res.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    // axios
+    //   .get(`http://localhost:5000/students/${studentId}`)
+    //   .then((res) => {
+    //     setStudent(res.data);
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //   });
   }, [studentId]);
 
+  const handleFormChange = (e) => {
+    const key = String(e.target.id);
+    setStudent({ ...student, [key]: e.target.value });
+    console.log(student);
+  };
+
   useEffect(() => {
-    // Fill the inputs
     document.getElementById("firstName").value = student.firstName;
     document.getElementById("lastName").value = student.lastName;
     document.getElementById("countryOfCitizenship").value =
@@ -125,7 +163,29 @@ const UserModalV2 = ({
     document.getElementById("passportDateOfExpiry").value =
       student.dateOfExpiry;
     document.getElementById("gender").value = student.gender;
-  }, [student]);
+  }, [studentId]);
+
+  const checkEmptyFields = () => {
+    for (const key in student) {
+      if (student[key] === "") {
+        return true;
+      }
+    }
+    if (studentImages.portrait === null && studentImages.passport === null) {
+      return true;
+    }
+    return false;
+  };
+
+  const handleSaveClick = (e) => {
+    e.preventDefault();
+    if (checkEmptyFields()) {
+      toast.error("Please fill in all fields.");
+      return;
+    }
+    console.log(`Saving student: ${JSON.stringify(student)}`);
+    console.log(`Images: ${JSON.stringify(studentImages)}`);
+  };
   return (
     <div
       id="outer"
@@ -162,23 +222,27 @@ const UserModalV2 = ({
               label={"First Name"}
               colorModeColors={colorModeColors}
               placeholder={"John"}
+              onChange={handleFormChange}
             />
             <InputV2
               id={"lastName"}
               label={"Last Name"}
               colorModeColors={colorModeColors}
               placeholder={"Doe"}
+              onChange={handleFormChange}
             />
             <div className="flex gap-2 justify-stretch">
               <DatePickerV2
                 id={"birthDate"}
                 label={"Birthdate"}
                 colorModeColors={colorModeColors}
+                onChange={handleFormChange}
               />
               <GenderSelectV2
                 id={"gender"}
                 label={"Gender"}
                 colorModeColors={colorModeColors}
+                onChange={handleFormChange}
               />
             </div>
             <InputV2
@@ -186,6 +250,7 @@ const UserModalV2 = ({
               label="Place of Birth"
               colorModeColors={colorModeColors}
               placeholder={"New York"}
+              onChange={handleFormChange}
             />
           </div>
           <div
@@ -197,22 +262,26 @@ const UserModalV2 = ({
               label={"Country of Citizenship"}
               colorModeColors={colorModeColors}
               placeholder={"USA"}
+              onChange={handleFormChange}
             />
             <InputV2
               id={"passportNumber"}
               label={"Passport number"}
               colorModeColors={colorModeColors}
               placeholder={"123456789"}
+              onChange={handleFormChange}
             />
             <DatePickerV2
               id={"passportDateOfIssue"}
               label={"Date of issue"}
               colorModeColors={colorModeColors}
+              onChange={handleFormChange}
             />
             <DatePickerV2
               id={"passportDateOfExpiry"}
               label={"Date of expiry"}
               colorModeColors={colorModeColors}
+              onChange={handleFormChange}
             />
           </div>
           <div
@@ -237,7 +306,7 @@ const UserModalV2 = ({
           id="buttonGroup"
           className="w-full flex justify-between gap-10 max-h-10"
         >
-          <SaveButtonV2 buttonTitle={buttonTitle} />
+          <SaveButtonV2 buttonTitle={buttonTitle} onClick={handleSaveClick} />
           <div className="flex gap-3 justify-end md:w-full xl:w-2/3">
             <UploadPassportButton
               studentImages={studentImages}

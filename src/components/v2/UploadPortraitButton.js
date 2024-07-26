@@ -42,7 +42,7 @@ const UploadPortraitButton = ({
         onClick={handleButtonClick}
       >
         <span className="font-inter font-semibold select-none 2xl:text-base xl:text-base md:text-sm">
-          Upload portrait
+          {studentImages.portrait ? "Change Portrait" : "Upload Portrait"}
         </span>
         <UploadIconV2 />
       </button>
