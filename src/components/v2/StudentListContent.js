@@ -43,14 +43,18 @@ const StudentListContent = ({
     12: "Dec",
   };
   const mapDateToVerboseString = (date) => {
-    const components = date.split("-");
-    const year = components[0];
-    const month = MONTHS[components[1]];
-    const day = String(components[2]).startsWith("0")
-      ? components[2][1]
-      : components[2];
-    return `${month} ${day}, ${year}`;
+    // const components = date.split("-");
+    // const year = components[0];
+    // const month = MONTHS[components[1]];
+    // const day = String(components[2]).startsWith("0")
+    //   ? components[2][1]
+    //   : components[2];
+    // return `${month} ${day}, ${year}`;
+    return date;
   };
+  const [deleted, setDeleted] = useState(1);
+  const [isAddStudentActive, setIsAddStudentActive] = useState(false);
+
   useEffect(() => {
     axios
       .get(`${API_URL}/students`, {
@@ -70,7 +74,7 @@ const StudentListContent = ({
           window.location.href = "/login";
         }
       });
-  }, []);
+  }, [deleted, isAddStudentActive]);
 
   const [searchCriteria, setSearchCriteria] = useState("");
   const handleSearchChange = () => {
@@ -91,8 +95,6 @@ const StudentListContent = ({
   const handleExportJson = () => {
     exportJson(students, user.token, API_URL);
   };
-
-  const [isAddStudentActive, setIsAddStudentActive] = useState(false);
 
   return (
     <div
@@ -447,7 +449,7 @@ const StudentListContent = ({
                       color: colorModeColors.tableContent,
                     }}
                   >
-                    {mapDateToVerboseString(student.dateOfIssue)}
+                    {mapDateToVerboseString(student.passportDateOfIssue)}
                   </td>
                   <td
                     className="p-5 border-b-2 font-inter h-18"
@@ -456,7 +458,7 @@ const StudentListContent = ({
                       color: colorModeColors.tableContent,
                     }}
                   >
-                    {mapDateToVerboseString(student.dateOfExpiry)}
+                    {mapDateToVerboseString(student.passportDateOfExpiry)}
                   </td>
                   <td
                     className="p-3 border-b-2"
@@ -478,7 +480,14 @@ const StudentListContent = ({
                         setStudentId={setStudentId}
                         setIsEditActive={setIsEditActive}
                       />
-                      <DeleteIcon color={colorModeColors.icon} />
+                      <DeleteIcon
+                        color={colorModeColors.icon}
+                        studentId={student.id}
+                        API_URL={API_URL}
+                        deleted={deleted}
+                        setDeleted={setDeleted}
+                        user={user}
+                      />
                     </div>
                   </td>
                 </tr>

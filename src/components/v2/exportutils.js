@@ -66,8 +66,8 @@ export const exportXml = (data, token, API_URL) => {
 
 const makeStudentXml = (student) => {
   const dateOfBirth = student.birthDate.split("-");
-  const issueDate = student.dateOfIssue.split("-");
-  const expiryDate = student.dateOfExpiry.split("-");
+  const issueDate = student.passportDateOfIssue.split("-");
+  const expiryDate = student.passportDateOfExpiry.split("-");
   const validity = student.validity ? "valid" : "invalid";
   return `<student id="${student.id}">
           <name>

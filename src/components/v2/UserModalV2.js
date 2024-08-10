@@ -213,7 +213,6 @@ const UserModalV2 = ({
     }
     setLoadingText("Saving data");
     setIsLoading(true);
-
     // Saving student
     axios
       .post(`${API_URL}/students`, student, {
@@ -224,6 +223,8 @@ const UserModalV2 = ({
         },
       })
       .then((userRes) => {
+        console.log(`Student data saved!`);
+        console.log(`Passport data: ${passportData}`);
         // Saving passport validation
         axios
           .post(`${API_URL}/validations`, passportData, {
@@ -234,24 +235,24 @@ const UserModalV2 = ({
             },
           })
           .then(() => {
+            console.log("Passport validation saved");
             // Saving images
+            const passportBlob = new Blob([studentImages.passport]);
+            const portraitBlob = new Blob([studentImages.portrait]);
             const imageForm = new FormData();
             if (studentImages.passport) {
               console.log(`Passport is ${studentImages.passport}`);
-              imageForm.append("passport", studentImages.passport);
+              imageForm.append("passport", passportBlob);
             } else {
               console.error("Passport image is missing");
             }
-
             if (studentImages.portrait) {
               console.log(`Portrait is ${studentImages.portrait}`);
-              imageForm.append("selfie", studentImages.portrait);
+              imageForm.append("selfie", portraitBlob);
             } else {
               console.error("Portrait image is missing");
             }
-
             console.log(imageForm);
-
             const studentId = userRes.data.id;
             const url = `${API_URL}/files/upload/${studentId}`;
             console.log(`Saving images for student with id: ${studentId}`);
@@ -293,6 +294,24 @@ const UserModalV2 = ({
                 });
                 setModified(false);
                 const savedStudentId = userRes.data.id;
+                setStudentImages({
+                  portrait: null,
+                  passport: null,
+                });
+                setStudent({
+                  id: studentId,
+                  firstName: "",
+                  lastName: "",
+                  gender: "",
+                  birthDate: "",
+                  placeOfBirth: "",
+                  countryOfCitizenship: "",
+                  passportNumber: "",
+                  passportDateOfIssue: "",
+                  passportDateOfExpiry: "",
+                });
+                setCloseWasClicked(-1 * closeWasClicked);
+                setIsAddStudentActive(false);
                 toast.success(`Student with id '${savedStudentId}' saved!`);
               })
               .catch((err) => {

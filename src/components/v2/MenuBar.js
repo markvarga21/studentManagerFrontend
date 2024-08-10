@@ -114,12 +114,10 @@ const MenuBar = ({
         }
       })
       .catch((err) => {
-        if (err.response.status === 401) {
-          localStorage.removeItem("user");
-          setUserWasModified(-1 * userWasModified);
-          toast.success("Logout successful!");
-          navigate("/");
-        }
+        localStorage.removeItem("user");
+        setUserWasModified(-1 * userWasModified);
+        toast.success("Logout successful!");
+        navigate("/");
       });
     const colors = {
       burger: DEFAULT_ICON_COLOR,

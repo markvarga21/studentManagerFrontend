@@ -68,7 +68,7 @@ const AppV2 = () => {
   const [currentTheme, setCurrentTheme] = useState("light");
   const [colorModeColors, setColorModeColors] = useState(LIGHT_MODE);
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(window.__AUTH_DATA__ || null);
   const [studentId, setStudentId] = useState(null);
   const [isEditActive, setIsEditActive] = useState(false);
 

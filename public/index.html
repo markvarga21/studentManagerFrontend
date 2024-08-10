@@ -20,7 +20,9 @@
     <title>Student manager</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <script>
+      window.__AUTH_DATA__ = JSON.parse(localStorage.getItem("user"));
+    </script>
     <div id="root"></div>
   </body>
 </html>

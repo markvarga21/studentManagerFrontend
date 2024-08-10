@@ -1,8 +1,34 @@
+import axios from "axios";
 import React from "react";
+import toast, { Toaster } from "react-hot-toast";
 
-const DeleteIcon = ({ color }) => {
+const DeleteIcon = ({
+  color,
+  studentId,
+  API_URL,
+  deleted,
+  setDeleted,
+  user,
+}) => {
+  const handleDeleteClick = () => {
+    axios
+      .delete(`${API_URL}/students/${studentId}`, {
+        headers: {
+          Authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("user")).token
+          }`,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        setDeleted(-1 * deleted);
+        toast.success("Student deleted successfully!");
+      })
+      .catch((err) => console.error(err));
+  };
   return (
-    <div className="hover:cursor-pointer h-full">
+    <div className="hover:cursor-pointer h-full" onClick={handleDeleteClick}>
+      <Toaster />
       <svg
         style={{ height: "2.5vh", minHeight: "18px" }}
         viewBox="0 0 24 24"
