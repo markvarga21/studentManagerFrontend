@@ -44,14 +44,13 @@ const StudentListContent = ({
     12: "Dec",
   };
   const mapDateToVerboseString = (date) => {
-    // const components = date.split("-");
-    // const year = components[0];
-    // const month = MONTHS[components[1]];
-    // const day = String(components[2]).startsWith("0")
-    //   ? components[2][1]
-    //   : components[2];
-    // return `${month} ${day}, ${year}`;
-    return date;
+    const components = date.split("-");
+    const year = components[0];
+    const month = MONTHS[components[1]];
+    const day = String(components[2]).startsWith("0")
+      ? components[2][1]
+      : components[2];
+    return `${month} ${day}, ${year}`;
   };
   const [deleted, setDeleted] = useState(1);
   const [isAddStudentActive, setIsAddStudentActive] = useState(false);

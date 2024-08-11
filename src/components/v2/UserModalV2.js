@@ -10,6 +10,7 @@ import RadioButtonGroupV2 from "./RadioButtonGroupV2";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Loading from "./Loading";
+import ValidationButtons from "./ValidationButtons";
 
 const UserModalV2 = ({
   mode,
@@ -179,6 +180,7 @@ const UserModalV2 = ({
 
   const [isFetchStudentWaiting, setIsFetchStudentWaiting] = useState(false);
   const [isFetchImagesWaiting, setIsFetchImagesWaiting] = useState(false);
+  const [studentWasModified, setStudentWasModified] = useState(1);
   useEffect(() => {
     if (isEditActive) {
       console.log(`Loading student with id: ${studentId}`);
@@ -223,7 +225,7 @@ const UserModalV2 = ({
           console.error(err);
         });
     }
-  }, [studentId]);
+  }, [studentId, studentWasModified]);
 
   useEffect(() => {
     if (isEditActive) {
@@ -267,6 +269,25 @@ const UserModalV2 = ({
       return true;
     }
     return false;
+  };
+
+  const handleStudentUpdate = (e) => {
+    e.preventDefault();
+    axios
+      .put(`${API_URL}/students/${studentId}`, student, {
+        headers: {
+          Authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("user")).token
+          }`,
+        },
+      })
+      .then((res) => {
+        toast.success(`Student with id '${studentId}' updated!`);
+        setStudentWasModified(-1 * studentWasModified);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   const handleSaveClick = (e) => {
@@ -414,6 +435,34 @@ const UserModalV2 = ({
   });
   const [modified, setModified] = useState(false);
 
+  const [facialValidity, setFacialValidity] = useState(
+    "Faces are not yet validated!"
+  );
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/facialValidations/${passportData.passportNumber}`, {
+        headers: {
+          Authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("user")).token
+          }`,
+        },
+      })
+      .then((res) => {
+        const data = res.data;
+        const roundedPercent = (data.percentage * 100).toFixed(2);
+        const valid = data.isValid;
+        if (valid) {
+          const message = `\u2705 Photo is ${roundedPercent}% similar!`;
+          setFacialValidity(message);
+        } else {
+          const message = `\u274C Photos are only ${roundedPercent}% similar!`;
+          setFacialValidity(message);
+        }
+      })
+      .catch((err) => {
+        setFacialValidity("\u274C Faces are not yet validated!");
+      });
+  }, [isEditActive]);
   return (
     <div
       id="outer"
@@ -530,37 +579,62 @@ const UserModalV2 = ({
               alt="Student images"
               className="w-48 h-48 object-cover rounded-lg"
             />
+            {isEditActive ? (
+              <div style={{ color: colorModeColors.inputText }}>
+                {facialValidity}
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
         </form>
         <div
           id="buttonGroup"
           className="w-full flex justify-between gap-10 max-h-10"
         >
-          <SaveButtonV2 buttonTitle={buttonTitle} onClick={handleSaveClick} />
+          <SaveButtonV2
+            buttonTitle={buttonTitle}
+            onClick={isAddStudentActive ? handleSaveClick : handleStudentUpdate}
+          />
           <div className="flex gap-3 justify-end md:w-full xl:w-2/3">
-            <UploadPassportButton
-              studentImages={studentImages}
-              setStudentImages={setStudentImages}
-              setSelectedOption={setSelectedOption}
-              passportWasChanged={passportWasChanged}
-              setPassportWasChanged={setPassportWasChanged}
-              passportData={passportData}
-              setPassportData={setPassportData}
-              API_URL={API_URL}
-              setIsLoading={setIsLoading}
-              setLoadingText={setLoadingText}
-              modified={modified}
-              setModified={setModified}
-              student={student}
-              setStudent={setStudent}
-            />
-            <UploadPortraitButton
-              studentImages={studentImages}
-              setStudentImages={setStudentImages}
-              setSelectedOption={setSelectedOption}
-              portraitWasChanged={portraitWasChanged}
-              setPortraitWasChanged={setPortraitWasChanged}
-            />
+            {isEditActive ? (
+              <>
+                {JSON.parse(localStorage.getItem("user")).roles.includes(
+                  "ROLE_ADMIN"
+                ) ? (
+                  <ValidationButtons colors={colorModeColors} />
+                ) : (
+                  <></>
+                )}
+              </>
+            ) : (
+              <>
+                {" "}
+                <UploadPassportButton
+                  studentImages={studentImages}
+                  setStudentImages={setStudentImages}
+                  setSelectedOption={setSelectedOption}
+                  passportWasChanged={passportWasChanged}
+                  setPassportWasChanged={setPassportWasChanged}
+                  passportData={passportData}
+                  setPassportData={setPassportData}
+                  API_URL={API_URL}
+                  setIsLoading={setIsLoading}
+                  setLoadingText={setLoadingText}
+                  modified={modified}
+                  setModified={setModified}
+                  student={student}
+                  setStudent={setStudent}
+                />
+                <UploadPortraitButton
+                  studentImages={studentImages}
+                  setStudentImages={setStudentImages}
+                  setSelectedOption={setSelectedOption}
+                  portraitWasChanged={portraitWasChanged}
+                  setPortraitWasChanged={setPortraitWasChanged}
+                />
+              </>
+            )}
           </div>
         </div>
       </div>
