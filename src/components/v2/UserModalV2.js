@@ -277,15 +277,20 @@ const UserModalV2 = ({
     }
     setLoadingText("Saving data");
     setIsLoading(true);
+    const user = JSON.parse(localStorage.getItem("user"));
+    const roles = user.roles.replace("[", "").replace("]", "").replace(" ", "");
+    const username = user.username;
     // Saving student
     axios
-      .post(`${API_URL}/students`, student, {
-        headers: {
-          Authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("user")).token
-          }`,
-        },
-      })
+      .post(
+        `${API_URL}/students?username=${username}&roles=${roles}`,
+        student,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      )
       .then((userRes) => {
         console.log(`Student data saved!`);
         console.log(`Passport data: ${passportData}`);
@@ -293,9 +298,7 @@ const UserModalV2 = ({
         axios
           .post(`${API_URL}/validations`, passportData, {
             headers: {
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("user")).token
-              }`,
+              Authorization: `Bearer ${user.token}`,
             },
           })
           .then(() => {
@@ -325,9 +328,7 @@ const UserModalV2 = ({
               .post(`${API_URL}/files/upload/${studentId}`, imageForm, {
                 headers: {
                   "Content-Type": "multipart/form-data",
-                  Authorization: `Bearer ${
-                    JSON.parse(localStorage.getItem("user")).token
-                  }`,
+                  Authorization: `Bearer ${user.token}`,
                 },
               })
               .then(() => {

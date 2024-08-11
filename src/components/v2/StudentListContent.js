@@ -58,6 +58,7 @@ const StudentListContent = ({
 
   const exportJson = (data, token, API_URL) => {
     const json = JSON.stringify(data, null, 2);
+    console.log(json);
     axios
       .post(`${API_URL}/export/validate/json`, data, {
         headers: {
@@ -139,16 +140,16 @@ const StudentListContent = ({
           )}</countryOfCitizenship>
           <gender>${String(student.gender).toLowerCase()}</gender>
           <passportNumber>${student.passportNumber}</passportNumber>
-          <dateOfIssue>
+          <passportDateOfIssue>
               <year>${issueDate[0]}</year>
               <month>${issueDate[1]}</month>
               <day>${issueDate[2]}</day>
-          </dateOfIssue>
-          <dateOfExpiry>
+          </passportDateOfIssue>
+          <passportDateOfExpiry>
               <year>${expiryDate[0]}</year>
               <month>${expiryDate[1]}</month>
               <day>${expiryDate[2]}</day>
-          </dateOfExpiry>
+          </passportDateOfExpiry>
           <status>${validity}</status>
       </student>  `;
   };

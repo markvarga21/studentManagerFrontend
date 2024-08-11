@@ -208,7 +208,7 @@ const MenuBar = ({
           >
             <div
               class="inner p-3 rounded-md hover:cursor-pointer"
-              style={{ backgroundColor: navBackColors.homeNav }}
+              //style={{ backgroundColor: navBackColors.homeNav }}
               onClick={handleNavClick}
             >
               <svg
@@ -254,7 +254,7 @@ const MenuBar = ({
             >
               <div
                 class="inner p-3 rounded-md hover:cursor-pointer"
-                style={{ backgroundColor: navBackColors.studentListNav }}
+                //style={{ backgroundColor: navBackColors.studentListNav }}
                 onClick={handleNavClick}
               >
                 <svg
@@ -300,7 +300,7 @@ const MenuBar = ({
             >
               <div
                 class="inner p-3 rounded-md hover:cursor-pointer"
-                style={{ backgroundColor: navBackColors.reportNav }}
+                //style={{ backgroundColor: navBackColors.reportNav }}
                 onClick={handleNavClick}
               >
                 <svg
