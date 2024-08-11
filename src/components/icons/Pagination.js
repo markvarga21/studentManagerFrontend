@@ -54,11 +54,7 @@ const Pagination = ({
         setStudents(res.data.content);
       })
       .catch((err) => {
-        if (err.response.status === 401) {
-          localStorage.removeItem("user");
-          setUser(null);
-          window.location.href = "/login";
-        }
+        console.error(err);
       });
   }, [activePage, setActivePage]);
   const populatePages = () => {

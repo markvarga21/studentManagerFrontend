@@ -146,7 +146,14 @@ const AppV2 = () => {
                     API_URL={API_URL}
                   />
                 ) : (
-                  <StudentData colorModeColors={colorModeColors} user={user} />
+                  <StudentData
+                    colorModeColors={colorModeColors}
+                    user={user}
+                    API_URL={API_URL}
+                    studentId={studentId}
+                    setStudentId={setStudentId}
+                    setUser={setUser}
+                  />
                 )
               ) : (
                 <Unauthorized colorModeColors={colorModeColors} />

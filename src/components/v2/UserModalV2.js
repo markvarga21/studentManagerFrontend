@@ -25,6 +25,9 @@ const UserModalV2 = ({
   setIsAddStudentActive,
   API_URL,
   setUser,
+  studentUserWasModified,
+  setStudentUserWasModified,
+  setIsModalActive,
 }) => {
   const [student, setStudent] = useState({
     id: studentId,
@@ -284,6 +287,8 @@ const UserModalV2 = ({
       .then((res) => {
         toast.success(`Student with id '${studentId}' updated!`);
         setStudentWasModified(-1 * studentWasModified);
+        setStudentUserWasModified(-1 * studentUserWasModified);
+        setIsModalActive(false);
       })
       .catch((err) => {
         console.error(err);
@@ -397,13 +402,17 @@ const UserModalV2 = ({
                   passportDateOfExpiry: "",
                 });
                 setCloseWasClicked(-1 * closeWasClicked);
+                setStudentUserWasModified(-1 * studentUserWasModified);
+                setIsModalActive(false);
                 setIsAddStudentActive(false);
                 toast.success(`Student with id '${savedStudentId}' saved!`);
+                console.log(`Add student modal is: ${isAddStudentActive}`);
               })
               .catch((err) => {
                 console.error(err);
                 console.log("Error saving images");
                 setIsLoading(false);
+                setIsAddStudentActive(false);
               });
           })
           .catch((err) => {

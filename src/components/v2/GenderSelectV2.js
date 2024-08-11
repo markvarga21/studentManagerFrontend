@@ -2,13 +2,13 @@ import React from "react";
 
 const GenderSelectV2 = ({ id, label, colorModeColors, onChange }) => {
   return (
-    <div className="w-full">
+    <div className="w-full gender-select-container">
       <label htmlFor={id} className="text-base font-normal text-tableTextColor">
         {label}
       </label>
       <select
         id={id}
-        className="block p-3 pl-6 text-sm font-inter font-semibold text-gray-900 border-2 border-gray rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-creme appearance-none"
+        className="gender-select block p-3 pl-6 text-sm font-inter font-semibold text-gray-900 border-2 border-gray rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-creme appearance-none"
         style={{
           borderColor: colorModeColors.buttonBorder,
           backgroundColor: colorModeColors.buttonBackGround,
@@ -17,13 +17,17 @@ const GenderSelectV2 = ({ id, label, colorModeColors, onChange }) => {
         defaultValue={""}
         onChange={onChange}
       >
-        <option id="gender" style={{ color: colorModeColors.inputText }}>
+        <option
+          id="gender"
+          style={{ color: colorModeColors.inputText }}
+          className="text-base"
+        >
           -
         </option>
-        <option key="male" value="MALE">
+        <option key="male" value="MALE" className="text-base h-10 pt-5 pb-5">
           Male
         </option>
-        <option key="female" value="FEMALE">
+        <option key="female" value="FEMALE" className="text-base">
           Female
         </option>
       </select>
