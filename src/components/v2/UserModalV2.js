@@ -9,7 +9,6 @@ import GenderSelectV2 from "./GenderSelectV2";
 import RadioButtonGroupV2 from "./RadioButtonGroupV2";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { ClipLoader } from "react-spinners";
 import Loading from "./Loading";
 
 const UserModalV2 = ({
@@ -19,6 +18,7 @@ const UserModalV2 = ({
   setStudentId,
   modalTitle,
   buttonTitle,
+  isEditActive,
   setIsEditActive,
   isAddStudentActive,
   setIsAddStudentActive,
@@ -145,8 +145,11 @@ const UserModalV2 = ({
 
   useEffect(() => {
     if (studentImages.passport !== null) {
-      setActualImage({ ...studentImages, passport: studentImages.passport });
-      setActualImage(studentImages.passport);
+      setActualImage({
+        ...studentImages,
+        passport: URL.createObjectURL(studentImages.passport),
+      });
+      setActualImage(URL.createObjectURL(studentImages.passport));
     } else {
       setActualImage("https://placehold.co/300.png?text=?");
     }
@@ -154,23 +157,83 @@ const UserModalV2 = ({
 
   useEffect(() => {
     if (studentImages.portrait !== null) {
-      setActualImage({ ...studentImages, portrait: studentImages.portrait });
-      setActualImage(studentImages.portrait);
+      setActualImage({
+        ...studentImages,
+        portrait: URL.createObjectURL(studentImages.portrait),
+      });
+      setActualImage(URL.createObjectURL(studentImages.portrait));
     } else {
       setActualImage("https://placehold.co/300.png?text=?");
     }
   }, [portraitWasChanged, closeWasClicked]);
 
+  function base64ToBlob(base64) {
+    const byteCharacters = atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: "image/jpeg" });
+  }
+
+  const [isFetchStudentWaiting, setIsFetchStudentWaiting] = useState(false);
+  const [isFetchImagesWaiting, setIsFetchImagesWaiting] = useState(false);
   useEffect(() => {
-    // axios
-    //   .get(`http://localhost:5000/students/${studentId}`)
-    //   .then((res) => {
-    //     setStudent(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
+    if (isEditActive) {
+      console.log(`Loading student with id: ${studentId}`);
+      setIsFetchImagesWaiting(true);
+      setIsFetchStudentWaiting(true);
+      axios
+        .get(`${API_URL}/students/${studentId}`, {
+          headers: {
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("user")).token
+            }`,
+          },
+        })
+        .then((res) => {
+          setStudent(res.data);
+          setIsFetchStudentWaiting(false);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+
+      axios
+        .get(`${API_URL}/files/combined/${studentId}`, {
+          headers: {
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("user")).token
+            }`,
+          },
+        })
+        .then((res) => {
+          const portraitBytes = res.data.selfieImage;
+          const passportBytes = res.data.passportImage;
+          const portraitBlob = base64ToBlob(portraitBytes);
+          const passportBlob = base64ToBlob(passportBytes);
+          setStudentImages({
+            portrait: portraitBlob,
+            passport: passportBlob,
+          });
+          setIsFetchImagesWaiting(false);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   }, [studentId]);
+
+  useEffect(() => {
+    if (isEditActive) {
+      if (isFetchStudentWaiting || isFetchImagesWaiting) {
+        console.log("Edit loading started...");
+      } else if (!isFetchStudentWaiting && !isFetchImagesWaiting) {
+        console.log("Edit loading finished!");
+      }
+    }
+  }, [isEditActive]);
 
   const handleFormChange = (e) => {
     const key = String(e.target.id);
@@ -186,11 +249,12 @@ const UserModalV2 = ({
     document.getElementById("placeOfBirth").value = student.placeOfBirth;
     document.getElementById("passportNumber").value = student.passportNumber;
     document.getElementById("birthDate").value = student.birthDate;
-    document.getElementById("passportDateOfIssue").value = student.dateOfIssue;
+    document.getElementById("passportDateOfIssue").value =
+      student.passportDateOfIssue;
     document.getElementById("passportDateOfExpiry").value =
-      student.dateOfExpiry;
+      student.passportDateOfExpiry;
     document.getElementById("gender").value = student.gender;
-  }, [studentId]);
+  }, [student]);
 
   const checkEmptyFields = () => {
     for (const key in student) {
@@ -460,8 +524,9 @@ const UserModalV2 = ({
               setSelectedOption={setSelectedOption}
             />
             <img
+              id="studentImage"
               src={actualImage}
-              alt="student"
+              alt="Student images"
               className="w-48 h-48 object-cover rounded-lg"
             />
           </div>

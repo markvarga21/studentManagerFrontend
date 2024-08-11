@@ -19,7 +19,7 @@ const UploadPortraitButton = ({
       const file = event.target.files[0];
       setStudentImages({
         ...studentImages,
-        portrait: URL.createObjectURL(file),
+        portrait: file,
       });
       setSelectedOption("portrait");
       setPortraitWasChanged(-1 * portraitWasChanged);

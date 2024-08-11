@@ -30,7 +30,7 @@ const UploadPassportButton = ({
       const file = event.target.files[0];
       setStudentImages({
         ...studentImages,
-        passport: URL.createObjectURL(file),
+        passport: file,
       });
       setSelectedOption("passport");
       setPassportWasChanged(-1 * passportWasChanged);

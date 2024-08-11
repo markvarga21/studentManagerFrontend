@@ -17,19 +17,19 @@ const RadioButtonGroupV2 = ({
     }
     setSelectedOption(option);
     if (option === "passport") {
-      setActualImage(studentImages.passport);
+      setActualImage(URL.createObjectURL(studentImages.passport));
     } else {
-      setActualImage(studentImages.portrait);
+      setActualImage(URL.createObjectURL(studentImages.portrait));
     }
   };
 
   useEffect(() => {
     if (studentImages.passport !== null) {
-      setActualImage(studentImages.passport);
+      setActualImage(URL.createObjectURL(studentImages.passport));
     } else {
       setActualImage("https://placehold.co/300.png?text=?");
     }
-  }, []);
+  }, [studentImages]);
 
   return (
     <div className="w-full flex gap-4 justify-center">
