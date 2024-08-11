@@ -8,7 +8,6 @@ import Pagination from "../icons/Pagination";
 import axios from "axios";
 import ExportIcon from "../icons/ImportIcon";
 import UserModalV2 from "./UserModalV2";
-import axios from "axios";
 import toast from "react-hot-toast";
 import formatXml from "xml-formatter";
 
