@@ -6,6 +6,7 @@ import UserModalV2 from "./UserModalV2";
 import toast, { Toaster } from "react-hot-toast";
 import EditIcon from "../icons/EditIcon";
 import DeleteIcon from "../icons/DeleteIcon";
+import Validity from "./Validity";
 
 const StudentData = ({
   colorModeColors,
@@ -183,7 +184,15 @@ const StudentData = ({
           className="text-4xl font-inter font-bold select-none"
           style={{ color: colorModeColors.title }}
         >
-          My data
+          <div className="flex items-start gap-2">
+            <span>Student data</span>
+            <Validity
+              validity={
+                userData.validity !== "" ? userData.validity : "Invalid"
+              }
+              colorModeColors={colorModeColors}
+            />
+          </div>
         </div>
         <div className="userInfo flex gap-3 items-center">
           <img
