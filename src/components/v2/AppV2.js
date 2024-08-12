@@ -179,7 +179,7 @@ const AppV2 = () => {
             path="/report"
             element={
               user ? (
-                <Report colorModeColors={colorModeColors} />
+                <Report colorModeColors={colorModeColors} API_URL={API_URL} />
               ) : (
                 <Unauthorized colorModeColors={colorModeColors} />
               )
