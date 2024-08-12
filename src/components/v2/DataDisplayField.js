@@ -10,7 +10,7 @@ const DataDisplayField = ({ label, content, colors }) => {
         {label}
       </div>
       <div
-        className="font-inter font-normal text-md p-4 rounded-xl hover:cursor-not-allowed"
+        className="font-inter font-normal text-sm p-4 rounded-xl hover:cursor-not-allowed"
         style={{
           backgroundColor: colors.tableHeader,
           color: colors.tableContent,
