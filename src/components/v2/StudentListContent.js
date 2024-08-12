@@ -157,6 +157,8 @@ const StudentListContent = ({
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
 
+  const [wasValidated, setWasValidated] = useState(1);
+  const [editSubmitted, setEditSubmitted] = useState(1);
   useEffect(() => {
     axios
       .get(`${API_URL}/students`, {
@@ -176,7 +178,7 @@ const StudentListContent = ({
       .catch((err) => {
         console.error(err);
       });
-  }, [deleted, isAddStudentActive]);
+  }, [deleted, isAddStudentActive, wasValidated, editSubmitted]);
 
   const [searchCriteria, setSearchCriteria] = useState("");
   const handleSearchChange = () => {
@@ -225,6 +227,10 @@ const StudentListContent = ({
             setIsEditActive={setIsEditActive}
             API_URL={API_URL}
             setUser={setUser}
+            wasValidated={wasValidated}
+            setWasValidated={setWasValidated}
+            editSubmitted={editSubmitted}
+            setEditSubmitted={setEditSubmitted}
           />
         )}
         {isAddStudentActive && (
@@ -576,7 +582,7 @@ const StudentListContent = ({
                     style={{ borderColor: colorModeColors.tableBorder }}
                   >
                     <Validity
-                      validity={student.validity}
+                      validity={student.valid}
                       colorModeColors={colorModeColors}
                     />
                   </td>

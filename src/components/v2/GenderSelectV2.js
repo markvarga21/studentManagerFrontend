@@ -1,6 +1,12 @@
 import React from "react";
 
-const GenderSelectV2 = ({ id, label, colorModeColors, onChange }) => {
+const GenderSelectV2 = ({
+  id,
+  label,
+  colorModeColors,
+  onChange,
+  errorFields,
+}) => {
   return (
     <div className="w-full gender-select-container">
       <label htmlFor={id} className="text-base font-normal text-tableTextColor">

@@ -188,9 +188,7 @@ const StudentData = ({
           <div className="flex items-start gap-2">
             <span>Student data</span>
             <Validity
-              validity={
-                userData.validity !== "" ? userData.validity : "Invalid"
-              }
+              validity={userData.valid !== "" ? userData.valid : "Invalid"}
               colorModeColors={colorModeColors}
             />
           </div>

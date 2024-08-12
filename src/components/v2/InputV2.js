@@ -1,6 +1,13 @@
 import React from "react";
 
-const InputV2 = ({ colorModeColors, id, label, placeholder, onChange }) => {
+const InputV2 = ({
+  colorModeColors,
+  id,
+  label,
+  placeholder,
+  onChange,
+  errorFields,
+}) => {
   return (
     <div className="w-full">
       <label htmlFor={id} className="text-base font-normal text-tableTextColor">

@@ -28,6 +28,10 @@ const UserModalV2 = ({
   studentUserWasModified,
   setStudentUserWasModified,
   setIsModalActive,
+  wasValidated,
+  setWasValidated,
+  editSubmitted,
+  setEditSubmitted,
 }) => {
   const [student, setStudent] = useState({
     id: studentId,
@@ -285,10 +289,12 @@ const UserModalV2 = ({
         },
       })
       .then((res) => {
+        setEditSubmitted(-1 * editSubmitted);
         toast.success(`Student with id '${studentId}' updated!`);
         setStudentWasModified(-1 * studentWasModified);
         setStudentUserWasModified(-1 * studentUserWasModified);
         setIsModalActive(false);
+        setWasValidated(-1 * wasValidated);
       })
       .catch((err) => {
         console.error(err);
@@ -455,29 +461,86 @@ const UserModalV2 = ({
   );
   useEffect(() => {
     axios
-      .get(`${API_URL}/facialValidations/${passportData.passportNumber}`, {
+      .get(`${API_URL}/students/${studentId}`, {
         headers: {
           Authorization: `Bearer ${
             JSON.parse(localStorage.getItem("user")).token
           }`,
         },
       })
-      .then((res) => {
-        const data = res.data;
-        const roundedPercent = (data.percentage * 100).toFixed(2);
-        const valid = data.isValid;
-        if (valid) {
-          const message = `\u2705 Photo is ${roundedPercent}% similar!`;
-          setFacialValidity(message);
-        } else {
-          const message = `\u274C Photos are only ${roundedPercent}% similar!`;
-          setFacialValidity(message);
-        }
+      .then((studentRes) => {
+        const passportNumber = studentRes.data.passportNumber;
+        axios
+          .get(`${API_URL}/facialValidations/${passportNumber}`, {
+            headers: {
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("user")).token
+              }`,
+            },
+          })
+          .then((res) => {
+            const data = res.data;
+            const roundedPercent = (data.percentage * 100).toFixed(2);
+            const valid = data.isValid;
+            if (valid) {
+              const message = `\u2705 Photos are ${roundedPercent}% similar!`;
+              setFacialValidity(message);
+            } else {
+              const message = `\u274C Photos are only ${roundedPercent}% similar!`;
+              setFacialValidity(message);
+            }
+          })
+          .catch((err) => {
+            setFacialValidity("\u274C Faces are not yet validated!");
+          });
       })
       .catch((err) => {
-        setFacialValidity("\u274C Faces are not yet validated!");
+        console.error(err);
       });
-  }, [isEditActive]);
+  }, [isEditActive, wasValidated, studentWasModified]);
+
+  const DEFAULT_ERROR_FIELDS = {
+    firstName: {
+      error: false,
+      replacement: "",
+    },
+    lastName: {
+      error: false,
+      replacement: "",
+    },
+    birthDate: {
+      error: false,
+      replacement: "",
+    },
+    placeOfBirth: {
+      error: false,
+      replacement: "",
+    },
+    countryOfCitizenship: {
+      error: false,
+      replacement: "",
+    },
+    gender: {
+      error: false,
+      replacement: "",
+    },
+    passportNumber: {
+      error: false,
+      replacement: "",
+    },
+    passportDateOfIssue: {
+      error: false,
+      replacement: "",
+    },
+    passportDateOfExpiry: {
+      error: false,
+      replacement: "",
+    },
+  };
+  const [errorFields, setErrorFields] = useState(DEFAULT_ERROR_FIELDS);
+  const handleAutomaticValidation = () => {
+    console.log("Automatic validation");
+  };
   return (
     <div
       id="outer"
@@ -516,6 +579,7 @@ const UserModalV2 = ({
               colorModeColors={colorModeColors}
               placeholder={"John"}
               onChange={handleFormChange}
+              errorFields={errorFields}
             />
             <InputV2
               id={"lastName"}
@@ -523,6 +587,7 @@ const UserModalV2 = ({
               colorModeColors={colorModeColors}
               placeholder={"Doe"}
               onChange={handleFormChange}
+              errorFields={errorFields}
             />
             <div className="flex gap-2 justify-stretch">
               <DatePickerV2
@@ -530,12 +595,14 @@ const UserModalV2 = ({
                 label={"Birthdate"}
                 colorModeColors={colorModeColors}
                 onChange={handleFormChange}
+                errorFields={errorFields}
               />
               <GenderSelectV2
                 id={"gender"}
                 label={"Gender"}
                 colorModeColors={colorModeColors}
                 onChange={handleFormChange}
+                errorFields={errorFields}
               />
             </div>
             <InputV2
@@ -544,6 +611,7 @@ const UserModalV2 = ({
               colorModeColors={colorModeColors}
               placeholder={"New York"}
               onChange={handleFormChange}
+              errorFields={errorFields}
             />
           </div>
           <div
@@ -556,6 +624,7 @@ const UserModalV2 = ({
               colorModeColors={colorModeColors}
               placeholder={"USA"}
               onChange={handleFormChange}
+              errorFields={errorFields}
             />
             <InputV2
               id={"passportNumber"}
@@ -563,18 +632,21 @@ const UserModalV2 = ({
               colorModeColors={colorModeColors}
               placeholder={"123456789"}
               onChange={handleFormChange}
+              errorFields={errorFields}
             />
             <DatePickerV2
               id={"passportDateOfIssue"}
               label={"Date of issue"}
               colorModeColors={colorModeColors}
               onChange={handleFormChange}
+              errorFields={errorFields}
             />
             <DatePickerV2
               id={"passportDateOfExpiry"}
               label={"Date of expiry"}
               colorModeColors={colorModeColors}
               onChange={handleFormChange}
+              errorFields={errorFields}
             />
           </div>
           <div
@@ -617,7 +689,14 @@ const UserModalV2 = ({
                 {JSON.parse(localStorage.getItem("user")).roles.includes(
                   "ROLE_ADMIN"
                 ) ? (
-                  <ValidationButtons colors={colorModeColors} />
+                  <ValidationButtons
+                    colors={colorModeColors}
+                    API_URL={API_URL}
+                    studentId={studentId}
+                    wasValidated={wasValidated}
+                    setWasValidated={setWasValidated}
+                    handleAutomaticValidation={handleAutomaticValidation}
+                  />
                 ) : (
                   <></>
                 )}

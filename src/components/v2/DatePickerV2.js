@@ -1,6 +1,12 @@
 import React from "react";
 
-const DatePickerV2 = ({ colorModeColors, id, label, onChange }) => {
+const DatePickerV2 = ({
+  colorModeColors,
+  id,
+  label,
+  onChange,
+  errorFields,
+}) => {
   return (
     <div className="w-full">
       <label htmlFor={id} className="text-base font-normal text-tableTextColor">
