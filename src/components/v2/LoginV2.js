@@ -59,6 +59,7 @@ const LoginV2 = ({
   };
   return (
     <div
+      id="login"
       className="w-full h-full flex flex-col justify-center items-center pt-12 pb-56"
       style={{ backgroundColor: colorModeColors.bg }}
     >

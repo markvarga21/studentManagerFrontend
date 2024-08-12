@@ -118,12 +118,13 @@ const AppV2 = () => {
       if (now > expirationTime) {
         localStorage.removeItem("user");
         setUser(null);
+        window.location.href = "/login";
       }
     }
   }, []);
 
   return (
-    <div className="flex h-[100vh]">
+    <div id="mainApp" className="flex h-[100vh]">
       <BrowserRouter>
         <MenuBar
           colorModeColors={colorModeColors}

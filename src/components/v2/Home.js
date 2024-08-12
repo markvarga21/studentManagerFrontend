@@ -11,6 +11,7 @@ const Home = ({ user, colorModeColors }) => {
   };
   return (
     <div
+      id="home"
       className="flex flex-col items-center justify-center w-full gap-10 font-inter pb-56"
       style={{ backgroundColor: colorModeColors.bg }}
     >

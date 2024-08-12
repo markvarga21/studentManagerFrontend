@@ -3,6 +3,7 @@ import React from "react";
 const NotFound = ({ colorModeColors }) => {
   return (
     <div
+      id="not-found"
       className="flex flex-col items-center justify-center w-full gap-3 font-inter pb-56"
       style={{ backgroundColor: colorModeColors.bg }}
     >

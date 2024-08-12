@@ -3,6 +3,7 @@ import React from "react";
 const Unauthorized = ({ colorModeColors }) => {
   return (
     <div
+      id="unauthorized"
       className="flex flex-col items-center justify-center w-full gap-3 font-inter pb-56"
       style={{ backgroundColor: colorModeColors.bg }}
     >

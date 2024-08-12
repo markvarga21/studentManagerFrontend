@@ -488,7 +488,7 @@ const UserModalV2 = ({
       }}
     >
       <div
-        className="w-4/6 h-fit p-12 flex flex-col gap-8 rounded-xl overflow-auto"
+        className="w-4/6 h-fit max-h-[80%] p-12 flex flex-col gap-8 rounded-xl overflow-auto"
         style={{
           boxShadow: "0 0 15px rgba(0, 0, 0, 0.5)",
           backgroundColor: colorModeColors.tableHeader,

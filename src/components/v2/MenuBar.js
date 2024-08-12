@@ -145,7 +145,7 @@ const MenuBar = ({
   return (
     <div
       id="menubar"
-      class="flex flex-col bg-[#141414] items-center justify-between h-full w-1/4 z-50"
+      class="flex flex-col bg-[#141414] items-center justify-between h-full z-50 absolute"
       data-isopen={isMenuOpen}
     >
       <Toaster />

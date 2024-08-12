@@ -137,6 +137,7 @@ const StudentData = ({
   };
   return (
     <div
+      id="studentData"
       className="flex flex-col h-full w-full justify-center items-start"
       style={{ backgroundColor: colorModeColors.bg }}
     >

@@ -63,16 +63,17 @@ input[type="radio"]:checked + label[data-theme="dark"] {
 
 #menubar[data-isopen="false"] {
   transition: width 0.5s ease;
-  width: 5rem;
+  width: 80px;
 }
 
 #menubar[data-isopen="true"] {
   transition: width 0.5s ease;
-  width: 12rem;
+  width: 192px;
 }
 
 #menubar {
   overflow: hidden;
+  height: 100vh;
 }
 
 input[type="date"]:in-range::-webkit-datetime-edit-year-field,
@@ -99,5 +100,41 @@ option#gender {
 @keyframes l1 {
   to {
     clip-path: inset(0 -34% 0 0);
+  }
+}
+
+@media only screen and (max-width: 1400px) {
+  #mainApp {
+    width: calc(100% - 80px);
+  }
+  #studentListContent,
+  #studentData,
+  #unauthorized,
+  #login,
+  #register,
+  #not-found,
+  #report,
+  #home {
+    margin-left: 80px;
+  }
+
+  .data-display {
+    font-size: 0.8rem !important;
+  }
+}
+
+@media only screen and (min-width: 1401px) {
+  #mainApp {
+    width: 100%;
+  }
+  #studentListContent,
+  #studentData,
+  #unauthorized,
+  #login,
+  #register,
+  #not-found,
+  #report,
+  #home {
+    margin-left: 80px;
   }
 }

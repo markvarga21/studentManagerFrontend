@@ -80,6 +80,7 @@ const RegisterV2 = ({ colorModeColors, API_URL }) => {
   };
   return (
     <div
+      id="register"
       className="w-full h-full flex flex-col justify-center items-center"
       style={{ backgroundColor: colorModeColors.bg }}
     >

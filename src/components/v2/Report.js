@@ -17,6 +17,7 @@ const Report = ({ colorModeColors }) => {
 
   return (
     <div
+      id="report"
       className="w-full h-full flex flex-col justify-center items-center pt-12 pb-56"
       style={{ backgroundColor: colorModeColors.bg }}
     >
