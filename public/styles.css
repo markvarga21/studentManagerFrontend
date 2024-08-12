@@ -33,6 +33,11 @@ input[type="radio"]:checked + label[data-theme="dark"] {
   font-weight: 600;
 }
 
+input:-webkit-autofill,
+input:autofill {
+  background-color: green !important;
+}
+
 :root {
   --scrollbar-track-color: #f1f1f1;
   --scrollbar-thumb-color: #b2b2b2;
@@ -137,4 +142,18 @@ option#gender {
   #home {
     margin-left: 80px;
   }
+}
+
+img {
+  transition: transform 0.3s ease, position 0.3s ease;
+}
+
+img:hover {
+  transform: scale(2.5);
+  z-index: 10;
+  object-fit: contain;
+}
+
+div#userModal {
+  overflow-x: hidden;
 }

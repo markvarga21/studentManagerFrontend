@@ -501,8 +501,8 @@ const UserModalV2 = ({
 
   const DEFAULT_ERROR_FIELDS = {
     firstName: {
-      error: false,
-      replacement: "",
+      error: true,
+      replacement: "Aladar",
     },
     lastName: {
       error: false,
@@ -541,6 +541,11 @@ const UserModalV2 = ({
   const handleAutomaticValidation = () => {
     console.log("Automatic validation");
   };
+  const acceptReplacement = (e) => {
+    const id = e.target.className;
+    const replacement = errorFields[id].replacement;
+    console.log(`Accepting replacement for ${id} the value of ${replacement}`);
+  };
   return (
     <div
       id="outer"
@@ -551,6 +556,7 @@ const UserModalV2 = ({
       }}
     >
       <div
+        id="userModal"
         className="w-4/6 h-fit max-h-[80%] p-12 flex flex-col gap-8 rounded-xl overflow-auto"
         style={{
           boxShadow: "0 0 15px rgba(0, 0, 0, 0.5)",
@@ -580,6 +586,7 @@ const UserModalV2 = ({
               placeholder={"John"}
               onChange={handleFormChange}
               errorFields={errorFields}
+              acceptReplacement={acceptReplacement}
             />
             <InputV2
               id={"lastName"}
@@ -588,6 +595,7 @@ const UserModalV2 = ({
               placeholder={"Doe"}
               onChange={handleFormChange}
               errorFields={errorFields}
+              acceptReplacement={acceptReplacement}
             />
             <div className="flex gap-2 justify-stretch">
               <DatePickerV2
@@ -596,6 +604,7 @@ const UserModalV2 = ({
                 colorModeColors={colorModeColors}
                 onChange={handleFormChange}
                 errorFields={errorFields}
+                acceptReplacement={acceptReplacement}
               />
               <GenderSelectV2
                 id={"gender"}
@@ -603,6 +612,7 @@ const UserModalV2 = ({
                 colorModeColors={colorModeColors}
                 onChange={handleFormChange}
                 errorFields={errorFields}
+                acceptReplacement={acceptReplacement}
               />
             </div>
             <InputV2
@@ -612,6 +622,7 @@ const UserModalV2 = ({
               placeholder={"New York"}
               onChange={handleFormChange}
               errorFields={errorFields}
+              acceptReplacement={acceptReplacement}
             />
           </div>
           <div
@@ -625,6 +636,7 @@ const UserModalV2 = ({
               placeholder={"USA"}
               onChange={handleFormChange}
               errorFields={errorFields}
+              acceptReplacement={acceptReplacement}
             />
             <InputV2
               id={"passportNumber"}
@@ -633,6 +645,7 @@ const UserModalV2 = ({
               placeholder={"123456789"}
               onChange={handleFormChange}
               errorFields={errorFields}
+              acceptReplacement={acceptReplacement}
             />
             <DatePickerV2
               id={"passportDateOfIssue"}
@@ -640,6 +653,7 @@ const UserModalV2 = ({
               colorModeColors={colorModeColors}
               onChange={handleFormChange}
               errorFields={errorFields}
+              acceptReplacement={acceptReplacement}
             />
             <DatePickerV2
               id={"passportDateOfExpiry"}
@@ -647,6 +661,7 @@ const UserModalV2 = ({
               colorModeColors={colorModeColors}
               onChange={handleFormChange}
               errorFields={errorFields}
+              acceptReplacement={acceptReplacement}
             />
           </div>
           <div

@@ -440,9 +440,9 @@ const StudentListContent = ({
                 if (filter === "All") {
                   return student;
                 } else if (filter === "Valid") {
-                  return student.validity;
+                  return student.valid;
                 } else {
-                  return !student.validity;
+                  return !student.valid;
                 }
               })
               .filter((user) => {
