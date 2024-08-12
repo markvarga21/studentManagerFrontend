@@ -160,7 +160,11 @@ const StudentListContent = ({
   useEffect(() => {
     axios
       .get(`${API_URL}/students`, {
-        headers: { Authorization: `Bearer ${user.token}` },
+        headers: {
+          Authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("user")).token
+          }`,
+        },
       })
       .then((res) => {
         const numberOfPages = Math.ceil(
@@ -187,11 +191,19 @@ const StudentListContent = ({
   };
 
   const handleExportXml = () => {
-    exportXml(students, user.token, API_URL);
+    exportXml(
+      students,
+      JSON.parse(localStorage.getItem("user")).token,
+      API_URL
+    );
   };
 
   const handleExportJson = () => {
-    exportJson(students, user.token, API_URL);
+    exportJson(
+      students,
+      JSON.parse(localStorage.getItem("user")).token,
+      API_URL
+    );
   };
 
   return (

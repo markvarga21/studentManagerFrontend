@@ -83,7 +83,7 @@ const AppV2 = () => {
     console.log("Checking user timeout");
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
-      const decoded = jwtDecode(user.token);
+      const decoded = jwtDecode(JSON.parse(localStorage.getItem("user")).token);
       console.log("User exists");
       console.log(`Issued at: ${decoded.iat}`);
       const expirationTime = new Date(decoded.exp * 1000);
@@ -107,6 +107,20 @@ const AppV2 = () => {
     debounce: DEBOUNCE_TIME,
     onIdle: handleUserTimeout,
   });
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      const decoded = jwtDecode(JSON.parse(localStorage.getItem("user")).token);
+      const expirationTime = new Date(decoded.exp * 1000);
+      console.log("Expiration time: ", expirationTime);
+      const now = new Date(Date.now());
+      if (now > expirationTime) {
+        localStorage.removeItem("user");
+        setUser(null);
+      }
+    }
+  }, []);
 
   return (
     <div className="flex h-[100vh]">

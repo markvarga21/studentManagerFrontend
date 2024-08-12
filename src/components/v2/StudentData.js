@@ -50,7 +50,9 @@ const StudentData = ({
     axios
       .get(`${API_URL}/studentUser/${user.username}`, {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("user")).token
+          }`,
         },
       })
       .then((res) => {
@@ -58,7 +60,9 @@ const StudentData = ({
         axios
           .get(`${API_URL}/students/${studentId}`, {
             headers: {
-              Authorization: `Bearer ${user.token}`,
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("user")).token
+              }`,
             },
           })
           .then((res) => {
@@ -66,7 +70,9 @@ const StudentData = ({
             axios
               .get(`${API_URL}/files/combined/${res.data.id}`, {
                 headers: {
-                  Authorization: `Bearer ${user.token}`,
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("user")).token
+                  }`,
                 },
               })
               .then((imageRes) => {

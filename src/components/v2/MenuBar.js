@@ -100,7 +100,9 @@ const MenuBar = ({
         {},
         {
           headers: {
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("user")).token
+            }`,
             "Access-Control-Allow-Origin": "*",
           },
         }

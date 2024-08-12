@@ -313,7 +313,9 @@ const UserModalV2 = ({
         student,
         {
           headers: {
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("user")).token
+            }`,
           },
         }
       )
@@ -324,7 +326,9 @@ const UserModalV2 = ({
         axios
           .post(`${API_URL}/validations`, passportData, {
             headers: {
-              Authorization: `Bearer ${user.token}`,
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("user")).token
+              }`,
             },
           })
           .then(() => {
@@ -354,7 +358,9 @@ const UserModalV2 = ({
               .post(`${API_URL}/files/upload/${studentId}`, imageForm, {
                 headers: {
                   "Content-Type": "multipart/form-data",
-                  Authorization: `Bearer ${user.token}`,
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("user")).token
+                  }`,
                 },
               })
               .then(() => {
