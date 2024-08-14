@@ -1,0 +1,159 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "Inter", sans-serif;
+}
+
+input[type="radio"]:checked + label[data-theme="light"] {
+  background-color: #e1b77a;
+  color: black;
+  border-color: #e1b77a;
+  font-weight: 600;
+}
+
+input[type="radio"] + label[data-theme="light"] {
+  color: #9b9d9f;
+  border: 2px solid #d4d7d9;
+}
+
+input[type="radio"] + label[data-theme="dark"] {
+  border: 2px solid rgba(162, 162, 162, 0.3);
+  color: rgba(255, 255, 255, 0.4);
+  background-color: none;
+}
+
+input[type="radio"]:checked + label[data-theme="dark"] {
+  background-color: #404040;
+  color: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(162, 162, 162, 0.8);
+  font-weight: 600;
+}
+
+input:-webkit-autofill,
+input:autofill {
+  background-color: green !important;
+}
+
+:root {
+  --scrollbar-track-color: #f1f1f1;
+  --scrollbar-thumb-color: #b2b2b2;
+  --scrollbar-thumb-hover-color: #939393;
+}
+
+[data-theme="dark"] {
+  --scrollbar-track-color: #2e2e2e;
+  --scrollbar-thumb-color: #414141;
+  --scrollbar-thumb-hover-color: #4d4d4d;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover-color);
+}
+
+#menubar[data-isopen="false"] {
+  transition: width 0.5s ease;
+  width: 80px;
+}
+
+#menubar[data-isopen="true"] {
+  transition: width 0.5s ease;
+  width: 192px;
+}
+
+#menubar {
+  overflow: hidden;
+  height: 100vh;
+}
+
+input[type="date"]:in-range::-webkit-datetime-edit-year-field,
+input[type="date"]:in-range::-webkit-datetime-edit-month-field,
+input[type="date"]:in-range::-webkit-datetime-edit-day-field,
+input[type="date"]:in-range::-webkit-datetime-edit-text,
+option#gender {
+  color: rgb(162 162 163);
+}
+
+::selection {
+  color: black;
+  background: #e1b77a;
+}
+
+.loader {
+  width: 20px;
+  aspect-ratio: 4;
+  background: radial-gradient(circle closest-side, #e8e8e8 90%, #0000) 0 /
+    calc(100% / 3) 100% space;
+  clip-path: inset(0 100% 0 0);
+  animation: l1 1s steps(4) infinite;
+}
+@keyframes l1 {
+  to {
+    clip-path: inset(0 -34% 0 0);
+  }
+}
+
+@media only screen and (max-width: 1400px) {
+  #mainApp {
+    width: calc(100% - 80px);
+  }
+  #studentListContent,
+  #studentData,
+  #unauthorized,
+  #login,
+  #register,
+  #not-found,
+  #report,
+  #home {
+    margin-left: 80px;
+  }
+
+  .data-display {
+    font-size: 0.8rem !important;
+  }
+}
+
+@media only screen and (min-width: 1401px) {
+  #mainApp {
+    width: 100%;
+  }
+  #studentListContent,
+  #studentData,
+  #unauthorized,
+  #login,
+  #register,
+  #not-found,
+  #report,
+  #home {
+    margin-left: 80px;
+  }
+}
+
+img {
+  transition: transform 0.3s ease, position 0.3s ease;
+}
+
+img:hover {
+  transform: scale(2.5);
+  z-index: 10;
+  object-fit: contain;
+}
+
+div#userModal {
+  overflow-x: hidden;
+}
