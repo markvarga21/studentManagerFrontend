@@ -59,6 +59,7 @@ const MenuBar = ({
     const navElement = event.currentTarget;
     const nav = navElement.parentElement.id;
     localStorage.setItem("activeNav", nav);
+    console.log("Nav: ", nav);
     if (nav !== "modeNav" && nav !== "burger" && nav !== "userNav") {
       const colors = {
         ...svgColors,
@@ -113,6 +114,7 @@ const MenuBar = ({
           setUserWasModified(-1 * userWasModified);
           toast.success("Logout successful!");
           navigate("/");
+          localStorage.setItem("activeNav", "homeNav");
         }
       })
       .catch((err) => {
@@ -120,6 +122,7 @@ const MenuBar = ({
         setUserWasModified(-1 * userWasModified);
         toast.success("Logout successful!");
         navigate("/");
+        localStorage.setItem("activeNav", "homeNav");
       });
     const colors = {
       burger: DEFAULT_ICON_COLOR,
@@ -210,7 +213,12 @@ const MenuBar = ({
           >
             <div
               class="inner p-3 rounded-md hover:cursor-pointer"
-              //style={{ backgroundColor: navBackColors.homeNav }}
+              style={{
+                backgroundColor:
+                  localStorage.getItem("activeNav") === "homeNav"
+                    ? ACTIVE_BACKGROUND_COLOR
+                    : DEFAULT_BACKGROUND_COLOR,
+              }}
               onClick={handleNavClick}
             >
               <svg
@@ -228,7 +236,11 @@ const MenuBar = ({
                 <g id="SVGRepo_iconCarrier">
                   <path
                     d="M14 21.0001V15.0001H10V21.0001M19 9.77818V16.2001C19 17.8802 19 18.7203 18.673 19.362C18.3854 19.9265 17.9265 20.3855 17.362 20.6731C16.7202 21.0001 15.8802 21.0001 14.2 21.0001H9.8C8.11984 21.0001 7.27976 21.0001 6.63803 20.6731C6.07354 20.3855 5.6146 19.9265 5.32698 19.362C5 18.7203 5 17.8802 5 16.2001V9.77753M21 12.0001L15.5668 5.96405C14.3311 4.59129 13.7133 3.9049 12.9856 3.65151C12.3466 3.42894 11.651 3.42899 11.0119 3.65165C10.2843 3.90516 9.66661 4.59163 8.43114 5.96458L3 12.0001"
-                    stroke={svgColors.homeNav}
+                    stroke={
+                      localStorage.getItem("activeNav") === "homeNav"
+                        ? ACTIVE_ICON_COLOR
+                        : DEFAULT_ICON_COLOR
+                    }
                     strokeWidth="1.6"
                     stroke-linecap="round"
                     strokeLinejoin="round"
@@ -256,7 +268,12 @@ const MenuBar = ({
             >
               <div
                 class="inner p-3 rounded-md hover:cursor-pointer"
-                //style={{ backgroundColor: navBackColors.studentListNav }}
+                style={{
+                  backgroundColor:
+                    localStorage.getItem("activeNav") === "studentListNav"
+                      ? ACTIVE_BACKGROUND_COLOR
+                      : DEFAULT_BACKGROUND_COLOR,
+                }}
                 onClick={handleNavClick}
               >
                 <svg
@@ -276,7 +293,11 @@ const MenuBar = ({
                   <g id="SVGRepo_iconCarrier">
                     <path
                       d="M978.578286 900.461714l-108.617143-108.617143c30.134857-39.570286 48.274286-88.795429 48.274286-142.189714a235.739429 235.739429 0 0 0-235.52-235.373714 235.739429 235.739429 0 0 0-235.373715 235.373714 235.739429 235.739429 0 0 0 235.446857 235.52c53.467429 0 102.692571-18.139429 142.189715-48.274286l108.617143 108.544a31.524571 31.524571 0 0 0 44.836571 0 31.744 31.744 0 0 0 0.146286-44.982857zM510.902857 649.654857a172.105143 172.105143 0 0 1 171.885714-171.885714 171.885714 171.885714 0 0 1 0 343.771428 172.178286 172.178286 0 0 1-171.885714-171.885714z m270.262857-378.514286c0 17.554286-14.262857 31.744-31.817143 31.744H431.396571a31.744 31.744 0 0 1 0-63.488h317.952c17.554286 0 31.817143 14.189714 31.817143 31.744z m-609.426285 620.032h211.968a31.890286 31.890286 0 0 1 0 63.634286H171.739429c-58.368 0-106.057143-47.542857-106.057143-106.057143V283.062857c0-14.262857 5.12-28.086857 14.262857-39.058286L240.420571 53.101714a57.417143 57.417143 0 0 1 43.885715-20.48h517.997714c58.441143 0 106.057143 47.542857 106.057143 106.057143V366.445714a31.744 31.744 0 0 1-63.634286 0V138.605714a42.422857 42.422857 0 0 0-42.276571-42.349714H336.018286V280.137143a50.688 50.688 0 0 1-50.980572 50.176H129.389714v518.509714c0 23.332571 19.017143 42.349714 42.349715 42.349714zM272.457143 113.810286l-128.512 152.868571h128.512v-152.868571z m79.506286 476.16a31.744 31.744 0 0 0 0-63.634286H240.64a31.744 31.744 0 0 0 0 63.634286h111.323429z m0 146.066285a31.744 31.744 0 0 0 0-63.561142H240.64a31.744 31.744 0 0 0 0 63.561142h111.323429z m31.744-353.206857H240.64a31.744 31.744 0 0 0 0 63.561143h143.067429a31.744 31.744 0 0 0 0-63.561143z"
-                      fill={svgColors.studentListNav}
+                      fill={
+                        localStorage.getItem("activeNav") === "studentListNav"
+                          ? ACTIVE_ICON_COLOR
+                          : DEFAULT_ICON_COLOR
+                      }
                     ></path>
                   </g>
                 </svg>
@@ -302,7 +323,12 @@ const MenuBar = ({
             >
               <div
                 class="inner p-3 rounded-md hover:cursor-pointer"
-                //style={{ backgroundColor: navBackColors.reportNav }}
+                style={{
+                  backgroundColor:
+                    localStorage.getItem("activeNav") === "reportNav"
+                      ? ACTIVE_BACKGROUND_COLOR
+                      : DEFAULT_BACKGROUND_COLOR,
+                }}
                 onClick={handleNavClick}
               >
                 <svg
@@ -320,7 +346,11 @@ const MenuBar = ({
                   <g id="SVGRepo_iconCarrier">
                     <path
                       d="M5 21V3.90002C5 3.90002 5.875 3 8.5 3C11.125 3 12.875 4.8 15.5 4.8C18.125 4.8 19 3.9 19 3.9V14.7C19 14.7 18.125 15.6 15.5 15.6C12.875 15.6 11.125 13.8 8.5 13.8C5.875 13.8 5 14.7 5 14.7"
-                      stroke={svgColors.reportNav}
+                      stroke={
+                        localStorage.getItem("activeNav") === "reportNav"
+                          ? ACTIVE_ICON_COLOR
+                          : DEFAULT_ICON_COLOR
+                      }
                       strokeWidth="1.6"
                       stroke-linecap="round"
                       strokeLinejoin="round"

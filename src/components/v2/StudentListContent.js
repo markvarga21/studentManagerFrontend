@@ -420,7 +420,7 @@ const StudentListContent = ({
               <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
                 Passport number
               </th>
-              <th className="text-left text-sm text-tableTextColor p-3 2xl:block xl:hidden font-inter font-semibold">
+              <th className="text-left text-sm text-tableTextColor p-3 2xl:block font-inter font-semibold">
                 Date of issue
               </th>
               <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
@@ -560,7 +560,7 @@ const StudentListContent = ({
                     {student.passportNumber}
                   </td>
                   <td
-                    className="p-5 border-b-2 2xl:block xl:hidden font-inter h-18"
+                    className="p-5 border-b-2 2xl:block font-inter h-18"
                     style={{
                       borderColor: colorModeColors.tableBorder,
                       color: colorModeColors.tableContent,

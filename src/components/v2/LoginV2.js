@@ -44,6 +44,8 @@ const LoginV2 = ({
           setUserWasModified(-1 * userWasModified);
           toast.success("Login successful!");
           navigate("/");
+          localStorage.setItem("activeNav", "homeNav");
+          console.log(localStorage.getItem("activeNav"));
         }
       })
       .catch((err) => {

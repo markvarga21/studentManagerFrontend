@@ -186,7 +186,7 @@ const StudentData = ({
           style={{ color: colorModeColors.title }}
         >
           <div className="flex items-start gap-2">
-            <span>Student data</span>
+            <span>My data</span>
             <Validity
               validity={userData.valid !== "" ? userData.valid : "Invalid"}
               colorModeColors={colorModeColors}
