@@ -88,6 +88,7 @@ const UserModalV2 = ({
     } else {
       addCleanup();
     }
+    setErrorFields(DEFAULT_ERROR_FIELDS);
   };
 
   const addCleanup = () => {
@@ -501,8 +502,8 @@ const UserModalV2 = ({
 
   const DEFAULT_ERROR_FIELDS = {
     firstName: {
-      error: true,
-      replacement: "Aladar",
+      error: false,
+      replacement: "",
     },
     lastName: {
       error: false,
@@ -539,12 +540,77 @@ const UserModalV2 = ({
   };
   const [errorFields, setErrorFields] = useState(DEFAULT_ERROR_FIELDS);
   const handleAutomaticValidation = () => {
-    console.log("Automatic validation");
+    const studentJson = JSON.stringify(student);
+    const passport = studentImages.passport;
+    const formData = new FormData();
+    formData.append("passport", passport);
+    formData.append("studentJson", studentJson);
+    setLoadingText("Validating student");
+    setIsLoading(true);
+    axios
+      .post(`${API_URL}/validations/validate`, formData, {
+        headers: {
+          Authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("user")).token
+          }`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((autoRes) => {
+        if (autoRes.data.isValid) {
+          axios
+            .post(
+              `${API_URL}/validations/validateManually?studentId=${studentId}`,
+              {},
+              {
+                headers: {
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("user")).token
+                  }`,
+                },
+              }
+            )
+            .then((vmRes) => {
+              toast.success("Student data is valid!");
+              setIsLoading(false);
+              setWasValidated(-1 * wasValidated);
+            })
+            .catch((err) => {
+              console.error(err);
+              setIsLoading(false);
+            });
+        } else {
+          const correctStudent = autoRes.data.studentDto;
+          delete correctStudent.id;
+          const keys = Object.keys(correctStudent);
+          const errorTemp = errorFields;
+          for (let key of keys) {
+            const currentVal = student[key];
+            const correctVal = correctStudent[key];
+            if (currentVal !== correctVal) {
+              if (correctVal !== "") {
+                errorTemp[key].error = true;
+                errorTemp[key].replacement = correctVal;
+              }
+            }
+          }
+          setWasValidated(-1 * wasValidated);
+          setIsLoading(false);
+          setLoadingText("");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        setIsLoading(false);
+      });
   };
   const acceptReplacement = (e) => {
-    const id = e.target.className;
+    const id = e.target.className.split(" ")[0];
+    console.log(id);
     const replacement = errorFields[id].replacement;
-    console.log(`Accepting replacement for ${id} the value of ${replacement}`);
+    document.getElementById(id).value = replacement;
+    setStudent({ ...student, [id]: replacement });
+    setErrorFields({ ...errorFields, [id]: { error: false, replacement: "" } });
   };
   return (
     <div

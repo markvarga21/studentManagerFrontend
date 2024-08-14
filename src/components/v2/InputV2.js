@@ -10,12 +10,6 @@ const InputV2 = ({
   acceptReplacement,
 }) => {
   const RED_HEX = "#F44336";
-  const [backgroundColor, setBackgroundColor] = useState(
-    errorFields[id].error ? "#F44336" : colorModeColors.buttonBackGround
-  );
-  const [inputColor, setInputColor] = useState(
-    errorFields[id].error ? "white" : colorModeColors.inputText
-  );
   return (
     <div className="w-full">
       <div className="flex justify-between">
@@ -40,15 +34,16 @@ const InputV2 = ({
           </div>
         )}
       </div>
-
       <input
         type="text"
         id={id}
         className="block p-3 pl-6 text-sm font-inter font-semibold text-gray-900 border-2 border-gray rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-creme"
         style={{
           borderColor: colorModeColors.buttonBorder,
-          backgroundColor: backgroundColor,
-          color: inputColor,
+          backgroundColor: errorFields[id].error
+            ? RED_HEX
+            : colorModeColors.buttonBackGround,
+          color: errorFields[id].error ? "white" : colorModeColors.inputText,
         }}
         autoComplete="off"
         placeholder={placeholder}
