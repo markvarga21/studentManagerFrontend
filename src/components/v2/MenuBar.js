@@ -91,8 +91,14 @@ const MenuBar = ({
       setColorModeColors(newColorModeColors);
       const invertedTheme = currentTheme === "light" ? "dark" : "light";
       document.documentElement.setAttribute("data-theme", invertedTheme);
+      const color = invertedTheme === "light" ? "#FFFFFF" : "#121212";
+      document.getElementById("root").style.backgroundColor = color;
     }
   };
+
+  useEffect(() => {
+    document.getElementById("root").style.backgroundColor = "#FFFFFF";
+  }, []);
 
   const handleLogout = () => {
     axios
@@ -307,7 +313,12 @@ const MenuBar = ({
                 style={{ color: svgColors.studentListNav }}
                 onClick={handleNavClick}
               >
-                Students
+                {localStorage.getItem("user") !== null &&
+                JSON.parse(localStorage.getItem("user")).roles.includes(
+                  "ROLE_ADMIN"
+                )
+                  ? "Students"
+                  : "Profile"}
               </div>
             </a>
           </Link>
