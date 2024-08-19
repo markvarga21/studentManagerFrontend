@@ -73,7 +73,7 @@ const Report = ({ colorModeColors, API_URL }) => {
           <input
             type="text"
             id="report-subject"
-            className="block p-3 pl-6 text-base font-inter font-medium text-gray-900 border-2 border-gray rounded-lg w-full"
+            className="block p-3 pl-6 text-base font-inter font-medium text-gray-900 border-2 border-gray rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-creme"
             style={{
               borderColor: colorModeColors.buttonBorder,
               backgroundColor: colorModeColors.buttonBackGround,
@@ -88,7 +88,7 @@ const Report = ({ colorModeColors, API_URL }) => {
           </label>
           <textarea
             id="report-description"
-            className="block p-3 pl-6 text-base font-inter font-medium text-gray-900 border-2 border-gray rounded-lg h-full"
+            className="block p-3 pl-6 text-base font-inter font-medium text-gray-900 border-2 border-gray rounded-lg h-full focus:outline-none focus:ring-2 focus:ring-creme"
             style={{
               borderColor: colorModeColors.buttonBorder,
               backgroundColor: colorModeColors.buttonBackGround,

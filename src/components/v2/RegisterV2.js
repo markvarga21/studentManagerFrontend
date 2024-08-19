@@ -109,7 +109,7 @@ const RegisterV2 = ({ colorModeColors, API_URL }) => {
           <input
             type="text"
             id="register-username"
-            className="block p-3 pl-6 text-sm font-inter font-medium text-gray-900 border-2 border-gray rounded-lg w-full"
+            className="block p-3 pl-6 text-sm font-inter font-medium text-gray-900 border-2 border-gray rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-creme"
             style={{
               borderColor: colorModeColors.buttonBorder,
               backgroundColor: colorModeColors.buttonBackGround,
@@ -127,7 +127,7 @@ const RegisterV2 = ({ colorModeColors, API_URL }) => {
           <input
             type="email"
             id="register-email"
-            className="block p-3 pl-6 text-sm font-inter font-medium text-gray-900 border-2 border-gray rounded-lg w-full"
+            className="block p-3 pl-6 text-sm font-inter font-medium text-gray-900 border-2 border-gray rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-creme"
             style={{
               borderColor: colorModeColors.buttonBorder,
               backgroundColor: colorModeColors.buttonBackGround,
@@ -145,7 +145,7 @@ const RegisterV2 = ({ colorModeColors, API_URL }) => {
           <input
             type="text"
             id="register-firstName"
-            className="block p-3 pl-6 text-sm font-inter font-medium text-gray-900 border-2 border-gray rounded-lg w-full"
+            className="block p-3 pl-6 text-sm font-inter font-medium text-gray-900 border-2 border-gray rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-creme"
             style={{
               borderColor: colorModeColors.buttonBorder,
               backgroundColor: colorModeColors.buttonBackGround,
@@ -163,7 +163,7 @@ const RegisterV2 = ({ colorModeColors, API_URL }) => {
           <input
             type="text"
             id="register-lastName"
-            className="block p-3 pl-6 text-sm font-inter font-medium text-gray-900 border-2 border-gray rounded-lg w-full"
+            className="block p-3 pl-6 text-sm font-inter font-medium text-gray-900 border-2 border-gray rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-creme"
             style={{
               borderColor: colorModeColors.buttonBorder,
               backgroundColor: colorModeColors.buttonBackGround,
@@ -180,7 +180,7 @@ const RegisterV2 = ({ colorModeColors, API_URL }) => {
           <input
             type="password"
             id="register-password"
-            className="block p-3 pl-6 text-sm font-inter font-medium text-gray-900 border-2 border-gray rounded-lg w-full"
+            className="block p-3 pl-6 text-sm font-inter font-medium text-gray-900 border-2 border-gray rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-creme"
             style={{
               borderColor: colorModeColors.buttonBorder,
               backgroundColor: colorModeColors.buttonBackGround,

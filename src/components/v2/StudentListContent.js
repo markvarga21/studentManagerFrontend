@@ -376,7 +376,7 @@ const StudentListContent = ({
             <input
               type="text"
               id="table-search-users"
-              className="block p-3 pl-9 text-sm font-inter font-medium text-gray-900 border-2 border-gray rounded-lg w-80"
+              className="block p-3 pl-9 text-sm font-inter font-medium text-gray-900 border-2 border-gray rounded-lg w-80 focus:outline-none focus:ring-2 focus:ring-creme"
               style={{
                 borderColor: colorModeColors.buttonBorder,
                 backgroundColor: colorModeColors.buttonBackGround,

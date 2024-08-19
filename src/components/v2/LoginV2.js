@@ -86,7 +86,7 @@ const LoginV2 = ({
           <input
             type="text"
             id="login-username"
-            className="block p-3 pl-6 text-sm font-inter font-medium text-gray-900 border-2 border-gray rounded-lg w-full"
+            className="block p-3 pl-6 text-sm font-inter font-medium text-gray-900 border-2 border-gray rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-creme"
             style={{
               borderColor: colorModeColors.buttonBorder,
               backgroundColor: colorModeColors.buttonBackGround,
@@ -104,7 +104,7 @@ const LoginV2 = ({
           <input
             type="password"
             id="login-password"
-            className="block p-3 pl-6 text-sm font-inter font-medium text-gray-900 border-2 border-gray rounded-lg w-full"
+            className="block p-3 pl-6 text-sm font-inter font-medium text-gray-900 border-2 border-gray rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-creme"
             style={{
               borderColor: colorModeColors.buttonBorder,
               backgroundColor: colorModeColors.buttonBackGround,
