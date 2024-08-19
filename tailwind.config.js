@@ -15,6 +15,7 @@ module.exports = withMT({
         uniGoldLight: "#FFC962",
         creme: "#E1B77A",
         darkCreme: "#BB812A",
+        lightCreme: "#F2D3A7",
         gray: "#D4D7D9",
         darkGray: "#48494A",
         tableGray: "#E8E8E8",

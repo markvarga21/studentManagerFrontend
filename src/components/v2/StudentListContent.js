@@ -300,7 +300,7 @@ const StudentListContent = ({
             </div>
             <div
               id="addButton"
-              className="flex items-center gap-2 mr-20 pt-2 pb-2 pl-4 pr-4 bg-creme rounded-xl hover:cursor-pointer shadow-xl"
+              className="flex items-center gap-2 mr-20 pt-2 pb-2 pl-4 pr-4 bg-creme rounded-xl hover:cursor-pointer shadow-xl focus:ring-4 focus:ring-lightCreme focus:ring-opacity-80 focus:outline-none"
               onClick={() => setIsAddStudentActive(true)}
             >
               <PlusIcon />

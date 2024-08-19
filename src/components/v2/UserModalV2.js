@@ -461,8 +461,9 @@ const UserModalV2 = ({
     "Faces are not yet validated!"
   );
   useEffect(() => {
+    const studentIdValue = studentId ? "/" + studentId : "";
     axios
-      .get(`${API_URL}/students/${studentId}`, {
+      .get(`${API_URL}/students${studentIdValue}`, {
         headers: {
           Authorization: `Bearer ${
             JSON.parse(localStorage.getItem("user")).token

@@ -15,6 +15,10 @@ const Report = ({ colorModeColors, API_URL }) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (subject === "" || description === "") {
+      toast.error("Please fill in all fields.");
+      return;
+    }
     const username = JSON.parse(localStorage.getItem("user")).username;
     setIsLoading(true);
     axios
@@ -95,7 +99,7 @@ const Report = ({ colorModeColors, API_URL }) => {
             autoComplete="off"
           ></textarea>
           <button
-            className="mt-5 pt-2 pb-2 pl-4 pr-4 bg-creme rounded-xl hover:cursor-pointer shadow-xl text-black text-base"
+            className="mt-5 pt-2 pb-2 pl-4 pr-4 bg-creme rounded-xl hover:cursor-pointer shadow-xl text-black text-base focus:ring-4 focus:ring-lightCreme focus:ring-opacity-80 focus:outline-none"
             type="submit"
           >
             Submit

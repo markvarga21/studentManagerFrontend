@@ -75,7 +75,8 @@ const RegisterV2 = ({ colorModeColors, API_URL }) => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
+        toast.error("Username is already taken. Please try another one.");
       });
   };
   return (
@@ -189,7 +190,7 @@ const RegisterV2 = ({ colorModeColors, API_URL }) => {
           />
           <button
             className={
-              "mt-5 pt-2 pb-2 pl-4 pr-4 bg-creme rounded-xl shadow-xl text-black text-base " +
+              "mt-5 pt-2 pb-2 pl-4 pr-4 bg-creme rounded-xl shadow-xl text-black text-base focus:ring-4 focus:ring-lightCreme focus:ring-opacity-80 focus:outline-none " +
               (isWaiting ? "cursor-not-allowed" : "hover:cursor-pointer")
             }
             type="submit"
