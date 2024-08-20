@@ -184,7 +184,7 @@ const StudentListContent = ({
   const handleSearchChange = () => {
     const crit = document.getElementById("table-search-users").value;
     const normalized = crit.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    setSearchCriteria(normalized);
+    setSearchCriteria(normalized.trim());
   };
 
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);

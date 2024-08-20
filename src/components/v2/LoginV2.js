@@ -25,6 +25,9 @@ const LoginV2 = ({
       toast.error("Please fill in all fields.");
       return;
     }
+    for (const key in loginDetails) {
+      loginDetails[key] = loginDetails[key].trim();
+    }
     axios
       .post(`${API_URL}/auth/login`, loginDetails)
       .then((res) => {

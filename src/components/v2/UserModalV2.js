@@ -313,6 +313,9 @@ const UserModalV2 = ({
     const user = JSON.parse(localStorage.getItem("user"));
     const roles = user.roles.replace("[", "").replace("]", "").replace(" ", "");
     const username = user.username;
+    for (const key in student) {
+      student[key] = student[key].trim();
+    }
     // Saving student
     axios
       .post(

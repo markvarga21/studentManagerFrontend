@@ -54,6 +54,9 @@ const RegisterV2 = ({ colorModeColors, API_URL }) => {
     userRegisterDetails.lastName = capitalizeFirstLetter(
       userRegisterDetails.lastName
     );
+    for (const key in userRegisterDetails) {
+      userRegisterDetails[key] = userRegisterDetails[key].trim();
+    }
     axios
       .post(`${API_URL}/auth/register`, userRegisterDetails)
       .then((res) => {
