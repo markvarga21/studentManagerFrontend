@@ -84,7 +84,6 @@ const MenuBar = ({
     }
 
     if (nav === "modeNav") {
-      console.log(`Active nav: ${localStorage.getItem("activeNav")}`);
       const newColorModeColors =
         currentTheme === "light" ? darkMode : lightMode;
       setCurrentTheme(currentTheme === "light" ? "dark" : "light");
