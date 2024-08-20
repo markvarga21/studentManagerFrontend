@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import ModeNav from "../icons/ModeNav";
 import GearIcon from "../icons/GearIcon";
 import LogoutIcon from "../icons/LogoutIcon";
-import { Link, useNavigate } from "react-router-dom";
-import { Tooltip } from "react-tooltip";
+import {Link, useNavigate} from "react-router-dom";
+import {Tooltip} from "react-tooltip";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast, {Toaster} from "react-hot-toast";
 
 const MenuBar = ({
   colorModeColors,
@@ -58,9 +58,8 @@ const MenuBar = ({
   const handleNavClick = (event) => {
     const navElement = event.currentTarget;
     const nav = navElement.parentElement.id;
-    localStorage.setItem("activeNav", nav);
-    console.log("Nav: ", nav);
     if (nav !== "modeNav" && nav !== "burger" && nav !== "userNav") {
+      localStorage.setItem("activeNav", nav);
       const colors = {
         ...svgColors,
         burger: DEFAULT_ICON_COLOR,
@@ -85,14 +84,14 @@ const MenuBar = ({
     }
 
     if (nav === "modeNav") {
+      console.log(`Active nav: ${localStorage.getItem("activeNav")}`);
       const newColorModeColors =
         currentTheme === "light" ? darkMode : lightMode;
       setCurrentTheme(currentTheme === "light" ? "dark" : "light");
       setColorModeColors(newColorModeColors);
       const invertedTheme = currentTheme === "light" ? "dark" : "light";
       document.documentElement.setAttribute("data-theme", invertedTheme);
-      const color = invertedTheme === "light" ? "#FFFFFF" : "#121212";
-      document.getElementById("root").style.backgroundColor = color;
+      document.getElementById("root").style.backgroundColor = invertedTheme === "light" ? "#FFFFFF" : "#121212";
     }
   };
 

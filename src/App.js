@@ -74,7 +74,6 @@ const App = () => {
   const [isEditActive, setIsEditActive] = useState(false);
 
   const API_URL = process.env.REACT_APP_API_URL;
-  console.log("API URL: ", API_URL);
   const [userWasModified, setUserWasModified] = useState(1);
 
   useEffect(() => {
