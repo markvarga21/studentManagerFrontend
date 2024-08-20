@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import PlusIcon from "../icons/PlusIcon";
-import DataDisplayField from "./DataDisplayField";
+import DataDisplayField from "../util/DataDisplayField";
 import axios from "axios";
-import UserModalV2 from "./UserModalV2";
+import UserModal from "../modals/UserModal";
 import toast, { Toaster } from "react-hot-toast";
 import EditIcon from "../icons/EditIcon";
 import DeleteIcon from "../icons/DeleteIcon";
-import Validity from "./Validity";
+import Validity from "../util/Validity";
 
 const StudentData = ({
   colorModeColors,
@@ -145,7 +145,7 @@ const StudentData = ({
       {isModalActive && (
         <>
           {userData.id === "" ? (
-            <UserModalV2
+            <UserModal
               mode={"add"}
               colorModeColors={colorModeColors}
               studentId={userData.id}
@@ -161,7 +161,7 @@ const StudentData = ({
               setIsModalActive={setIsModalActive}
             />
           ) : (
-            <UserModalV2
+            <UserModal
               mode={"edit"}
               colorModeColors={colorModeColors}
               studentId={userData.id}

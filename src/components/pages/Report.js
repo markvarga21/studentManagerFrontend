@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import Loading from "./Loading";
+import Loading from "../util/Loading";
 
 const Report = ({ colorModeColors, API_URL }) => {
   const [isLoading, setIsLoading] = useState(false);

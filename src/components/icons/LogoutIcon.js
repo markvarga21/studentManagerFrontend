@@ -1,32 +1,38 @@
 import React from "react";
 
-const LogoutIcon = () => {
+const LogoutIcon = ({ color, ICON_SIZES, handleLogout }) => {
   return (
-    <div className="mb-1">
-      <svg
-        fill="#000000"
-        height="15px"
-        width="15px"
-        version="1.1"
-        id="Capa_1"
-        viewBox="0 0 198.715 198.715"
-      >
-        <g>
-          <path
-            d="M161.463,48.763c-2.929-2.929-7.677-2.929-10.607,0c-2.929,2.929-2.929,7.677,0,10.606
-       c13.763,13.763,21.342,32.062,21.342,51.526c0,19.463-7.579,37.761-21.342,51.523c-14.203,14.204-32.857,21.305-51.516,21.303
-       c-18.659-0.001-37.322-7.104-51.527-21.309c-28.405-28.405-28.402-74.625,0.005-103.032c2.929-2.929,2.929-7.678,0-10.606
-       c-2.929-2.929-7.677-2.929-10.607,0C2.956,83.029,2.953,138.766,37.206,173.019c17.132,17.132,39.632,25.697,62.135,25.696
-       c22.497-0.001,44.997-8.564,62.123-25.69c16.595-16.594,25.734-38.659,25.734-62.129C187.199,87.425,178.059,65.359,161.463,48.763
-       z"
-          />
-          <path
-            d="M99.332,97.164c4.143,0,7.5-3.358,7.5-7.5V7.5c0-4.142-3.357-7.5-7.5-7.5s-7.5,3.358-7.5,7.5v82.164
-       C91.832,93.807,95.189,97.164,99.332,97.164z"
-          />
-        </g>
-      </svg>
-    </div>
+    <svg
+      style={{ height: ICON_SIZES / 75 + "vh", minHeight: "20px" }}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      transform="matrix(-1, 0, 0, 1, 0, 0)"
+      onClick={handleLogout}
+    >
+      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g
+        id="SVGRepo_tracerCarrier"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      ></g>
+      <g id="SVGRepo_iconCarrier">
+        {" "}
+        <path
+          d="M12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4"
+          stroke={color}
+          stroke-width="1.5"
+          stroke-linecap="round"
+        ></path>{" "}
+        <path
+          d="M10 12H20M20 12L17 9M20 12L17 15"
+          stroke={color}
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        ></path>{" "}
+      </g>
+    </svg>
   );
 };
 

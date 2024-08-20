@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import PlusIcon from "../icons/PlusIcon";
 import SearchIcon from "../icons/SearchIcon";
-import Validity from "./Validity";
+import Validity from "../util/Validity";
 import EditIcon from "../icons/EditIcon";
 import DeleteIcon from "../icons/DeleteIcon";
 import Pagination from "../icons/Pagination";
 import axios from "axios";
 import ExportIcon from "../icons/ImportIcon";
-import UserModalV2 from "./UserModalV2";
+import UserModal from "../modals/UserModal";
 import toast from "react-hot-toast";
 import formatXml from "xml-formatter";
 
@@ -216,7 +216,7 @@ const StudentListContent = ({
     >
       <div>
         {isEditActive && (
-          <UserModalV2
+          <UserModal
             mode={"edit"}
             colorModeColors={colorModeColors}
             studentId={studentId}
@@ -234,7 +234,7 @@ const StudentListContent = ({
           />
         )}
         {isAddStudentActive && (
-          <UserModalV2
+          <UserModal
             mode={"add"}
             colorModeColors={colorModeColors}
             modalTitle={"Add student"}
@@ -488,7 +488,7 @@ const StudentListContent = ({
               .map((student) => (
                 <tr key={student.id}>
                   <td
-                    className="p-5 border-b-2 font-bold font-inter h-18"
+                    className="p-5 border-b-2 font-bold font-inter h-18 xl:text-sm 2xl:text-base"
                     style={{
                       borderColor: colorModeColors.tableBorder,
                       color: colorModeColors.tableContent,
@@ -497,7 +497,7 @@ const StudentListContent = ({
                     {student.id}
                   </td>
                   <td
-                    className="p-5 border-b-2 font-inter h-18"
+                    className="p-5 border-b-2 font-inter h-18 xl:text-sm 2xl:text-base"
                     style={{
                       borderColor: colorModeColors.tableBorder,
                       color: colorModeColors.tableContent,
@@ -506,7 +506,7 @@ const StudentListContent = ({
                     {student.firstName}
                   </td>
                   <td
-                    className="p-5 border-b-2 font-inter h-18"
+                    className="p-5 border-b-2 font-inter h-18 xl:text-sm 2xl:text-base"
                     style={{
                       borderColor: colorModeColors.tableBorder,
                       color: colorModeColors.tableContent,
@@ -515,7 +515,7 @@ const StudentListContent = ({
                     {student.lastName}
                   </td>
                   <td
-                    className="p-5 border-b-2 font-inter h-18"
+                    className="p-5 border-b-2 font-inter h-18 xl:text-sm 2xl:text-base"
                     style={{
                       borderColor: colorModeColors.tableBorder,
                       color: colorModeColors.tableContent,
@@ -524,7 +524,7 @@ const StudentListContent = ({
                     {mapDateToVerboseString(student.birthDate)}
                   </td>
                   <td
-                    className="p-5 border-b-2 font-inter h-18"
+                    className="p-5 border-b-2 font-inter h-18 xl:text-sm 2xl:text-base"
                     style={{
                       borderColor: colorModeColors.tableBorder,
                       color: colorModeColors.tableContent,
@@ -533,7 +533,7 @@ const StudentListContent = ({
                     {student.placeOfBirth}
                   </td>
                   <td
-                    className="p-5 border-b-2 font-inter h-18"
+                    className="p-5 border-b-2 font-inter h-18 xl:text-sm 2xl:text-base"
                     style={{
                       borderColor: colorModeColors.tableBorder,
                       color: colorModeColors.tableContent,
@@ -542,7 +542,7 @@ const StudentListContent = ({
                     {student.countryOfCitizenship}
                   </td>
                   <td
-                    className="p-5 border-b-2 font-inter h-18"
+                    className="p-5 border-b-2 font-inter h-18 xl:text-sm 2xl:text-base"
                     style={{
                       borderColor: colorModeColors.tableBorder,
                       color: colorModeColors.tableContent,
@@ -551,7 +551,7 @@ const StudentListContent = ({
                     {student.gender}
                   </td>
                   <td
-                    className="p-5 border-b-2 font-inter h-18"
+                    className="p-5 border-b-2 font-inter h-18 xl:text-sm 2xl:text-base"
                     style={{
                       borderColor: colorModeColors.tableBorder,
                       color: colorModeColors.tableContent,
@@ -560,7 +560,7 @@ const StudentListContent = ({
                     {student.passportNumber}
                   </td>
                   <td
-                    className="p-5 border-b-2 2xl:block font-inter h-18"
+                    className="p-5 border-b-2 2xl:block font-inter h-18 xl:text-sm 2xl:text-base"
                     style={{
                       borderColor: colorModeColors.tableBorder,
                       color: colorModeColors.tableContent,
@@ -569,7 +569,7 @@ const StudentListContent = ({
                     {mapDateToVerboseString(student.passportDateOfIssue)}
                   </td>
                   <td
-                    className="p-5 border-b-2 font-inter h-18"
+                    className="p-5 border-b-2 font-inter h-18 xl:text-sm 2xl:text-base"
                     style={{
                       borderColor: colorModeColors.tableBorder,
                       color: colorModeColors.tableContent,

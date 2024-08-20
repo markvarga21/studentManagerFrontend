@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-const RegisterV2 = ({ colorModeColors, API_URL }) => {
+const Register = ({ colorModeColors, API_URL }) => {
   const navigate = useNavigate();
   const [userRegisterDetails, setUserRegisterDetails] = useState({
     username: "",
@@ -216,4 +216,4 @@ const RegisterV2 = ({ colorModeColors, API_URL }) => {
   );
 };
 
-export default RegisterV2;
+export default Register;

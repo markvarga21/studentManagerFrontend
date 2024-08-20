@@ -1,5 +1,5 @@
 import React from "react";
-import ValidationIcon from "./ValidationIcon";
+import ValidationIcon from "../icons/ValidationIcon";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 

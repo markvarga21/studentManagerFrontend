@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
-const RadioButtonGroupV2 = ({
+const RadioButtonGroup = ({
   colorModeColors,
   studentImages,
   setActualImage,
@@ -87,4 +87,4 @@ const RadioButtonGroupV2 = ({
   );
 };
 
-export default RadioButtonGroupV2;
+export default RadioButtonGroup;

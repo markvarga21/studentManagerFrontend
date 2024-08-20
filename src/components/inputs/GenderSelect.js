@@ -1,16 +1,16 @@
 import React from "react";
 
-const DatePickerV2 = ({
-  colorModeColors,
+const GenderSelect = ({
   id,
   label,
+  colorModeColors,
   onChange,
   errorFields,
   acceptReplacement,
 }) => {
   const RED_HEX = "#F44336";
   return (
-    <div className="w-full">
+    <div className="w-full gender-select-container">
       <div className="flex justify-between">
         <label
           htmlFor={id}
@@ -33,10 +33,9 @@ const DatePickerV2 = ({
           </div>
         )}
       </div>
-      <input
-        type="date"
+      <select
         id={id}
-        className="date block p-3 pl-6 text-sm font-inter font-semibold text-gray-900 border-2 border-gray rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-creme placeholder-red"
+        className="gender-select block p-3 pl-6 text-sm font-inter font-semibold text-gray-900 border-2 border-gray rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-creme appearance-none"
         style={{
           borderColor: colorModeColors.buttonBorder,
           backgroundColor: errorFields[id].error
@@ -44,11 +43,25 @@ const DatePickerV2 = ({
             : colorModeColors.buttonBackGround,
           color: errorFields[id].error ? "white" : colorModeColors.inputText,
         }}
-        autoComplete="off"
+        defaultValue={""}
         onChange={onChange}
-      />
+      >
+        <option
+          id="gender"
+          style={{ color: colorModeColors.inputText }}
+          className="text-base"
+        >
+          -
+        </option>
+        <option key="male" value="MALE" className="text-base h-10 pt-5 pb-5">
+          Male
+        </option>
+        <option key="female" value="FEMALE" className="text-base">
+          Female
+        </option>
+      </select>
     </div>
   );
 };
 
-export default DatePickerV2;
+export default GenderSelect;

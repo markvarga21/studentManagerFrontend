@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-const InputV2 = ({
+const DatePicker = ({
   colorModeColors,
   id,
   label,
-  placeholder,
   onChange,
   errorFields,
   acceptReplacement,
@@ -35,9 +34,9 @@ const InputV2 = ({
         )}
       </div>
       <input
-        type="text"
+        type="date"
         id={id}
-        className="block p-3 pl-6 text-sm font-inter font-semibold text-gray-900 border-2 border-gray rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-creme"
+        className="date block p-3 pl-6 text-sm font-inter font-semibold text-gray-900 border-2 border-gray rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-creme placeholder-red"
         style={{
           borderColor: colorModeColors.buttonBorder,
           backgroundColor: errorFields[id].error
@@ -46,11 +45,10 @@ const InputV2 = ({
           color: errorFields[id].error ? "white" : colorModeColors.inputText,
         }}
         autoComplete="off"
-        placeholder={placeholder}
         onChange={onChange}
       />
     </div>
   );
 };
 
-export default InputV2;
+export default DatePicker;

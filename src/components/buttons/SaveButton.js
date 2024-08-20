@@ -1,7 +1,7 @@
 import React from "react";
-import SaveIconV2 from "../icons/SaveIconV2";
+import SaveIcon from "../icons/SaveIcon";
 
-const SaveButtonV2 = ({ buttonTitle, onClick }) => {
+const SaveButton = ({ buttonTitle, onClick }) => {
   return (
     <button
       id="saveButton"
@@ -11,9 +11,9 @@ const SaveButtonV2 = ({ buttonTitle, onClick }) => {
       <span className="font-inter font-semibold select-none 2xl:text-base xl:text-base md:text-sm">
         {buttonTitle}
       </span>
-      <SaveIconV2 />
+      <SaveIcon />
     </button>
   );
 };
 
-export default SaveButtonV2;
+export default SaveButton;

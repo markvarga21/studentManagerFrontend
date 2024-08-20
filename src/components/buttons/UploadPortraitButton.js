@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import UploadIconV2 from "../icons/UploadIconV2";
+import UploadIcon from "../icons/UploadIcon";
 
 const UploadPortraitButton = ({
   studentImages,
@@ -44,7 +44,7 @@ const UploadPortraitButton = ({
         <span className="font-inter font-semibold select-none 2xl:text-base xl:text-base md:text-sm">
           {studentImages.portrait ? "Change Portrait" : "Upload Portrait"}
         </span>
-        <UploadIconV2 />
+        <UploadIcon />
       </button>
     </div>
   );
