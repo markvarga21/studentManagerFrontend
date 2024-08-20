@@ -10,9 +10,9 @@ jobs:
     name: Application build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@pages
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@pages
         with:
           node-version: "18"
       - name: Install dependencies
@@ -20,11 +20,11 @@ jobs:
       - name: Build React application
         run: npm run build
       - name: Save artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@pages
         with:
           name: build-artifact
           path: build
-      - name: Docker Hub login
+      - name: Docker Hub auth
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}

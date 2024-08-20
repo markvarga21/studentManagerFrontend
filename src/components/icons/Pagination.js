@@ -31,7 +31,7 @@ const Pagination = ({
         if (err.response.status === 401) {
           localStorage.removeItem("user");
           setUser(null);
-          window.location.href = "/login";
+          window.location.href = "/auth";
         }
       });
     if (page !== "...") {

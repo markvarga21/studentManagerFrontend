@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import UploadIconV2 from "../icons/UploadIconV2";
+import UploadIcon from "../icons/UploadIcon";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -115,7 +115,7 @@ const UploadPassportButton = ({
         <span className="font-inter font-semibold select-none 2xl:text-base xl:text-base md:text-sm">
           {studentImages.passport ? "Change Passport" : "Upload Passport"}
         </span>
-        <UploadIconV2 />
+        <UploadIcon />
       </button>
     </div>
   );

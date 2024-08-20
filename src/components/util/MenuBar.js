@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ModeNav from "../icons/ModeNav";
 import GearIcon from "../icons/GearIcon";
-import LogoutIconV2 from "../icons/LogoutIconV2";
+import LogoutIcon from "../icons/LogoutIcon";
 import { Link, useNavigate } from "react-router-dom";
 import { Tooltip } from "react-tooltip";
 import axios from "axios";
@@ -406,7 +406,7 @@ const MenuBar = ({
                 ICON_SIZES={ICON_SIZES}
               />
               {user ? (
-                <LogoutIconV2
+                <LogoutIcon
                   color={svgColors.userNav}
                   ICON_SIZES={ICON_SIZES}
                   handleLogout={handleLogout}

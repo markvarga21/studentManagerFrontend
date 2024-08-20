@@ -1,18 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import CloseIcon from "../icons/CloseIcon";
-import SaveButtonV2 from "./SaveButtonV2";
-import UploadPassportButton from "./UploadPassportButton";
-import UploadPortraitButton from "./UploadPortraitButton";
-import InputV2 from "./InputV2";
-import DatePickerV2 from "./DatePickerV2";
-import GenderSelectV2 from "./GenderSelectV2";
-import RadioButtonGroupV2 from "./RadioButtonGroupV2";
+import SaveButton from "../buttons/SaveButton";
+import UploadPassportButton from "../buttons/UploadPassportButton";
+import UploadPortraitButton from "../buttons/UploadPortraitButton";
+import Input from "../inputs/Input";
+import DatePicker from "../inputs/DatePicker";
+import GenderSelect from "../inputs/GenderSelect";
+import RadioButtonGroup from "../buttons/RadioButtonGroup";
 import axios from "axios";
 import toast from "react-hot-toast";
-import Loading from "./Loading";
-import ValidationButtons from "./ValidationButtons";
+import Loading from "../util/Loading";
+import ValidationButtons from "../buttons/ValidationButtons";
 
-const UserModalV2 = ({
+const UserModal = ({
   mode,
   colorModeColors,
   studentId,
@@ -649,7 +649,7 @@ const UserModalV2 = ({
             id="left"
             className="flex-grow w-full xl:w-auto flex flex-col gap-3"
           >
-            <InputV2
+            <Input
               id={"firstName"}
               label={"First Name"}
               colorModeColors={colorModeColors}
@@ -658,7 +658,7 @@ const UserModalV2 = ({
               errorFields={errorFields}
               acceptReplacement={acceptReplacement}
             />
-            <InputV2
+            <Input
               id={"lastName"}
               label={"Last Name"}
               colorModeColors={colorModeColors}
@@ -668,7 +668,7 @@ const UserModalV2 = ({
               acceptReplacement={acceptReplacement}
             />
             <div className="flex gap-2 justify-stretch">
-              <DatePickerV2
+              <DatePicker
                 id={"birthDate"}
                 label={"Birthdate"}
                 colorModeColors={colorModeColors}
@@ -676,7 +676,7 @@ const UserModalV2 = ({
                 errorFields={errorFields}
                 acceptReplacement={acceptReplacement}
               />
-              <GenderSelectV2
+              <GenderSelect
                 id={"gender"}
                 label={"Gender"}
                 colorModeColors={colorModeColors}
@@ -685,7 +685,7 @@ const UserModalV2 = ({
                 acceptReplacement={acceptReplacement}
               />
             </div>
-            <InputV2
+            <Input
               id="placeOfBirth"
               label="Place of Birth"
               colorModeColors={colorModeColors}
@@ -699,7 +699,7 @@ const UserModalV2 = ({
             id="middle"
             className="flex-grow w-full xl:w-auto flex flex-col gap-3"
           >
-            <InputV2
+            <Input
               id={"countryOfCitizenship"}
               label={"Country of Citizenship"}
               colorModeColors={colorModeColors}
@@ -708,7 +708,7 @@ const UserModalV2 = ({
               errorFields={errorFields}
               acceptReplacement={acceptReplacement}
             />
-            <InputV2
+            <Input
               id={"passportNumber"}
               label={"Passport number"}
               colorModeColors={colorModeColors}
@@ -717,7 +717,7 @@ const UserModalV2 = ({
               errorFields={errorFields}
               acceptReplacement={acceptReplacement}
             />
-            <DatePickerV2
+            <DatePicker
               id={"passportDateOfIssue"}
               label={"Date of issue"}
               colorModeColors={colorModeColors}
@@ -725,7 +725,7 @@ const UserModalV2 = ({
               errorFields={errorFields}
               acceptReplacement={acceptReplacement}
             />
-            <DatePickerV2
+            <DatePicker
               id={"passportDateOfExpiry"}
               label={"Date of expiry"}
               colorModeColors={colorModeColors}
@@ -738,7 +738,7 @@ const UserModalV2 = ({
             id="right"
             className="flex-grow w-full xl:w-auto flex flex-col items-center justify-evenly gap-3"
           >
-            <RadioButtonGroupV2
+            <RadioButtonGroup
               colorModeColors={colorModeColors}
               studentImages={studentImages}
               setActualImage={setActualImage}
@@ -764,7 +764,7 @@ const UserModalV2 = ({
           id="buttonGroup"
           className="w-full flex justify-between gap-10 max-h-10"
         >
-          <SaveButtonV2
+          <SaveButton
             buttonTitle={buttonTitle}
             onClick={isAddStudentActive ? handleSaveClick : handleStudentUpdate}
           />
@@ -821,4 +821,4 @@ const UserModalV2 = ({
   );
 };
 
-export default UserModalV2;
+export default UserModal;

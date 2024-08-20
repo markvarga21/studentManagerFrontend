@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-const LoginV2 = ({
+const Login = ({
   colorModeColors,
   API_URL,
   userWasModified,
@@ -136,4 +136,4 @@ const LoginV2 = ({
   );
 };
 
-export default LoginV2;
+export default Login;
