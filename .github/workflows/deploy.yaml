@@ -10,9 +10,9 @@ jobs:
     name: Application build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@pages
+      - uses: actions/checkout@v3
       - name: Set up Node.js
-        uses: actions/setup-node@pages
+        uses: actions/setup-node@v3
         with:
           node-version: "18"
       - name: Install dependencies
@@ -20,7 +20,7 @@ jobs:
       - name: Build React application
         run: npm run build
       - name: Save artifact
-        uses: actions/upload-artifact@pages
+        uses: actions/upload-artifact@v3
         with:
           name: build-artifact
           path: build
