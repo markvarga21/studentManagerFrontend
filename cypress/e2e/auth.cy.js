@@ -45,6 +45,13 @@ describe('register test', () => {
         cy.visit('http://localhost:3000/register');
     })
 
+    after(() => {
+        cy.fixture("user").then(user => {
+            cy.login(Cypress.env("username"), Cypress.env("password"));
+            cy.deleteUser(user.username);
+        });
+    })
+
     it('should render the register page', () => {
         cy.get('[data-testid="register-title"]')
             .should('exist')
@@ -81,8 +88,6 @@ describe('register test', () => {
             cy.get('[data-testid="register-button"]')
                 .click();
             cy.wait(1000);
-            cy.login(Cypress.env("username"), Cypress.env("password"));
-            cy.deleteUser(user.username);
         })
     })
 })

@@ -1,0 +1,260 @@
+{
+  "stats": {
+    "suites": 2,
+    "tests": 8,
+    "passes": 8,
+    "pending": 0,
+    "failures": 0,
+    "start": "2024-08-22T16:55:51.530Z",
+    "end": "2024-08-22T16:56:23.578Z",
+    "duration": 32048,
+    "testsRegistered": 8,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "55b3eaf2-bce4-46de-86cd-678fd497c513",
+      "title": "",
+      "fullFile": "cypress\\e2e\\myData.cy.js",
+      "file": "cypress\\e2e\\myData.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "1cff9dc9-dd45-4ce1-88e2-2c49f9b67d35",
+          "title": "user pages render test",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "should render the home page",
+              "fullTitle": "user pages render test should render the home page",
+              "timedOut": null,
+              "duration": 4991,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.fixture(\"user\").then(user => {\n  cy.get('[data-testid=\"home-title\"]').should('exist').should('have.text', `Welcome, ${user.username}!`);\n});",
+              "err": {},
+              "uuid": "7bde587f-347f-4ee8-b1f9-84e73cfd195d",
+              "parentUUID": "1cff9dc9-dd45-4ce1-88e2-2c49f9b67d35",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "should render the user my data page",
+              "fullTitle": "user pages render test should render the user my data page",
+              "timedOut": null,
+              "duration": 1324,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-testid=\"data-nav\"]').click();\ncy.get('[data-testid=\"myData-title\"]').should('exist').should('have.text', 'My data');",
+              "err": {},
+              "uuid": "6443b966-9dc3-465a-b678-9d6b6fb6c52a",
+              "parentUUID": "1cff9dc9-dd45-4ce1-88e2-2c49f9b67d35",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "should render the report page",
+              "fullTitle": "user pages render test should render the report page",
+              "timedOut": null,
+              "duration": 1392,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-testid=\"report-nav\"]').click();\ncy.get('[data-testid=\"report-title\"]').should('exist').should('have.text', 'Report a problem');",
+              "err": {},
+              "uuid": "1381a0f7-9702-459f-8d62-4b324a95c395",
+              "parentUUID": "1cff9dc9-dd45-4ce1-88e2-2c49f9b67d35",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "should log out the user",
+              "fullTitle": "user pages render test should log out the user",
+              "timedOut": null,
+              "duration": 1447,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-testid=\"settings-button\"]').click();\ncy.get('[data-testid=\"logout-icon\"]').click();\ncy.url().should('eql', 'http://localhost:3000/');\ncy.get('[data-testid=\"home-title\"]').should('exist').should('have.text', 'Welcome!');",
+              "err": {},
+              "uuid": "85cfe0d5-5610-444f-aa69-f27028c32cac",
+              "parentUUID": "1cff9dc9-dd45-4ce1-88e2-2c49f9b67d35",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "7bde587f-347f-4ee8-b1f9-84e73cfd195d",
+            "6443b966-9dc3-465a-b678-9d6b6fb6c52a",
+            "1381a0f7-9702-459f-8d62-4b324a95c395",
+            "85cfe0d5-5610-444f-aa69-f27028c32cac"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 9154,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        },
+        {
+          "uuid": "111ee41a-0356-40fc-955d-273cc4d20edb",
+          "title": "user data",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "should render add data page",
+              "fullTitle": "user data should render add data page",
+              "timedOut": null,
+              "duration": 4481,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-testid=\"data-nav\"]').click();\ncy.get('[data-testid=\"addData-button\"]').click();",
+              "err": {},
+              "uuid": "b8bfb7ac-497d-42b2-929e-1912875dd172",
+              "parentUUID": "111ee41a-0356-40fc-955d-273cc4d20edb",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "should upload passport",
+              "fullTitle": "user data should upload passport",
+              "timedOut": null,
+              "duration": 6720,
+              "state": "passed",
+              "speed": "medium",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.intercept('POST', '/api/v1/form/extractData').as('extractData');\ncy.get('[data-testid=\"data-nav\"]').click();\ncy.get('[data-testid=\"addData-button\"]').click();\ncy.get('[data-testid=\"uploadPassport-button\"]').should('exist').click();\ncy.get('[data-testid=\"passport-input\"]').selectFile('cypress/fixtures/passport.jpg', {\n  force: true\n});\ncy.wait('@extractData').then(() => {\n  cy.get('[data-testid=\"passport-input\"]').should('exist').invoke('val').should('not.be.empty');\n});",
+              "err": {},
+              "uuid": "3af3218b-35a8-426a-87b6-5d58091c9535",
+              "parentUUID": "111ee41a-0356-40fc-955d-273cc4d20edb",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "should upload portrait",
+              "fullTitle": "user data should upload portrait",
+              "timedOut": null,
+              "duration": 1614,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-testid=\"data-nav\"]').click();\ncy.get('[data-testid=\"addData-button\"]').click();\ncy.get('[data-testid=\"uploadPortrait-button\"]').should('exist').click();\ncy.get('[data-testid=\"portrait-input\"]').selectFile('cypress/fixtures/portrait.jpg', {\n  force: true\n});\ncy.get('[data-testid=\"portrait-input\"]').should('exist').invoke('val').should('not.be.empty');",
+              "err": {},
+              "uuid": "ccd9f12f-c8ed-48ed-ad39-f731d2e88d54",
+              "parentUUID": "111ee41a-0356-40fc-955d-273cc4d20edb",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "should extract data from passport",
+              "fullTitle": "user data should extract data from passport",
+              "timedOut": null,
+              "duration": 6785,
+              "state": "passed",
+              "speed": "medium",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.intercept('POST', '/api/v1/form/extractData').as('extractData');\ncy.get('[data-testid=\"data-nav\"]').click();\ncy.get('[data-testid=\"addData-button\"]').click();\ncy.get('[data-testid=\"addData-title\"]').should('exist').should('have.text', 'Add student');\ncy.get('[data-testid=\"uploadPassport-button\"]').should('exist').click();\ncy.get('[data-testid=\"passport-input\"]').selectFile('cypress/fixtures/passport.jpg', {\n  force: true\n});\ncy.wait('@extractData').then(interception => {\n  cy.verifyAddDataFields();\n});",
+              "err": {},
+              "uuid": "d20d06b8-3546-4647-8856-27d8afa3207a",
+              "parentUUID": "111ee41a-0356-40fc-955d-273cc4d20edb",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "b8bfb7ac-497d-42b2-929e-1912875dd172",
+            "3af3218b-35a8-426a-87b6-5d58091c9535",
+            "ccd9f12f-c8ed-48ed-ad39-f731d2e88d54",
+            "d20d06b8-3546-4647-8856-27d8afa3207a"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 19600,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "index",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "docs/cypress",
+        "charts": true,
+        "reportFilename": "index",
+        "overwrite": true,
+        "html": true,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

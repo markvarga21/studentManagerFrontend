@@ -1,15 +1,7 @@
 describe('user pages render test', () => {
     before(() => {
         cy.register();
-    });
-
-    after(() => {
-        cy.fixture("user").then((user) => {
-            cy.login(Cypress.env("username"), Cypress.env("password"));
-            cy.deleteUser(user.username);
-        })
     })
-
     beforeEach(() => {
         cy.fixture("user").then(user => {
             cy.visit('http://localhost:3000/login');
@@ -19,6 +11,12 @@ describe('user pages render test', () => {
                 .type(user.password);
             cy.get('[data-testid="login-button"]')
                 .click();
+        })
+    })
+    after(() => {
+        cy.fixture("user").then((user) => {
+            cy.login(Cypress.env("username"), Cypress.env("password"));
+            cy.deleteUser(user.username);
         })
     })
 
@@ -61,13 +59,6 @@ describe('user pages render test', () => {
 describe('user data', () => {
     before(() => {
         cy.register();
-    });
-
-    after(() => {
-        cy.fixture("user").then((user) => {
-            cy.login(Cypress.env("username"), Cypress.env("password"));
-            cy.deleteUser(user.username);
-        })
     })
 
     beforeEach(() => {
@@ -81,6 +72,13 @@ describe('user data', () => {
                 .click();
         })
     })
+
+    after(() => {
+        cy.fixture("user").then((user) => {
+            cy.login(Cypress.env("username"), Cypress.env("password"));
+            cy.deleteUser(user.username);
+        })
+    });
 
     it('should render add data page', () => {
         cy.get('[data-testid="data-nav"]')

@@ -7,5 +7,14 @@ module.exports = defineConfig({
     },
     viewportWidth: 1920,
     viewportHeight: 1080,
+    reporter: 'mochawesome',
+    reporterOptions: {
+      reportDir: 'docs/cypress',
+      charts: true,
+      reportFilename: 'index',
+      overwrite: true,
+      html: true,
+      json: true,
+    },
   },
 });

@@ -24,12 +24,21 @@ Cypress.Commands.add('deleteUser', (username) => {
 })
 
 Cypress.Commands.add('register', () => {
-    cy.fixture("user").then(user => {
-        cy.request({
-            method: 'POST',
-            url: 'http://localhost:8080/api/v1/auth/register',
-            body: user
-        })
+    cy.visit('http://localhost:3000/register');
+    cy.fixture("user").then((user) => {
+        cy.get('[data-testid="register-username"]')
+            .type(user.username);
+        cy.get('[data-testid="register-email"]')
+            .type(user.email);
+        cy.get('[data-testid="register-firstName"]')
+            .type(user.firstName);
+        cy.get('[data-testid="register-lastName"]')
+            .type(user.lastName);
+        cy.get('[data-testid="register-password"]')
+            .type(user.password);
+        cy.get('[data-testid="register-button"]')
+            .click();
+        cy.wait(1000);
     })
 })
 
