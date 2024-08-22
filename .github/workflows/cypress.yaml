@@ -20,10 +20,7 @@ jobs:
         run: npm run build
       - name: Run Cypress tests
         run: npx cypress run
-        env:
-          CYPRESS_ENV: 'production'
       - name: Deploy to GitHub Pages
-        if: success()
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
