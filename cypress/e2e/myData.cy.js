@@ -131,13 +131,8 @@ describe('user data', () => {
         cy.get('[data-testid="addData-title"]')
             .should('exist')
             .should('have.text', 'Add student');
-        cy.get('[data-testid="uploadPassport-button"]')
-            .should('exist')
-            .click();
-        cy.get('[data-testid="passport-input"]')
-            .selectFile('cypress/fixtures/passport.jpg', { force: true });
-        cy.wait('@extractData').then((interception) => {
+        cy.extractDataFromPassport(() => {
             cy.verifyAddDataFields();
-        });
+        })
     });
 });

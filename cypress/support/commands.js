@@ -64,3 +64,27 @@ Cypress.Commands.add('verifyAddDataFields', () => {
             .should('have.value', student.passportDateOfIssue);
     });
 })
+
+Cypress.Commands.add('manualLogin', () => {
+    cy.visit('http://localhost:3000/login');
+    const username = Cypress.env("username");
+    const password = Cypress.env("password");
+    cy.fixture("user").then(user => {
+        cy.get('[data-testid="login-username"]')
+            .type(username);
+        cy.get('[data-testid="login-password"]')
+            .type(password);
+        cy.get('[data-testid="login-button"]')
+            .click();
+    });
+})
+
+Cypress.Commands.add('extractDataFromPassport', (afterFunc) => {
+    cy.intercept('POST', '/api/v1/form/extractData').as('extractData');
+    cy.get('[data-testid="uploadPassport-button"]')
+        .should('exist')
+        .click();
+    cy.get('[data-testid="passport-input"]')
+        .selectFile('cypress/fixtures/passport.jpg', { force: true });
+    cy.wait('@extractData').then(afterFunc);
+})

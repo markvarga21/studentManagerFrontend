@@ -25,6 +25,7 @@ const DatePicker = ({
               className={`${id} hover:cursor-pointer underline`}
               onClick={acceptReplacement}
               style={{ color: colorModeColors.inputText }}
+              data-testid={`accept-replacement-for-${id}`}
             >
               Accept
             </div>

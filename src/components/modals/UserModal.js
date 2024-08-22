@@ -764,7 +764,7 @@ const UserModal = ({
               className="w-48 h-48 object-cover rounded-lg"
             />
             {isEditActive ? (
-              <div style={{ color: colorModeColors.inputText }}>
+              <div style={{ color: colorModeColors.inputText }} data-testid={"facial-validity"}>
                 {facialValidity}
               </div>
             ) : (
