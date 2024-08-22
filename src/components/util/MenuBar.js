@@ -384,6 +384,7 @@ const MenuBar = ({
           e.stopPropagation();
           setSettingsAreOpen(!settingsAreOpen);
         }}
+        data-testid={"settings-button"}
       >
         <div
           className="flex-col pb-5"
