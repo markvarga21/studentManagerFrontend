@@ -7,6 +7,7 @@ const DatePicker = ({
   onChange,
   errorFields,
   acceptReplacement,
+  testId
 }) => {
   const RED_HEX = "#F44336";
   return (
@@ -46,6 +47,7 @@ const DatePicker = ({
         }}
         autoComplete="off"
         onChange={onChange}
+        data-testid={testId}
       />
     </div>
   );

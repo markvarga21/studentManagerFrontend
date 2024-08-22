@@ -7,6 +7,7 @@ const GenderSelect = ({
   onChange,
   errorFields,
   acceptReplacement,
+  testId
 }) => {
   const RED_HEX = "#F44336";
   return (
@@ -45,6 +46,7 @@ const GenderSelect = ({
         }}
         defaultValue={""}
         onChange={onChange}
+        data-testid={testId}
       >
         <option
           id="gender"

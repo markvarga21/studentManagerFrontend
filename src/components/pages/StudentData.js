@@ -186,7 +186,7 @@ const StudentData = ({
           style={{ color: colorModeColors.title }}
         >
           <div className="flex items-start gap-2">
-            <span>My data</span>
+            <span data-testid={"myData-title"}>My data</span>
             <Validity
               validity={userData.valid !== "" ? userData.valid : "Invalid"}
               colorModeColors={colorModeColors}
@@ -266,6 +266,7 @@ const StudentData = ({
           id="addButton"
           className="flex items-center gap-2 pt-2 pb-2 pl-4 pr-4 ml-32 bg-creme rounded-xl hover:cursor-pointer shadow-xl"
           onClick={() => setIsModalActive(true)}
+          data-testid={"addData-button"}
         >
           {userData.id === "" ? <PlusIcon /> : <EditIcon basic={true} />}
 

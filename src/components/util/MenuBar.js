@@ -279,6 +279,7 @@ const MenuBar = ({
                       : DEFAULT_BACKGROUND_COLOR,
                 }}
                 onClick={handleNavClick}
+                data-testid={"data-nav"}
               >
                 <svg
                   viewBox="0 0 1024 1024"
@@ -339,6 +340,7 @@ const MenuBar = ({
                       : DEFAULT_BACKGROUND_COLOR,
                 }}
                 onClick={handleNavClick}
+                data-testid={"report-nav"}
               >
                 <svg
                   viewBox="0 0 24 24"

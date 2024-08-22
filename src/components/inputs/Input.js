@@ -8,6 +8,7 @@ const Input = ({
   onChange,
   errorFields,
   acceptReplacement,
+  testId
 }) => {
   const RED_HEX = "#F44336";
   return (
@@ -48,6 +49,7 @@ const Input = ({
         autoComplete="off"
         placeholder={placeholder}
         onChange={onChange}
+        data-testid={testId}
       />
     </div>
   );
