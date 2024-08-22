@@ -1,4 +1,4 @@
-describe('user pages render test', () => {
+describe('User pages render test', () => {
     before(() => {
         cy.register();
     })
@@ -56,7 +56,7 @@ describe('user pages render test', () => {
     })
 });
 
-describe('user data', () => {
+describe('User data', () => {
     before(() => {
         cy.register();
     })

@@ -1,4 +1,4 @@
-describe('handling students', () => {
+describe('Handling students', () => {
     beforeEach(() => {
         cy.manualLogin();
         cy.get('[data-testid="data-nav"]')
