@@ -71,10 +71,8 @@ const Register = ({ colorModeColors, API_URL }) => {
             password: "",
           });
           setIsWaiting(true);
-          setTimeout(() => {
-            navigate("/login");
-            setIsWaiting(false);
-          }, 2000);
+          navigate("/login");
+          setIsWaiting(false);
         }
       })
       .catch((err) => {
@@ -96,7 +94,7 @@ const Register = ({ colorModeColors, API_URL }) => {
         className="text-4xl font-inter font-bold select-none p-12 flex flex-col items-center gap-12 2xl:w-1/3 xl:w-1/2 lg:w-2/3"
         style={{ color: colorModeColors.title }}
       >
-        <span>Sign up</span>
+        <span data-testid={"register-title"}>Sign up</span>
         <form
           className="w-full flex flex-col gap-3 h-full"
           onSubmit={handleRegisterSubmit}
@@ -119,6 +117,7 @@ const Register = ({ colorModeColors, API_URL }) => {
               color: colorModeColors.inputText,
             }}
             autoComplete="off"
+            data-testid={"register-username"}
           />
           <label
             htmlFor="register-email"
@@ -137,6 +136,7 @@ const Register = ({ colorModeColors, API_URL }) => {
               color: colorModeColors.inputText,
             }}
             autoComplete="off"
+            data-testid={"register-email"}
           />
           <label
             htmlFor="register-firstName"
@@ -155,6 +155,7 @@ const Register = ({ colorModeColors, API_URL }) => {
               color: colorModeColors.inputText,
             }}
             autoComplete="off"
+            data-testid={"register-firstName"}
           />
           <label
             htmlFor="register-lastName"
@@ -172,6 +173,7 @@ const Register = ({ colorModeColors, API_URL }) => {
               backgroundColor: colorModeColors.buttonBackGround,
               color: colorModeColors.inputText,
             }}
+            data-testid={"register-lastName"}
           />
           <label
             htmlFor="register-password"
@@ -190,6 +192,7 @@ const Register = ({ colorModeColors, API_URL }) => {
               color: colorModeColors.inputText,
             }}
             autoComplete="off"
+            data-testid={"register-password"}
           />
           <button
             className={
@@ -198,6 +201,7 @@ const Register = ({ colorModeColors, API_URL }) => {
             }
             type="submit"
             disabled={isWaiting}
+            data-testid={"register-button"}
           >
             Register
           </button>

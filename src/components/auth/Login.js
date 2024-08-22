@@ -68,12 +68,12 @@ const Login = ({
       className="w-full h-full flex flex-col justify-center items-center pt-12 pb-56"
       style={{ backgroundColor: colorModeColors.bg }}
     >
-      <Toaster />
+      <Toaster data-testid={"login-toaster"} />
       <div
         className="text-4xl font-inter font-bold select-none p-12 flex flex-col items-center gap-12 2xl:w-1/3 xl:w-1/2 lg:w-2/3 h-full"
         style={{ color: colorModeColors.title }}
       >
-        <span>Login</span>
+        <span data-testid={"login-title"}>Login</span>
         <form
           className="w-full flex flex-col gap-3 h-full"
           onSubmit={handleLoginSubmit}
@@ -96,6 +96,7 @@ const Login = ({
               color: colorModeColors.inputText,
             }}
             autoComplete="off"
+            data-testid={"login-username"}
           />
           <label
             htmlFor="login-password"
@@ -114,10 +115,12 @@ const Login = ({
               color: colorModeColors.inputText,
             }}
             autoComplete="off"
+            data-testid={"login-password"}
           />
           <button
             className="mt-5 pt-2 pb-2 pl-4 pr-4 bg-creme rounded-xl hover:cursor-pointer shadow-xl text-black text-base focus:ring-4 focus:ring-lightCreme focus:ring-opacity-80 focus:outline-none"
             type="submit"
+            data-testid={"login-button"}
           >
             Login
           </button>
@@ -126,6 +129,7 @@ const Login = ({
             <a
               className="font-bold hover:cursor-pointer"
               onClick={navigateToRegister}
+              data-testid={"register-link"}
             >
               Sign Up
             </a>

@@ -302,6 +302,7 @@ const StudentListContent = ({
               id="addButton"
               className="flex items-center gap-2 mr-20 pt-2 pb-2 pl-4 pr-4 bg-creme rounded-xl hover:cursor-pointer shadow-xl focus:ring-4 focus:ring-lightCreme focus:ring-opacity-80 focus:outline-none"
               onClick={() => setIsAddStudentActive(true)}
+              data-testid={"admin-addData-button"}
             >
               <PlusIcon />
               <span className="font-inter font-semibold select-none">
@@ -324,6 +325,7 @@ const StudentListContent = ({
             className="hidden"
             defaultChecked
             onChange={handleStatusChange}
+            data-testid={"all-filterButton"}
           />
           <label
             htmlFor="all"
@@ -339,6 +341,7 @@ const StudentListContent = ({
             value="Valid"
             className="hidden"
             onChange={handleStatusChange}
+            data-testid={"valid-filterButton"}
           />
           <label
             htmlFor="valid"
@@ -354,6 +357,7 @@ const StudentListContent = ({
             value="Invalid"
             className="hidden"
             onChange={handleStatusChange}
+            data-testid={"invalid-filterButton"}
           />
           <label
             htmlFor="invalid"
@@ -434,7 +438,7 @@ const StudentListContent = ({
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody data-testid={"student-list"}>
             {students
               .filter((student) => {
                 if (filter === "All") {

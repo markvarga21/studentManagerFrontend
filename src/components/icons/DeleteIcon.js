@@ -31,6 +31,7 @@ const DeleteIcon = ({
     <div
       className="hover:cursor-pointer h-full"
       onClick={!basic ? handleDeleteClick : null}
+      data-testid={"delete-icon"}
     >
       <Toaster />
       <svg

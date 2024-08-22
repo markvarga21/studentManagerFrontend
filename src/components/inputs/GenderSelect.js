@@ -7,6 +7,7 @@ const GenderSelect = ({
   onChange,
   errorFields,
   acceptReplacement,
+  testId
 }) => {
   const RED_HEX = "#F44336";
   return (
@@ -24,6 +25,7 @@ const GenderSelect = ({
               className={`${id} hover:cursor-pointer underline`}
               onClick={acceptReplacement}
               style={{ color: colorModeColors.inputText }}
+              data-testid={`accept-replacement-for-${id}`}
             >
               Accept
             </div>
@@ -45,6 +47,7 @@ const GenderSelect = ({
         }}
         defaultValue={""}
         onChange={onChange}
+        data-testid={testId}
       >
         <option
           id="gender"

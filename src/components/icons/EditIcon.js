@@ -19,6 +19,7 @@ const EditIcon = ({
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         onClick={!basic ? handleEditClick : null}
+        data-testid={"edit-icon"}
       >
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
         <g

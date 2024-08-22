@@ -144,16 +144,6 @@ option#gender {
   }
 }
 
-img {
-  transition: transform 0.3s ease, position 0.3s ease;
-}
-
-img:hover {
-  transform: scale(2.5);
-  z-index: 10;
-  object-fit: contain;
-}
-
 div#userModal {
   overflow-x: hidden;
 }

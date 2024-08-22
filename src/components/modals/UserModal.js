@@ -638,7 +638,10 @@ const UserModal = ({
           id="editTitle"
           className="font-bold 2xl:text-4xl xl:text-3xl lg:text-2xl md:text-xl flex justify-between items-center"
         >
-          <span style={{ color: colorModeColors.title }}>{modalTitle}</span>
+          <span
+            style={{ color: colorModeColors.title }}
+            data-testid={"addData-title"}
+          >{modalTitle}</span>
           <CloseIcon
             color={colorModeColors.icon}
             handleClick={handleCloseClick}
@@ -657,6 +660,7 @@ const UserModal = ({
               onChange={handleFormChange}
               errorFields={errorFields}
               acceptReplacement={acceptReplacement}
+              testId={"firstName"}
             />
             <Input
               id={"lastName"}
@@ -666,6 +670,7 @@ const UserModal = ({
               onChange={handleFormChange}
               errorFields={errorFields}
               acceptReplacement={acceptReplacement}
+              testId={"lastName"}
             />
             <div className="flex gap-2 justify-stretch">
               <DatePicker
@@ -675,6 +680,7 @@ const UserModal = ({
                 onChange={handleFormChange}
                 errorFields={errorFields}
                 acceptReplacement={acceptReplacement}
+                testId={"birthDate"}
               />
               <GenderSelect
                 id={"gender"}
@@ -683,6 +689,7 @@ const UserModal = ({
                 onChange={handleFormChange}
                 errorFields={errorFields}
                 acceptReplacement={acceptReplacement}
+                testId={"gender"}
               />
             </div>
             <Input
@@ -693,6 +700,7 @@ const UserModal = ({
               onChange={handleFormChange}
               errorFields={errorFields}
               acceptReplacement={acceptReplacement}
+              testId={"placeOfBirth"}
             />
           </div>
           <div
@@ -707,6 +715,7 @@ const UserModal = ({
               onChange={handleFormChange}
               errorFields={errorFields}
               acceptReplacement={acceptReplacement}
+              testId={"countryOfCitizenship"}
             />
             <Input
               id={"passportNumber"}
@@ -716,6 +725,7 @@ const UserModal = ({
               onChange={handleFormChange}
               errorFields={errorFields}
               acceptReplacement={acceptReplacement}
+              testId={"passportNumber"}
             />
             <DatePicker
               id={"passportDateOfIssue"}
@@ -724,6 +734,7 @@ const UserModal = ({
               onChange={handleFormChange}
               errorFields={errorFields}
               acceptReplacement={acceptReplacement}
+              testId={"passportDateOfIssue"}
             />
             <DatePicker
               id={"passportDateOfExpiry"}
@@ -732,6 +743,7 @@ const UserModal = ({
               onChange={handleFormChange}
               errorFields={errorFields}
               acceptReplacement={acceptReplacement}
+              testId={"passportDateOfExpiry"}
             />
           </div>
           <div
@@ -752,7 +764,7 @@ const UserModal = ({
               className="w-48 h-48 object-cover rounded-lg"
             />
             {isEditActive ? (
-              <div style={{ color: colorModeColors.inputText }}>
+              <div style={{ color: colorModeColors.inputText }} data-testid={"facial-validity"}>
                 {facialValidity}
               </div>
             ) : (

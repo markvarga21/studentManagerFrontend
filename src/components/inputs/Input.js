@@ -8,6 +8,7 @@ const Input = ({
   onChange,
   errorFields,
   acceptReplacement,
+  testId
 }) => {
   const RED_HEX = "#F44336";
   return (
@@ -25,6 +26,7 @@ const Input = ({
               className={`${id} hover:cursor-pointer underline`}
               onClick={acceptReplacement}
               style={{ color: colorModeColors.inputText }}
+              data-testid={`accept-replacement-for-${id}`}
             >
               Accept
             </div>
@@ -48,6 +50,7 @@ const Input = ({
         autoComplete="off"
         placeholder={placeholder}
         onChange={onChange}
+        data-testid={testId}
       />
     </div>
   );

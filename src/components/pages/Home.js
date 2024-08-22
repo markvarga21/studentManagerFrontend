@@ -18,6 +18,7 @@ const Home = ({ user, colorModeColors }) => {
       <div
         className="w-fit text-5xl font-bold"
         style={{ color: colorModeColors.title }}
+        data-testid={"home-title"}
       >
         Welcome
         {user && user !== undefined ? (

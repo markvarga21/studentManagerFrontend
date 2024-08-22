@@ -7,6 +7,7 @@ const DatePicker = ({
   onChange,
   errorFields,
   acceptReplacement,
+  testId
 }) => {
   const RED_HEX = "#F44336";
   return (
@@ -24,6 +25,7 @@ const DatePicker = ({
               className={`${id} hover:cursor-pointer underline`}
               onClick={acceptReplacement}
               style={{ color: colorModeColors.inputText }}
+              data-testid={`accept-replacement-for-${id}`}
             >
               Accept
             </div>
@@ -46,6 +48,7 @@ const DatePicker = ({
         }}
         autoComplete="off"
         onChange={onChange}
+        data-testid={testId}
       />
     </div>
   );

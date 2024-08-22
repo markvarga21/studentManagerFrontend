@@ -9,6 +9,7 @@ const CloseIcon = ({ color, handleClick }) => {
       xmlns="http://www.w3.org/2000/svg"
       className="hover:cursor-pointer"
       onClick={handleClick}
+      data-testid={"close-icon"}
     >
       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
       <g

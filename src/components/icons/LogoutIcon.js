@@ -9,6 +9,7 @@ const LogoutIcon = ({ color, ICON_SIZES, handleLogout }) => {
       xmlns="http://www.w3.org/2000/svg"
       transform="matrix(-1, 0, 0, 1, 0, 0)"
       onClick={handleLogout}
+      data-testid={"logout-icon"}
     >
       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
       <g

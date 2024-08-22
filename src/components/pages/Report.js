@@ -62,7 +62,7 @@ const Report = ({ colorModeColors, API_URL }) => {
         className="text-4xl font-inter font-bold select-none p-12 flex flex-col items-center gap-12 w-1/2 h-full"
         style={{ color: colorModeColors.title }}
       >
-        <span>Report a problem</span>{" "}
+        <span data-testid={"report-title"}>Report a problem</span>{" "}
         <form
           className="w-full flex flex-col gap-3 h-full"
           onSubmit={handleSubmit}

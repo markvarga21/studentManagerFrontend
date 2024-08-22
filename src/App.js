@@ -95,7 +95,7 @@ const App = () => {
         console.log("User timed out");
         localStorage.removeItem("user");
         setUser(null);
-        window.location.href = "/auth";
+        window.location.href = "/login";
       }
     }
   };
@@ -119,7 +119,7 @@ const App = () => {
       if (now > expirationTime) {
         localStorage.removeItem("user");
         setUser(null);
-        window.location.href = "/auth";
+        window.location.href = "/login";
       }
     }
   }, []);
