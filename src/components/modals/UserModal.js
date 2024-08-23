@@ -282,24 +282,43 @@ const UserModal = ({
   const handleStudentUpdate = (e) => {
     e.preventDefault();
     axios
-      .put(`${API_URL}/students/${studentId}`, student, {
+      .get(`${API_URL}/students/${studentId}`, {
         headers: {
           Authorization: `Bearer ${
             JSON.parse(localStorage.getItem("user")).token
           }`,
         },
       })
-      .then((res) => {
-        setEditSubmitted(-1 * editSubmitted);
-        toast.success(`Student with id '${studentId}' updated!`);
-        setStudentWasModified(-1 * studentWasModified);
-        setStudentUserWasModified(-1 * studentUserWasModified);
-        setIsModalActive(false);
-        setWasValidated(-1 * wasValidated);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+        .then((res) => {
+          const studentWithoutUpdate = res.data;
+          const studentToUpdate = student;
+          delete studentToUpdate.valid;
+          delete studentWithoutUpdate.valid;
+          if (JSON.stringify(studentWithoutUpdate) === JSON.stringify(studentToUpdate)) {
+            toast.error("No changes were made!");
+          } else {
+            axios
+                .put(`${API_URL}/students/${studentId}`, student, {
+                  headers: {
+                    Authorization: `Bearer ${
+                        JSON.parse(localStorage.getItem("user")).token
+                    }`,
+                  },
+                })
+                .then((res) => {
+                  setEditSubmitted(-1 * editSubmitted);
+                  toast.success(`Student with id '${studentId}' updated!`);
+                  setStudentWasModified(-1 * studentWasModified);
+                  setStudentUserWasModified(-1 * studentUserWasModified);
+                  setIsModalActive(false);
+                  setWasValidated(-1 * wasValidated);
+                })
+                .catch((err) => {
+                  console.error(err);
+                });
+          }
+        })
+        .catch((err) => {console.error(err)});
   };
 
   const handleSaveClick = (e) => {
