@@ -118,6 +118,7 @@ const Register = ({ colorModeColors, API_URL }) => {
             }}
             autoComplete="off"
             data-testid={"register-username"}
+            disabled={isWaiting}
           />
           <label
             htmlFor="register-email"
@@ -137,6 +138,7 @@ const Register = ({ colorModeColors, API_URL }) => {
             }}
             autoComplete="off"
             data-testid={"register-email"}
+            disabled={isWaiting}
           />
           <label
             htmlFor="register-firstName"
@@ -156,6 +158,7 @@ const Register = ({ colorModeColors, API_URL }) => {
             }}
             autoComplete="off"
             data-testid={"register-firstName"}
+            disabled={isWaiting}
           />
           <label
             htmlFor="register-lastName"
@@ -174,6 +177,7 @@ const Register = ({ colorModeColors, API_URL }) => {
               color: colorModeColors.inputText,
             }}
             data-testid={"register-lastName"}
+            disabled={isWaiting}
           />
           <label
             htmlFor="register-password"
@@ -193,17 +197,17 @@ const Register = ({ colorModeColors, API_URL }) => {
             }}
             autoComplete="off"
             data-testid={"register-password"}
+            disabled={isWaiting}
           />
           <button
             className={
-              "mt-5 pt-2 pb-2 pl-4 pr-4 bg-creme rounded-xl shadow-xl text-black text-base focus:ring-4 focus:ring-lightCreme focus:ring-opacity-80 focus:outline-none " +
-              (isWaiting ? "cursor-not-allowed" : "hover:cursor-pointer")
+              "mt-5 pt-2 pb-2 pl-4 pr-4 bg-creme rounded-xl shadow-xl text-black text-base focus:ring-4 focus:ring-lightCreme focus:ring-opacity-80 hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none "
             }
             type="submit"
-            disabled={isWaiting}
             data-testid={"register-button"}
+            disabled={isWaiting}
           >
-            Register
+            {isWaiting ? "Registering..." : "Register"}
           </button>
           <span className="text-base font-normal flex gap-2 justify-center">
             <span>Already have an account?</span>
