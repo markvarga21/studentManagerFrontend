@@ -1,0 +1,205 @@
+{
+  "menubar": {
+    "home": "Home",
+    "students": "Students",
+    "myData": "Profile",
+    "report": "Report"
+  },
+  "homePage": {
+    "title": "Welcome",
+    "adminDescription": "Thank you for choosing our Student manager manager application! Feel free to use all the capabilities of the app. Furthermore, if you encounter any system or service related problem, please send a reporting ticket on the report (flag) tab!",
+    "userDescription": "Thank you for choosing our Student manager manager application! On the data tab you can submit-, edit-, and delete your data.",
+    "login": "Login",
+    "register": "Sign up"
+  },
+  "studentsPage": {
+    "title": "List of students",
+    "filterButtons": {
+      "all": "All",
+      "valid": "Valid",
+      "invalid": "Invalid"
+    },
+    "export": {
+      "title": "Export",
+      "json": "Export as JSON",
+      "xml": "Export as XML"
+    },
+    "addStudent": "Add student",
+    "search": "Search for students",
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "table": {
+      "id": "ID",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "dateOfBirth": "Date of birth",
+      "placeOfBirth": "Place of birth",
+      "countryOfCitizenship": "Country of citizenship",
+      "gender": "Gender",
+      "passportNumber": "Passport number",
+      "passportDateOfIssue": "Date of issue",
+      "passportDateOfExpiry": "Date of expiry",
+      "status": {
+        "title": "Status",
+        "valid": "Valid",
+        "invalid": "Invalid"
+      },
+      "actions": "Actions",
+      "months": {
+        "january": "Jan",
+        "february": "Feb",
+        "march": "Mar",
+        "april": "Apr",
+        "may": "May",
+        "june": "Jun",
+        "july": "Jul",
+        "august": "Aug",
+        "september": "Sep",
+        "october": "Oct",
+        "november": "Nov",
+        "december": "Dec"
+      }
+    }
+  },
+  "reportPage": {
+    "title": "Report a problem",
+    "subject": "Subject",
+    "description": "Description",
+    "submit": "Submit"
+  },
+  "loginPage": {
+    "title": "Login",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Login",
+    "newUser": {
+      "question": "Don't have an account?",
+      "link": "Sign up"
+    }
+  },
+  "registerPage": {
+    "title": "Sign Up",
+    "username": "Username",
+    "email": "Email",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "password": "Password",
+    "submit": {
+      "register": "Register",
+      "registering": "Registering..."
+    },
+    "alreadyUser": {
+      "question": "Already have an account?",
+      "link": "Login"
+    }
+  },
+  "userModal": {
+    "title": {
+      "add": "Add student",
+      "edit": "Edit student"
+    },
+    "files": {
+      "passport": "Passport",
+      "portrait": "Portrait"
+    },
+    "upload": {
+      "new": {
+        "passport": "Upload passport",
+        "portrait": "Upload portrait"
+      },
+      "replace": {
+        "passport": "Change passport",
+        "portrait": "Change portrait"
+      }
+    },
+    "submit": {
+      "add": "Save",
+      "edit": "Save changes"
+    },
+    "validation": {
+      "manual": "Manual validate",
+      "auto": "Validate"
+    },
+    "inputs": {
+      "firstName": {
+        "label": "First name",
+        "placeholder": "John"
+      },
+      "lastName": {
+        "label": "Last name",
+        "placeholder": "Doe"
+      },
+      "dateOfBirth": {
+        "label": "Date of Birth"
+      },
+      "placeOfBirth": {
+        "label": "Place of Birth",
+        "placeholder": "New York"
+      },
+      "gender": {
+        "label": "Gender"
+      },
+      "countryOfCitizenship": {
+        "label": "Country of Citizenship",
+        "placeholder": "USA"
+      },
+      "passportNumber": {
+        "label": "Passport number",
+        "placeholder": "123456789"
+      },
+      "passportDateOfIssue": {
+        "label": "Date of issue"
+      },
+      "passportDateOfExpiry": {
+        "label": "Date of expiry"
+      }
+    }
+  },
+  "myDataPage": {
+    "title": "My data",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "loading": {
+    "savingData": "Saving data",
+    "loading": "Loading",
+    "validation": "Validating student",
+    "passportDataExtract": "Extracting data from passport"
+  },
+  "facialValidation": {
+    "notYetValidated": "Faces are not yet validated!",
+    "validPreText": "Photos are",
+    "invalidPreText": "Photos are only",
+    "similarityText": "similar"
+  },
+  "toast": {
+    "success": {
+      "login": "Successfully logged in!",
+      "logout": "Successfully logged out!",
+      "register": "Successfully registered!",
+      "manualValidation": "Manual validation successful!",
+      "autoValidation": "Student data is valid!",
+      "report": "Report sent successfully!",
+      "dataExtracted": "Data extracted from passport!",
+      "student": {
+        "delete": "Student deleted!",
+        "add": "Student added!",
+        "update": "Student updated!"
+      }
+    },
+    "error": {
+      "emptyFields": "Please fill out all fields!",
+      "auth": {
+        "invalidCredentials": "Invalid credentials. Please try again!",
+        "usernameTaken": "Username is already taken. Please choose another one!"
+      },
+      "updateWithNoModification": "No changes were made!",
+      "noFile": "Please fill in all fields, and upload both pictures!",
+      "invalidData": "Invalid data. Please correct the errors!",
+      "extractData": "Failed to extract data from passport!"
+    }
+  }
+}

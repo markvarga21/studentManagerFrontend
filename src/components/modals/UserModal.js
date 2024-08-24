@@ -11,6 +11,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import Loading from "../util/Loading";
 import ValidationButtons from "../buttons/ValidationButtons";
+import {useTranslation} from "react-i18next";
 
 const UserModal = ({
   mode,
@@ -33,6 +34,7 @@ const UserModal = ({
   editSubmitted,
   setEditSubmitted,
 }) => {
+  const [t, i18n] = useTranslation("global");
   const [student, setStudent] = useState({
     id: studentId,
     firstName: "",
@@ -295,7 +297,7 @@ const UserModal = ({
           delete studentToUpdate.valid;
           delete studentWithoutUpdate.valid;
           if (JSON.stringify(studentWithoutUpdate) === JSON.stringify(studentToUpdate)) {
-            toast.error("No changes were made!");
+            toast.error(t("toast.error.updateWithNoModification"));
           } else {
             axios
                 .put(`${API_URL}/students/${studentId}`, student, {
@@ -306,8 +308,8 @@ const UserModal = ({
                   },
                 })
                 .then((res) => {
-                  setEditSubmitted(-1 * editSubmitted);
-                  toast.success(`Student with id '${studentId}' updated!`);
+                  // setEditSubmitted(-1 * editSubmitted);
+                  toast.success(t("toast.success.student.update"));
                   setStudentWasModified(-1 * studentWasModified);
                   setStudentUserWasModified(-1 * studentUserWasModified);
                   setIsModalActive(false);
@@ -324,10 +326,10 @@ const UserModal = ({
   const handleSaveClick = (e) => {
     e.preventDefault();
     if (checkEmptyFields()) {
-      toast.error("Please fill in all fields, and upload both pictures.");
+      toast.error(t("toast.error.noFile"));
       return;
     }
-    setLoadingText("Saving data");
+    setLoadingText(t("loading.savingData"));
     setIsLoading(true);
     const user = JSON.parse(localStorage.getItem("user"));
     const roles = user.roles.replace("[", "").replace("]", "").replace(" ", "");
@@ -440,7 +442,7 @@ const UserModal = ({
                 setStudentUserWasModified(-1 * studentUserWasModified);
                 setIsModalActive(false);
                 setIsAddStudentActive(false);
-                toast.success(`Student with id '${savedStudentId}' saved!`);
+                toast.success(t("toast.success.student.add"));
                 console.log(`Add student modal is: ${isAddStudentActive}`);
               })
               .catch((err) => {
@@ -464,7 +466,7 @@ const UserModal = ({
   };
 
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingText, setLoadingText] = useState("Loading");
+  const [loadingText, setLoadingText] = useState(t("loading.loading"));
 
   const [passportData, setPassportData] = useState({
     firstName: "",
@@ -480,7 +482,7 @@ const UserModal = ({
   const [modified, setModified] = useState(false);
 
   const [facialValidity, setFacialValidity] = useState(
-    "Faces are not yet validated!"
+    t("facialValidation.notYetValidated")
   );
   useEffect(() => {
     const studentIdValue = studentId ? "/" + studentId : "";
@@ -507,15 +509,15 @@ const UserModal = ({
             const roundedPercent = (data.percentage * 100).toFixed(2);
             const valid = data.isValid;
             if (valid) {
-              const message = `\u2705 Photos are ${roundedPercent}% similar!`;
+              const message = `\u2705 ${t("facialValidation.validPreText")} ${roundedPercent}% ${t("facialValidation.similarityText")}!`;
               setFacialValidity(message);
             } else {
-              const message = `\u274C Photos are only ${roundedPercent}% similar!`;
+              const message = `\u274C ${t("facialValidation.invalidPreText")} ${roundedPercent}% ${t("facialValidation.similarityText")}!`;
               setFacialValidity(message);
             }
           })
           .catch((err) => {
-            setFacialValidity("\u274C Faces are not yet validated!");
+            setFacialValidity(`\u274C ${t("facialValidation.notYetValidated")}`);
           });
       })
       .catch((err) => {
@@ -568,7 +570,7 @@ const UserModal = ({
     const formData = new FormData();
     formData.append("passport", passport);
     formData.append("studentJson", studentJson);
-    setLoadingText("Validating student");
+    setLoadingText(t("loading.validation"));
     setIsLoading(true);
     axios
       .post(`${API_URL}/validations/validate`, formData, {
@@ -594,7 +596,7 @@ const UserModal = ({
               }
             )
             .then((vmRes) => {
-              toast.success("Student data is valid!");
+              toast.success(t("toast.success.autoValidation"));
               setIsLoading(false);
               setWasValidated(-1 * wasValidated);
             })
@@ -673,9 +675,9 @@ const UserModal = ({
           >
             <Input
               id={"firstName"}
-              label={"First Name"}
+              label={t("userModal.inputs.firstName.label")}
               colorModeColors={colorModeColors}
-              placeholder={"John"}
+              placeholder={t("userModal.inputs.firstName.placeholder")}
               onChange={handleFormChange}
               errorFields={errorFields}
               acceptReplacement={acceptReplacement}
@@ -683,9 +685,9 @@ const UserModal = ({
             />
             <Input
               id={"lastName"}
-              label={"Last Name"}
+              label={t("userModal.inputs.lastName.label")}
               colorModeColors={colorModeColors}
-              placeholder={"Doe"}
+              placeholder={t("userModal.inputs.firstName.placeholder")}
               onChange={handleFormChange}
               errorFields={errorFields}
               acceptReplacement={acceptReplacement}
@@ -694,7 +696,7 @@ const UserModal = ({
             <div className="flex gap-2 justify-stretch">
               <DatePicker
                 id={"birthDate"}
-                label={"Birthdate"}
+                label={t("userModal.inputs.dateOfBirth.label")}
                 colorModeColors={colorModeColors}
                 onChange={handleFormChange}
                 errorFields={errorFields}
@@ -703,7 +705,7 @@ const UserModal = ({
               />
               <GenderSelect
                 id={"gender"}
-                label={"Gender"}
+                label={t("userModal.inputs.gender.label")}
                 colorModeColors={colorModeColors}
                 onChange={handleFormChange}
                 errorFields={errorFields}
@@ -713,9 +715,9 @@ const UserModal = ({
             </div>
             <Input
               id="placeOfBirth"
-              label="Place of Birth"
+              label={t("userModal.inputs.placeOfBirth.label")}
               colorModeColors={colorModeColors}
-              placeholder={"New York"}
+              placeholder={t("userModal.inputs.placeOfBirth.placeholder")}
               onChange={handleFormChange}
               errorFields={errorFields}
               acceptReplacement={acceptReplacement}
@@ -728,9 +730,9 @@ const UserModal = ({
           >
             <Input
               id={"countryOfCitizenship"}
-              label={"Country of Citizenship"}
+              label={t("userModal.inputs.countryOfCitizenship.label")}
               colorModeColors={colorModeColors}
-              placeholder={"USA"}
+              placeholder={t("userModal.inputs.countryOfCitizenship.placeholder")}
               onChange={handleFormChange}
               errorFields={errorFields}
               acceptReplacement={acceptReplacement}
@@ -738,9 +740,9 @@ const UserModal = ({
             />
             <Input
               id={"passportNumber"}
-              label={"Passport number"}
+              label={t("userModal.inputs.passportNumber.label")}
               colorModeColors={colorModeColors}
-              placeholder={"123456789"}
+              placeholder={t("userModal.inputs.passportNumber.placeholder")}
               onChange={handleFormChange}
               errorFields={errorFields}
               acceptReplacement={acceptReplacement}
@@ -748,7 +750,7 @@ const UserModal = ({
             />
             <DatePicker
               id={"passportDateOfIssue"}
-              label={"Date of issue"}
+              label={t("userModal.inputs.passportDateOfIssue.label")}
               colorModeColors={colorModeColors}
               onChange={handleFormChange}
               errorFields={errorFields}
@@ -757,7 +759,7 @@ const UserModal = ({
             />
             <DatePicker
               id={"passportDateOfExpiry"}
-              label={"Date of expiry"}
+              label={t("userModal.inputs.passportDateOfExpiry.label")}
               colorModeColors={colorModeColors}
               onChange={handleFormChange}
               errorFields={errorFields}

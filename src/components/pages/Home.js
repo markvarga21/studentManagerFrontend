@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const Home = ({ user, colorModeColors }) => {
   const navigate = useNavigate();
@@ -9,6 +10,7 @@ const Home = ({ user, colorModeColors }) => {
   const handleSignUpClick = () => {
     navigate("/register");
   };
+  const [t, i18n] = useTranslation("global");
   return (
     <div
       id="home"
@@ -20,7 +22,7 @@ const Home = ({ user, colorModeColors }) => {
         style={{ color: colorModeColors.title }}
         data-testid={"home-title"}
       >
-        Welcome
+        {t("homePage.title")}
         {user && user !== undefined ? (
           <span>
             , <span className="text-darkCreme">{user.username}</span>!
@@ -36,18 +38,14 @@ const Home = ({ user, colorModeColors }) => {
               className="w-2/3 text-center font-normal pt-4 text-lg"
               style={{ color: colorModeColors.tableContent }}
             >
-              Thank you for choosing our Student manager manager application!
-              Feel free to use all the capabilities of the app. Furthermore, if
-              you encounter any system or service related problem, please send a
-              reporting ticket on the report (flag) tab!
+              {t("homePage.adminDescription")}
             </div>
           ) : (
             <div
               className="w-2/3 text-center font-normal pt-4 text-lg"
               style={{ color: colorModeColors.tableContent }}
             >
-              Thank you for choosing our Student manager manager application! On
-              the data tab you can submit-, edit-, and delete your data.
+              {t("homePage.userDescription")}
             </div>
           )}
         </div>
@@ -66,7 +64,7 @@ const Home = ({ user, colorModeColors }) => {
               className="pt-2 pb-2 pl-4 pr-4 bg-creme rounded-xl hover:cursor-pointer shadow-xl font-semibold"
               onClick={handleLoginClick}
             >
-              Login
+              {t("homePage.login")}
             </button>
             <button
               className="pt-2 pb-2 pl-4 pr-4 border-2 rounded-xl hover:cursor-pointer"
@@ -77,7 +75,7 @@ const Home = ({ user, colorModeColors }) => {
               }}
               onClick={handleSignUpClick}
             >
-              Sign up
+              {t("homePage.register")}
             </button>
           </div>
         </div>

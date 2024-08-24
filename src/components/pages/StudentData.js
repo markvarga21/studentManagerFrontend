@@ -7,6 +7,7 @@ import toast, { Toaster } from "react-hot-toast";
 import EditIcon from "../icons/EditIcon";
 import DeleteIcon from "../icons/DeleteIcon";
 import Validity from "../util/Validity";
+import {useTranslation} from "react-i18next";
 
 const StudentData = ({
   colorModeColors,
@@ -29,6 +30,7 @@ const StudentData = ({
     passportDateOfIssue: "-",
     passportDateOfExpiry: "-",
   });
+  const [t, i18n] = useTranslation("global");
   const [userImages, setUserImages] = useState({
     passport: "https://placehold.co/300.png?text=?",
     selfie: "https://placehold.co/20.png?text=?",
@@ -130,7 +132,7 @@ const StudentData = ({
           passport: "https://placehold.co/300.png?text=?",
           selfie: "https://placehold.co/20.png?text=?",
         });
-        toast.success("Student deleted successfully!");
+        toast.success(t("toast.success.student.delete"));
         setStudentUserWasModified(-1 * studentUserWasModified);
       })
       .catch((err) => console.error(err));
@@ -150,8 +152,8 @@ const StudentData = ({
               colorModeColors={colorModeColors}
               studentId={userData.id}
               setStudentId={setStudentId}
-              modalTitle={"Add student"}
-              buttonTitle={"Save"}
+              modalTitle={t("userModal.title.add")}
+              buttonTitle={t("userModal.submit.add")}
               isAddStudentActive={isModalActive}
               setIsAddStudentActive={setIsModalActive}
               API_URL={API_URL}
@@ -166,8 +168,8 @@ const StudentData = ({
               colorModeColors={colorModeColors}
               studentId={userData.id}
               setStudentId={setStudentId}
-              modalTitle={"Edit student"}
-              buttonTitle={"Save changes"}
+              modalTitle={t("userModal.title.edit")}
+              buttonTitle={t("userModal.submit.edit")}
               isEditActive={isModalActive}
               setIsEditActive={setIsModalActive}
               API_URL={API_URL}
@@ -186,7 +188,7 @@ const StudentData = ({
           style={{ color: colorModeColors.title }}
         >
           <div className="flex items-start gap-2">
-            <span data-testid={"myData-title"}>My data</span>
+            <span data-testid={"myData-title"}>{t("myDataPage.title")}</span>
             <Validity
               validity={userData.valid !== "" ? userData.valid : "Invalid"}
               colorModeColors={colorModeColors}
@@ -204,51 +206,51 @@ const StudentData = ({
       <div className="p-16 flex gap-16 ml-16 w-5/6">
         <div className="left flex flex-col gap-6 w-full">
           <DataDisplayField
-            label="First name"
+            label={t("userModal.inputs.firstName.label")}
             content={userData.firstName}
             colors={colorModeColors}
           />
           <DataDisplayField
-            label="Last name"
+            label={t("userModal.inputs.lastName.label")}
             content={userData.lastName}
             colors={colorModeColors}
           />
           <div className="flex gap-6 items-center">
             <DataDisplayField
-              label="Birth date"
+              label={t("userModal.inputs.dateOfBirth.label")}
               content={userData.birthDate}
               colors={colorModeColors}
             />
             <DataDisplayField
-              label={"Gender"}
+              label={t("userModal.inputs.gender.label")}
               content={userData.gender}
               colors={colorModeColors}
             />
           </div>
           <DataDisplayField
-            label={"Place of Birth"}
+            label={t("userModal.inputs.placeOfBirth.label")}
             content={userData.placeOfBirth}
             colors={colorModeColors}
           />
         </div>
         <div className="right flex flex-col gap-6 w-full">
           <DataDisplayField
-            label={"Country of Citizenship"}
+            label={t("userModal.inputs.countryOfCitizenship.label")}
             content={userData.countryOfCitizenship}
             colors={colorModeColors}
           />
           <DataDisplayField
-            label={"Passport number"}
+            label={t("userModal.inputs.passportNumber.label")}
             content={userData.passportNumber}
             colors={colorModeColors}
           />
           <DataDisplayField
-            label={"Date of issue"}
+            label={t("userModal.inputs.passportDateOfIssue.label")}
             content={userData.passportDateOfIssue}
             colors={colorModeColors}
           />
           <DataDisplayField
-            label={"Date of expiry"}
+            label={t("userModal.inputs.passportDateOfExpiry.label")}
             content={userData.passportDateOfExpiry}
             colors={colorModeColors}
           />
@@ -271,7 +273,7 @@ const StudentData = ({
           {userData.id === "" ? <PlusIcon /> : <EditIcon basic={true} />}
 
           <span className="font-inter font-semibold select-none">
-            {userData.id === "" ? "Add" : "Edit"}
+            {userData.id === "" ? t("myDataPage.add") : t("myDataPage.edit")}
           </span>
         </div>
         {userData.id !== "" && (
@@ -282,7 +284,7 @@ const StudentData = ({
           >
             <DeleteIcon basic={true} />
             <span className="font-inter font-medium select-none 2xl:text-base xl:text-base md:text-sm text-red-500">
-              Delete
+              {t("myDataPage.delete")}
             </span>
           </button>
         )}

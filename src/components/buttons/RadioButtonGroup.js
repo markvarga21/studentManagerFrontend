@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import {useTranslation} from "react-i18next";
 
 const RadioButtonGroup = ({
   colorModeColors,
@@ -8,6 +9,7 @@ const RadioButtonGroup = ({
   selectedOption,
   setSelectedOption,
 }) => {
+  const [t, i18n] = useTranslation("global");
   const handleOptionChange = (option) => {
     if (option === "passport" && studentImages.passport == null) {
       return;
@@ -55,7 +57,7 @@ const RadioButtonGroup = ({
           className="sr-only"
         />
         <label htmlFor="passport" className="cursor-pointer">
-          Passport
+            {t("userModal.files.passport")}
         </label>
       </div>
 
@@ -80,7 +82,7 @@ const RadioButtonGroup = ({
           className="sr-only"
         />
         <label htmlFor="portrait" className="cursor-pointer">
-          Portrait
+            {t("userModal.files.portrait")}
         </label>
       </div>
     </div>

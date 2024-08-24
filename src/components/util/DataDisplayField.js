@@ -4,7 +4,7 @@ const DataDisplayField = ({ label, content, colors }) => {
   return (
     <div className="flex flex-col w-full">
       <div
-        className="font-inter font-semibold text-lg"
+        className="font-inter font-semibold 2xl:text-lg xl:text-sm"
         style={{ color: colors.inputText }}
       >
         {label}

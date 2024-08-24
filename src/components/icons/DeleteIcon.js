@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react";
 import toast, { Toaster } from "react-hot-toast";
+import {useTranslation} from "react-i18next";
 
 const DeleteIcon = ({
   color,
@@ -11,6 +12,7 @@ const DeleteIcon = ({
   user,
   basic,
 }) => {
+  const [t, i18n] = useTranslation("global");
   const handleDeleteClick = () => {
     axios
       .delete(`${API_URL}/students/${studentId}`, {
@@ -23,7 +25,7 @@ const DeleteIcon = ({
       .then((res) => {
         console.log(res);
         setDeleted(-1 * deleted);
-        toast.success("Student deleted successfully!");
+        toast.success(t("toast.success.student.delete"));
       })
       .catch((err) => console.error(err));
   };

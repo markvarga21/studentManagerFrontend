@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import UploadIcon from "../icons/UploadIcon";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import {useTranslation} from "react-i18next";
 
 const UploadPassportButton = ({
   studentImages,
@@ -19,6 +20,7 @@ const UploadPassportButton = ({
   student,
   setStudent,
 }) => {
+  const [t, i18n] = useTranslation("global");
   const fileInputRef = useRef(null);
 
   const handleButtonClick = () => {
@@ -41,7 +43,7 @@ const UploadPassportButton = ({
   };
 
   const extractDataFromPassport = (passport) => {
-    setLoadingText("Extracting data from passport");
+    setLoadingText(t("loading.passportDataExtract"));
     setIsLoading(true);
     const formData = new FormData();
     formData.append("passport", passport);
@@ -56,7 +58,7 @@ const UploadPassportButton = ({
       })
       .then((res) => {
         if (res.status !== 200) {
-          toast.error("Failed to extract data from passport!");
+          toast.error(t("toast.error.extractData"));
           return;
         }
         fillFormDataFromPassport(res.data);
@@ -67,12 +69,12 @@ const UploadPassportButton = ({
         setStudent(studentCopy);
         console.log(student);
         setIsLoading(false);
-        toast.success("Data extracted from passport successfully!");
+        toast.success(t("toast.success.dataExtracted"));
       })
       .catch((err) => {
         console.error(err);
         setIsLoading(false);
-        toast.error("Failed to extract data from passport!");
+        toast.error(t("toast.error.extractData"));
       });
   };
 
@@ -115,7 +117,7 @@ const UploadPassportButton = ({
         data-testid={"uploadPassport-button"}
       >
         <span className="font-inter font-semibold select-none 2xl:text-base xl:text-base md:text-sm">
-          {studentImages.passport ? "Change Passport" : "Upload Passport"}
+          {studentImages.passport ? t("userModal.upload.replace.passport") : t("userModal.upload.new.passport")}
         </span>
         <UploadIcon />
       </button>

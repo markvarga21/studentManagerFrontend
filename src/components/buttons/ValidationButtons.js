@@ -2,6 +2,7 @@ import React from "react";
 import ValidationIcon from "../icons/ValidationIcon";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import {useTranslation} from "react-i18next";
 
 const ValidationButtons = ({
   colors,
@@ -11,6 +12,7 @@ const ValidationButtons = ({
   setWasValidated,
   handleAutomaticValidation,
 }) => {
+  const [t, i18n] = useTranslation("global");
   const handleManualValidation = () => {
     axios
       .get(`${API_URL}/students/${studentId}`, {
@@ -49,7 +51,7 @@ const ValidationButtons = ({
               )
               .then(() => {
                 setWasValidated(-1 * wasValidated);
-                toast.success("Manual validation successful!");
+                toast.success(t("toast.success.manualValidation"));
               })
               .catch((setFacialValidationErr) => {
                 console.error(setFacialValidationErr);
@@ -76,7 +78,7 @@ const ValidationButtons = ({
           className="font-inter font-normal select-none 2xl:text-base xl:text-base md:text-sm"
           style={{ color: colors.inputText }}
         >
-          Manual validate
+          {t("userModal.validation.manual")}
         </span>
       </button>
       <button
@@ -86,7 +88,7 @@ const ValidationButtons = ({
         data-testid={"automaticValidation-button"}
       >
         <span className="font-inter font-semibold select-none 2xl:text-base xl:text-base md:text-sm">
-          Validate
+          {t("userModal.validation.auto")}
         </span>
         <ValidationIcon />
       </button>

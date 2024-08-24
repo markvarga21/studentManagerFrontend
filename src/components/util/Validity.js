@@ -1,8 +1,10 @@
 import React from "react";
 import CheckIcon from "../icons/CheckIcon";
 import CrossIcon from "../icons/CrossIcon";
+import {useTranslation} from "react-i18next";
 
 const Validity = ({ validity, colorModeColors }) => {
+  const [t, i18n] = useTranslation("global");
   return (
     <div data-testid={"student-validity"}>
       {validity ? (
@@ -15,7 +17,7 @@ const Validity = ({ validity, colorModeColors }) => {
           }}
         >
           <CheckIcon />
-          <span>Valid</span>
+          <span>{t("studentsPage.table.status.valid")}</span>
         </div>
       ) : (
         <div
@@ -27,7 +29,7 @@ const Validity = ({ validity, colorModeColors }) => {
           }}
         >
           <CrossIcon />
-          <span>Invalid</span>
+          <span>{t("studentsPage.table.status.invalid")}</span>
         </div>
       )}
     </div>

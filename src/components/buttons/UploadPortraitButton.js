@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import UploadIcon from "../icons/UploadIcon";
+import {useTranslation} from "react-i18next";
 
 const UploadPortraitButton = ({
   studentImages,
@@ -8,6 +9,7 @@ const UploadPortraitButton = ({
   portraitWasChanged,
   setPortraitWasChanged,
 }) => {
+  const [t, i18n] = useTranslation("global");
   const fileInputRef = useRef(null);
 
   const handleButtonClick = () => {
@@ -44,7 +46,7 @@ const UploadPortraitButton = ({
         data-testid={"uploadPortrait-button"}
       >
         <span className="font-inter font-semibold select-none 2xl:text-base xl:text-base md:text-sm">
-          {studentImages.portrait ? "Change Portrait" : "Upload Portrait"}
+          {studentImages.portrait ? t("userModal.upload.replace.portrait") : t("userModal.upload.new.portrait")}
         </span>
         <UploadIcon />
       </button>

@@ -2,8 +2,10 @@ import axios from "axios";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const Register = ({ colorModeColors, API_URL }) => {
+  const [t, i18n] = useTranslation("global");
   const navigate = useNavigate();
   const [userRegisterDetails, setUserRegisterDetails] = useState({
     username: "",
@@ -42,7 +44,7 @@ const Register = ({ colorModeColors, API_URL }) => {
       userRegisterDetails.lastName === "" ||
       userRegisterDetails.password === ""
     ) {
-      toast.error("Please fill in all fields.");
+      toast.error(t("toast.error.emptyFields"));
       return;
     }
     for (const key in userRegisterDetails) {
@@ -64,7 +66,7 @@ const Register = ({ colorModeColors, API_URL }) => {
       .then((res) => {
         if (res.status === 200) {
           console.log(JSON.stringify(res.data));
-          toast.success("Registration successful! Now please log in.");
+          toast.success(t("toast.success.register"));
           setUserRegisterDetails({
             username: "",
             email: "",
@@ -79,7 +81,7 @@ const Register = ({ colorModeColors, API_URL }) => {
       })
       .catch((err) => {
         console.error(err);
-        toast.error("Username is already taken. Please try another one.");
+        toast.error(t("toast.error.auth.usernameTaken"));
       });
   };
   return (
@@ -96,7 +98,7 @@ const Register = ({ colorModeColors, API_URL }) => {
         className="text-4xl font-inter font-bold select-none p-12 flex flex-col items-center gap-12 2xl:w-1/3 xl:w-1/2 lg:w-2/3"
         style={{ color: colorModeColors.title }}
       >
-        <span data-testid={"register-title"}>Sign up</span>
+        <span data-testid={"register-title"}>{t("registerPage.title")}</span>
         <form
           className="w-full flex flex-col gap-3 h-full"
           onSubmit={handleRegisterSubmit}
@@ -107,7 +109,7 @@ const Register = ({ colorModeColors, API_URL }) => {
             className="text-base font-medium"
             style={{ color: colorModeColors.inputText }}
           >
-            Username
+            {t("registerPage.username")}
           </label>
           <input
             type="text"
@@ -127,7 +129,7 @@ const Register = ({ colorModeColors, API_URL }) => {
             className="text-base font-medium"
             style={{ color: colorModeColors.inputText }}
           >
-            Email
+            {t("registerPage.email")}
           </label>
           <input
             type="email"
@@ -147,7 +149,7 @@ const Register = ({ colorModeColors, API_URL }) => {
             className="text-base font-medium"
             style={{ color: colorModeColors.inputText }}
           >
-            First name
+            {t("registerPage.firstName")}
           </label>
           <input
             type="text"
@@ -167,7 +169,7 @@ const Register = ({ colorModeColors, API_URL }) => {
             className="text-base font-medium"
             style={{ color: colorModeColors.inputText }}
           >
-            Last name
+            {t("registerPage.lastName")}
           </label>
           <input
             type="text"
@@ -186,7 +188,7 @@ const Register = ({ colorModeColors, API_URL }) => {
             className="text-base font-medium"
             style={{ color: colorModeColors.inputText }}
           >
-            Password
+            {t("registerPage.password")}
           </label>
           <input
             type="password"
@@ -209,15 +211,15 @@ const Register = ({ colorModeColors, API_URL }) => {
             data-testid={"register-button"}
             disabled={isWaiting}
           >
-            {isWaiting ? "Registering..." : "Register"}
+            {isWaiting ? t("registerPage.submit.registering") : t("registerPage.submit.register")}
           </button>
           <span className="text-base font-normal flex gap-2 justify-center">
-            <span>Already have an account?</span>
+            <span>{t("registerPage.alreadyUser.question")}</span>
             <a
               className="font-bold hover:cursor-pointer"
               onClick={navigateToLogin}
             >
-              Login
+              {t("registerPage.alreadyUser.link")}
             </a>
           </span>
         </form>

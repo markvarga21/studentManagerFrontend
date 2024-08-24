@@ -6,6 +6,8 @@ import {Link, useNavigate} from "react-router-dom";
 import {Tooltip} from "react-tooltip";
 import axios from "axios";
 import toast, {Toaster} from "react-hot-toast";
+import LanguageChangeIcon from "../icons/LanguageChangeIcon";
+import {useTranslation} from "react-i18next";
 
 const MenuBar = ({
   colorModeColors,
@@ -116,7 +118,7 @@ const MenuBar = ({
         if (res.status === 200) {
           localStorage.removeItem("user");
           setUserWasModified(-1 * userWasModified);
-          toast.success("Logout successful!");
+          toast.success(t("toast.success.logout"));
           navigate("/");
           localStorage.setItem("activeNav", "homeNav");
         }
@@ -124,7 +126,7 @@ const MenuBar = ({
       .catch((err) => {
         localStorage.removeItem("user");
         setUserWasModified(-1 * userWasModified);
-        toast.success("Logout successful!");
+        toast.success(t("toast.success.logout"));
         navigate("/");
         localStorage.setItem("activeNav", "homeNav");
       });
@@ -149,6 +151,7 @@ const MenuBar = ({
 
   const [settingsAreOpen, setSettingsAreOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [t, i18n] = useTranslation("global");
   return (
     <div
       id="menubar"
@@ -257,7 +260,7 @@ const MenuBar = ({
               style={{ color: svgColors.homeNav }}
               onClick={handleNavClick}
             >
-              Home
+              {t("menubar.home")}
             </div>
           </a>
         </Link>
@@ -316,8 +319,8 @@ const MenuBar = ({
                 JSON.parse(localStorage.getItem("user")).roles.includes(
                   "ROLE_ADMIN"
                 )
-                  ? "Students"
-                  : "Profile"}
+                  ? t("menubar.students")
+                  : t("menubar.myData")}
               </div>
             </a>
           </Link>
@@ -374,7 +377,7 @@ const MenuBar = ({
                 style={{ color: svgColors.reportNav }}
                 onClick={handleNavClick}
               >
-                Report
+                {t("menubar.report")}
               </div>
             </a>
           </Link>
@@ -400,6 +403,7 @@ const MenuBar = ({
                 gap: "1.5rem",
               }}
             >
+              <LanguageChangeIcon color={svgColors.userNav} />
               <ModeNav
                 handleNavClick={handleNavClick}
                 svgColors={svgColors}

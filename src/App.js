@@ -12,6 +12,7 @@ import StudentData from "./components/pages/StudentData";
 import { useIdleTimer } from "react-idle-timer";
 import { jwtDecode } from "jwt-decode";
 import "./App.css";
+import {useTranslation} from "react-i18next";
 
 const App = () => {
   const LIGHT_MODE = {
@@ -109,6 +110,8 @@ const App = () => {
     onIdle: handleUserTimeout,
   });
 
+  const [t, i18n] = useTranslation("global");
+  const DEFAULT_LANGUAGE = "en";
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
@@ -122,6 +125,11 @@ const App = () => {
         window.location.href = "/login";
       }
     }
+
+    if (!localStorage.getItem("language")) {
+      localStorage.setItem("language", DEFAULT_LANGUAGE);
+    }
+    i18n.changeLanguage(localStorage.getItem("language"));
   }, []);
 
   return (

@@ -1,0 +1,205 @@
+{
+  "menubar": {
+    "home": "Kezdőlap",
+    "students": "Hallgatók",
+    "myData": "Adataim",
+    "report": "Jelentés"
+  },
+  "homePage": {
+    "title": "Üdvözöljük",
+    "adminDescription": "Köszönjük, hogy a Hallgató kezelő alkalmazásunkat választotta! Használja ki az alkalmazás összes funkcionalitását. Továbbá, ha bármilyen gondba, hibába futna bele a rendszer egy vagy több komponensével, kérem küldjön egy hibajelentést a megfelelő fülre (zászló) kattintva!",
+    "userDescription": "Köszönjük, hogy a Hallgató kezelő alkalmazásunkat választotta! Az adatok fülön tudja adatait felvinni, módosítani, vagy törölni.",
+    "login": "Bejelentkezés",
+    "register": "Regisztráció"
+  },
+  "studentsPage": {
+    "title": "Hallgatók listája",
+    "filterButtons": {
+      "all": "Összes",
+      "valid": "Érvényes",
+      "invalid": "Érvénytelen"
+    },
+    "export": {
+      "title": "Export",
+      "json": "Exportálás JSON-be",
+      "xml": "Exportálás XML-be"
+    },
+    "addStudent": "Hallgató hozzáadása",
+    "search": "Hallgatók keresése",
+    "pagination": {
+      "previous": "Előző",
+      "next": "Következő"
+    },
+    "table": {
+      "id": "Azon",
+      "firstName": "Keresztnév",
+      "lastName": "Vezetéknév",
+      "dateOfBirth": "Születési dátum",
+      "placeOfBirth": "Születési hely",
+      "countryOfCitizenship": "Állampolgárság",
+      "gender": "Nem",
+      "passportNumber": "Útlevélszám",
+      "passportDateOfIssue": "Kiállítási dátum",
+      "passportDateOfExpiry": "Lejárati dátum",
+      "status": {
+        "title": "Státusz",
+        "valid": "Érvényes",
+        "invalid": "Érvénytelen"
+      },
+      "actions": "Műveletek",
+      "months": {
+        "january": "Jan",
+        "february": "Feb",
+        "march": "Már",
+        "april": "Ápr",
+        "may": "Máj",
+        "june": "Jún",
+        "july": "Júl",
+        "august": "Aug",
+        "september": "Szept",
+        "october": "Okt",
+        "november": "Nov",
+        "december": "Dec"
+      }
+    }
+  },
+  "reportPage": {
+    "title": "Jelentsen egy problémát",
+    "subject": "Tárgy",
+    "description": "Leírás",
+    "submit": "Küldés"
+  },
+  "loginPage": {
+    "title": "Bejelentkezés",
+    "username": "Felhasználónév",
+    "password": "Jelszó",
+    "submit": "Küldés",
+    "newUser": {
+      "question": "Nincs még fiókja?",
+      "link": "Regisztráljon"
+    }
+  },
+  "registerPage": {
+    "title": "Regisztráció",
+    "username": "Felhasználónév",
+    "email": "Email",
+    "firstName": "Keresztnév",
+    "lastName": "Vezetéknév",
+    "password": "Jelszó",
+    "submit": {
+      "register": "Küldés",
+      "registering": "Küldés..."
+    },
+    "alreadyUser": {
+      "question": "Már van fiókja?",
+      "link": "Bejelentkezés"
+    }
+  },
+  "userModal": {
+    "title": {
+      "add": "Hallgató hozzáadása",
+      "edit": "Hallgató szerkesztése"
+    },
+    "files": {
+      "passport": "Útlevél",
+      "portrait": "Portré"
+    },
+    "upload": {
+      "new": {
+        "passport": "Útlevél feltöltése",
+        "portrait": "Portré feltöltése"
+      },
+      "replace": {
+        "passport": "Útlevél módisítása",
+        "portrait": "Portré módisítása"
+      }
+    },
+    "submit": {
+      "add": "Mentés",
+      "edit": "Módosítások mentése"
+    },
+    "validation": {
+      "manual": "Kézi ellenőrzés",
+      "auto": "Ellenőrzés"
+    },
+    "inputs": {
+      "firstName": {
+        "label": "Keresztnév",
+        "placeholder": "Jakab"
+      },
+      "lastName": {
+        "label": "Vezetéknév",
+        "placeholder": "Gipsz"
+      },
+      "dateOfBirth": {
+        "label": "Születési dátum"
+      },
+      "placeOfBirth": {
+        "label": "Születési hely",
+        "placeholder": "Budapest"
+      },
+      "gender": {
+        "label": "Nem"
+      },
+      "countryOfCitizenship": {
+        "label": "Állampolgárság országa",
+        "placeholder": "Magyarország"
+      },
+      "passportNumber": {
+        "label": "Útlevélszám",
+        "placeholder": "123456789"
+      },
+      "passportDateOfIssue": {
+        "label": "Kiállítási dátum"
+      },
+      "passportDateOfExpiry": {
+        "label": "Lejárati dátum"
+      }
+    }
+  },
+  "myDataPage": {
+    "title": "Saját adatok",
+    "add": "Hozzáadás",
+    "edit": "Szerkesztés",
+    "delete": "Törlés"
+  },
+  "loading": {
+    "savingData": "Adatok mentése",
+    "loading": "Betöltés",
+    "validation": "Hallgató ellenőrzése",
+    "passportDataExtract": "Adatok kinyerése az útlevélből"
+  },
+  "facialValidation": {
+    "notYetValidated": "Az portréképek még nem voltak ellenőrizve!",
+    "validPreText": "A portréképek",
+    "invalidPreText": "A portréképek csupán",
+    "similarityText": "százalékban hasonlóak"
+  },
+  "toast": {
+    "success": {
+      "login": "Sikeres bejelentkezés!",
+      "logout": "Sikeres kijelentkezés!",
+      "register": "Sikeres regisztráció!",
+      "manualValidation": "Kézi ellenőrzés sikeres!",
+      "autoValidation": "A hallgató adatai érvényesek!",
+      "report": "Probléma jelentése sikeres!",
+      "dataExtracted": "Adatok kinyerve az útlevélből!",
+      "student": {
+        "delete": "Hallgató törölve!",
+        "add": "Hallgató hozzáadva!",
+        "update": "Hallgató módosítva!"
+      }
+    },
+    "error": {
+      "emptyFields": "Kérem töltse ki az összes mezőt!",
+      "auth": {
+        "invalidCredentials": "Érvénytelen bejelentkezési adatok. Kérem próbálja újra!",
+        "usernameTaken": "A felhasználónév már foglalt. Kérem válasszon másikat!"
+      },
+      "updateWithNoModification": "Nem történt változás!",
+      "noFile": "Kérem töltse ki az összes mezőt, és töltse fel a képeket!",
+      "invalidData": "Érvénytelen adatok. Kérem javítsa a hibákat!",
+      "extractData": "Az adatokat nem sikerült kinyerni az útlevélből!"
+    }
+  }
+}

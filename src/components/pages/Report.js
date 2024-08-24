@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import Loading from "../util/Loading";
+import {useTranslation} from "react-i18next";
 
 const Report = ({ colorModeColors, API_URL }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -16,7 +17,7 @@ const Report = ({ colorModeColors, API_URL }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (subject === "" || description === "") {
-      toast.error("Please fill in all fields.");
+      toast.error(t("toast.error.emptyFields"));
       return;
     }
     const username = JSON.parse(localStorage.getItem("user")).username;
@@ -43,13 +44,14 @@ const Report = ({ colorModeColors, API_URL }) => {
         setDescription("");
         document.getElementById("report-subject").value = "";
         document.getElementById("report-description").value = "";
-        toast.success("Report sent successfully!");
+        toast.success(t("toast.success.report"));
       })
       .catch((err) => {
         console.error(err);
       });
   };
 
+  const [t, i18n] = useTranslation("global");
   return (
     <div
       id="report"
@@ -62,13 +64,13 @@ const Report = ({ colorModeColors, API_URL }) => {
         className="text-4xl font-inter font-bold select-none p-12 flex flex-col items-center gap-12 w-1/2 h-full"
         style={{ color: colorModeColors.title }}
       >
-        <span data-testid={"report-title"}>Report a problem</span>{" "}
+        <span data-testid={"report-title"}>{t("reportPage.title")}</span>{" "}
         <form
           className="w-full flex flex-col gap-3 h-full"
           onSubmit={handleSubmit}
         >
           <label htmlFor="report-subject" className="sr-only">
-            Subject
+            {t("reportPage.subject")}
           </label>
           <input
             type="text"
@@ -79,12 +81,12 @@ const Report = ({ colorModeColors, API_URL }) => {
               backgroundColor: colorModeColors.buttonBackGround,
               color: colorModeColors.inputText,
             }}
-            placeholder="Subject"
+            placeholder={t("reportPage.subject")}
             onChange={handleSubjectChange}
             autoComplete="off"
           />
           <label htmlFor="report-description" className="sr-only">
-            Description
+            {t("reportPage.description")}
           </label>
           <textarea
             id="report-description"
@@ -94,7 +96,7 @@ const Report = ({ colorModeColors, API_URL }) => {
               backgroundColor: colorModeColors.buttonBackGround,
               color: colorModeColors.inputText,
             }}
-            placeholder="Description"
+            placeholder={t("reportPage.description")}
             onChange={handleDescriptionChange}
             autoComplete="off"
           ></textarea>
@@ -102,7 +104,7 @@ const Report = ({ colorModeColors, API_URL }) => {
             className="mt-5 pt-2 pb-2 pl-4 pr-4 bg-creme rounded-xl hover:cursor-pointer shadow-xl text-black text-base focus:ring-4 focus:ring-lightCreme focus:ring-opacity-80 focus:outline-none"
             type="submit"
           >
-            Submit
+            {t("reportPage.submit")}
           </button>
         </form>
       </div>

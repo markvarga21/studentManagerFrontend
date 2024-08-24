@@ -3,6 +3,7 @@ import LeftIcon from "./LeftIcon";
 import RightIcon from "./RightIcon";
 import PageNumber from "./PageNumber";
 import axios from "axios";
+import {useTranslation} from "react-i18next";
 
 const Pagination = ({
   numberOfPages,
@@ -91,6 +92,8 @@ const Pagination = ({
   useEffect(() => {
     populatePages();
   }, [activePage, numberOfPages, setActivePage]);
+
+  const [t, i18n] = useTranslation("global");
   return (
     <div className="h-14 flex justify-between pl-16 pr-16 pt-8 items-center">
       <button
@@ -108,7 +111,7 @@ const Pagination = ({
         }}
       >
         <LeftIcon color={colorModeColors.icon} />
-        <span>Previous</span>
+        <span>{t("studentsPage.pagination.previous")}</span>
       </button>
       <div id="pages" className="flex gap-1">
         {pages.map((page) => (
@@ -134,7 +137,7 @@ const Pagination = ({
           }
         }}
       >
-        <span>Next</span>
+        <span>{t("studentsPage.pagination.next")}</span>
         <RightIcon color={colorModeColors.icon} />
       </button>
     </div>

@@ -10,6 +10,7 @@ import ExportIcon from "../icons/ImportIcon";
 import UserModal from "../modals/UserModal";
 import toast from "react-hot-toast";
 import formatXml from "xml-formatter";
+import {useTranslation} from "react-i18next";
 
 const StudentListContent = ({
   colorModeColors,
@@ -22,6 +23,7 @@ const StudentListContent = ({
   setUser,
   API_URL,
 }) => {
+  const [t, i18n] = useTranslation("global");
   const [filter, setFilter] = useState("All");
   const [activePage, setActivePage] = useState(1);
   const [numberOfPages, setNumberOfPages] = useState(1);
@@ -30,18 +32,18 @@ const StudentListContent = ({
   };
   const [students, setStudents] = useState([]);
   const MONTHS = {
-    "01": "Jan",
-    "02": "Feb",
-    "03": "Mar",
-    "04": "Apr",
-    "05": "May",
-    "06": "Jun",
-    "07": "Jul",
-    "08": "Aug",
-    "09": "Sep",
-    10: "Oct",
-    11: "Nov",
-    12: "Dec",
+    "01": t("studentsPage.table.months.january"),
+    "02": t("studentsPage.table.months.february"),
+    "03": t("studentsPage.table.months.march"),
+    "04": t("studentsPage.table.months.april"),
+    "05": t("studentsPage.table.months.may"),
+    "06": t("studentsPage.table.months.june"),
+    "07": t("studentsPage.table.months.july"),
+    "08": t("studentsPage.table.months.august"),
+    "09": t("studentsPage.table.months.september"),
+    10: t("studentsPage.table.months.october"),
+    11: t("studentsPage.table.months.november"),
+    12: t("studentsPage.table.months.december"),
   };
   const mapDateToVerboseString = (date) => {
     const components = date.split("-");
@@ -76,7 +78,7 @@ const StudentListContent = ({
           a.click();
           URL.revokeObjectURL(url);
         } else {
-          toast.error("Invalid data. Please correct the errors.");
+          toast.error(t("toast.error.invalidData"));
         }
       })
       .catch((err) => {
@@ -110,7 +112,7 @@ const StudentListContent = ({
           a.click();
           URL.revokeObjectURL(url);
         } else {
-          toast.error("Invalid data. Please correct the errors.");
+          toast.error(t("toast.error.invalidData"));
         }
       })
       .catch((err) => {
@@ -207,7 +209,6 @@ const StudentListContent = ({
       API_URL
     );
   };
-
   return (
     <div
       id="studentListContent"
@@ -221,8 +222,8 @@ const StudentListContent = ({
             colorModeColors={colorModeColors}
             studentId={studentId}
             setStudentId={setStudentId}
-            modalTitle={"Edit student"}
-            buttonTitle={"Save changes"}
+            modalTitle={t("userModal.title.edit")}
+            buttonTitle={t("userModal.submit.edit")}
             isEditActive={isEditActive}
             setIsEditActive={setIsEditActive}
             API_URL={API_URL}
@@ -237,8 +238,8 @@ const StudentListContent = ({
           <UserModal
             mode={"add"}
             colorModeColors={colorModeColors}
-            modalTitle={"Add student"}
-            buttonTitle={"Save"}
+            modalTitle={t("userModal.title.add")}
+            buttonTitle={t("userModal.submit.add")}
             isAddStudentActive={isAddStudentActive}
             setIsAddStudentActive={setIsAddStudentActive}
             API_URL={API_URL}
@@ -256,7 +257,7 @@ const StudentListContent = ({
             className="pl-14 text-4xl font-inter font-bold select-none"
             style={{ color: colorModeColors.title }}
           >
-            List of students
+            {t("studentsPage.title")}
           </div>
           <div className="flex gap-3">
             <div
@@ -273,7 +274,7 @@ const StudentListContent = ({
                 className="font-inter font-semibold select-none"
                 style={{ color: colorModeColors.buttonText }}
               >
-                Export
+                {t("studentsPage.export.title")}
               </span>
               {isDropdownVisible && (
                 <div
@@ -287,13 +288,13 @@ const StudentListContent = ({
                     className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                     onClick={handleExportJson}
                   >
-                    Export as JSON
+                    {t("studentsPage.export.json")}
                   </div>
                   <div
                     className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                     onClick={handleExportXml}
                   >
-                    Export as XML
+                    {t("studentsPage.export.xml")}
                   </div>
                 </div>
               )}
@@ -306,7 +307,7 @@ const StudentListContent = ({
             >
               <PlusIcon />
               <span className="font-inter font-semibold select-none">
-                Add student
+                {t("studentsPage.addStudent")}
               </span>
             </div>
           </div>
@@ -332,7 +333,7 @@ const StudentListContent = ({
             className="select-none pt-2 pb-2 pl-6 pr-6 rounded-xl font-inter font-medium shadow-md cursor-pointer"
             data-theme={currentTheme}
           >
-            All
+            {t("studentsPage.filterButtons.all")}
           </label>
           <input
             type="radio"
@@ -348,7 +349,7 @@ const StudentListContent = ({
             className="select-none pt-2 pb-2 pl-6 pr-6 rounded-xl font-inter font-medium shadow-md cursor-pointer"
             data-theme={currentTheme}
           >
-            Valid
+            {t("studentsPage.filterButtons.valid")}
           </label>
           <input
             type="radio"
@@ -364,7 +365,7 @@ const StudentListContent = ({
             className="select-none pt-2 pb-2 pl-6 pr-6 rounded-xl font-inter font-medium shadow-md cursor-pointer"
             data-theme={currentTheme}
           >
-            Invalid
+            {t("studentsPage.filterButtons.invalid")}
           </label>
         </div>
         <div className="flex items-center justify-between pr-20">
@@ -386,7 +387,7 @@ const StudentListContent = ({
                 backgroundColor: colorModeColors.buttonBackGround,
                 color: colorModeColors.inputText,
               }}
-              placeholder="Search for students"
+              placeholder={t("studentsPage.search")}
               onChange={handleSearchChange}
               autoComplete="off"
             />
@@ -401,40 +402,40 @@ const StudentListContent = ({
           <thead style={{ backgroundColor: colorModeColors.tableHeader }}>
             <tr className="select-none border-b-2 border-gray">
               <th className="text-left text-sm text-tableTextColor pl-5 font-inter font-semibold">
-                ID
+                {t("studentsPage.table.id")}
               </th>
               <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
-                First name
+                {t("studentsPage.table.firstName")}
               </th>
               <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
-                Last name
+                {t("studentsPage.table.lastName")}
               </th>
               <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
-                Date of birth
+                {t("studentsPage.table.dateOfBirth")}
               </th>
               <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
-                Place of birth
+                {t("studentsPage.table.placeOfBirth")}
               </th>
               <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
-                Country of citizenship
+                {t("studentsPage.table.countryOfCitizenship")}
               </th>
               <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
-                Gender
+                {t("studentsPage.table.gender")}
               </th>
               <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
-                Passport number
+                {t("studentsPage.table.passportNumber")}
               </th>
               <th className="text-left text-sm text-tableTextColor p-3 2xl:block font-inter font-semibold">
-                Date of issue
+                {t("studentsPage.table.passportDateOfIssue")}
               </th>
               <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
-                Date of expiry
+                {t("studentsPage.table.passportDateOfExpiry")}
               </th>
               <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
-                Status
+                {t("studentsPage.table.status.title")}
               </th>
-              <th className="text-left text-sm text-tableTextColor p-3 font-inter font-semibold">
-                Action
+              <th className="text-left text-sm text-tableTextColor pr-3 pt-3 pb-3 font-inter font-semibold">
+                {t("studentsPage.table.actions")}
               </th>
             </tr>
           </thead>

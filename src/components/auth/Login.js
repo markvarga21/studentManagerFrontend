@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const Login = ({
   colorModeColors,
@@ -10,6 +11,7 @@ const Login = ({
   userWasModified,
   setUserWasModified,
 }) => {
+  const [t, i18n] = useTranslation("global");
   const navigate = useNavigate();
   const [loginDetails, setLoginDetails] = useState({
     username: "",
@@ -22,7 +24,7 @@ const Login = ({
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     if (loginDetails.username === "" || loginDetails.password === "") {
-      toast.error("Please fill in all fields.");
+      toast.error(t("toast.error.emptyFields"));
       return;
     }
     for (const key in loginDetails) {
@@ -45,14 +47,14 @@ const Login = ({
           };
           localStorage.setItem("user", JSON.stringify(user));
           setUserWasModified(-1 * userWasModified);
-          toast.success("Login successful!");
+          toast.success(t("toast.success.login"));
           navigate("/");
           localStorage.setItem("activeNav", "homeNav");
           console.log(localStorage.getItem("activeNav"));
         }
       })
       .catch((err) => {
-        toast.error("Invalid credentials. Please try again.");
+        toast.error(t("toast.error.auth.invalidCredentials"));
       });
   };
   const navigateToRegister = () => {
@@ -73,7 +75,7 @@ const Login = ({
         className="text-4xl font-inter font-bold select-none p-12 flex flex-col items-center gap-12 2xl:w-1/3 xl:w-1/2 lg:w-2/3 h-full"
         style={{ color: colorModeColors.title }}
       >
-        <span data-testid={"login-title"}>Login</span>
+        <span data-testid={"login-title"}>{t("loginPage.title")}</span>
         <form
           className="w-full flex flex-col gap-3 h-full"
           onSubmit={handleLoginSubmit}
@@ -84,7 +86,7 @@ const Login = ({
             className="text-base font-medium"
             style={{ color: colorModeColors.inputText }}
           >
-            Username
+            {t("loginPage.username")}
           </label>
           <input
             type="text"
@@ -103,7 +105,7 @@ const Login = ({
             className="text-base font-medium"
             style={{ color: colorModeColors.inputText }}
           >
-            Password
+            {t("loginPage.password")}
           </label>
           <input
             type="password"
@@ -122,16 +124,16 @@ const Login = ({
             type="submit"
             data-testid={"login-button"}
           >
-            Login
+            {t("loginPage.submit")}
           </button>
           <span className="text-base font-normal flex gap-2 justify-center">
-            <span>Don't have an account?</span>
+            <span>{t("loginPage.newUser.question")}</span>
             <a
               className="font-bold hover:cursor-pointer"
               onClick={navigateToRegister}
               data-testid={"register-link"}
             >
-              Sign Up
+              {t("loginPage.newUser.link")}
             </a>
           </span>
         </form>
