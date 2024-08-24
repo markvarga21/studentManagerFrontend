@@ -62,7 +62,7 @@ describe('Handling students', () => {
             cy.wait('@validateStudent').then(() => {
                 cy.get('[data-testid="facial-validity"]')
                     .should('exist')
-                    .should('contain.text', '\u2705');
+                    .should('contain.text', '\u274C');
                 cy.get('[data-testid="accept-replacement-for-firstName"]')
                     .click();
                 cy.get('[data-testid="save-button"]')
@@ -73,7 +73,7 @@ describe('Handling students', () => {
                 cy.wait('@secondValidation').then(() => {
                     cy.get('[data-testid="facial-validity"]')
                         .should('exist')
-                        .should('contain.text', '\u274C');
+                        .should('contain.text', '\u2705');
                     cy.get('[data-testid="close-icon"]')
                         .click();
                     cy.get('[data-testid="student-validity"] span')

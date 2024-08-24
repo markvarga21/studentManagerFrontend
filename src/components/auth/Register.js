@@ -57,6 +57,8 @@ const Register = ({ colorModeColors, API_URL }) => {
     for (const key in userRegisterDetails) {
       userRegisterDetails[key] = userRegisterDetails[key].trim();
     }
+    userRegisterDetails.firstName = userRegisterDetails.firstName.toUpperCase();
+    userRegisterDetails.lastName = userRegisterDetails.lastName.toUpperCase();
     axios
       .post(`${API_URL}/auth/register`, userRegisterDetails)
       .then((res) => {
