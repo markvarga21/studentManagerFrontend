@@ -1,6 +1,6 @@
 import React from "react";
 
-const DataDisplayField = ({ label, content, colors }) => {
+const DataDisplayField = ({ label, content, colors, dataTestId }) => {
   return (
     <div className="flex flex-col w-full">
       <div
@@ -15,6 +15,7 @@ const DataDisplayField = ({ label, content, colors }) => {
           backgroundColor: colors.tableHeader,
           color: colors.tableContent,
         }}
+        data-testid={dataTestId}
       >
         {content}
       </div>

@@ -259,6 +259,7 @@ const MenuBar = ({
               className="font-semibold select-none"
               style={{ color: svgColors.homeNav }}
               onClick={handleNavClick}
+              data-testid={"home-nav"}
             >
               {t("menubar.home")}
             </div>
