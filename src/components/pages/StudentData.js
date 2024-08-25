@@ -209,28 +209,33 @@ const StudentData = ({
             label={t("userModal.inputs.firstName.label")}
             content={userData.firstName}
             colors={colorModeColors}
+            dataTestId={"display-firstName"}
           />
           <DataDisplayField
             label={t("userModal.inputs.lastName.label")}
             content={userData.lastName}
             colors={colorModeColors}
+            dataTestId={"display-lastName"}
           />
           <div className="flex gap-6 items-center">
             <DataDisplayField
               label={t("userModal.inputs.dateOfBirth.label")}
               content={userData.birthDate}
               colors={colorModeColors}
+              dataTestId={"display-birthDate"}
             />
             <DataDisplayField
               label={t("userModal.inputs.gender.label")}
               content={userData.gender}
               colors={colorModeColors}
+              dataTestId={"display-gender"}
             />
           </div>
           <DataDisplayField
             label={t("userModal.inputs.placeOfBirth.label")}
             content={userData.placeOfBirth}
             colors={colorModeColors}
+            dataTestId={"display-placeOfBirth"}
           />
         </div>
         <div className="right flex flex-col gap-6 w-full">
@@ -238,21 +243,25 @@ const StudentData = ({
             label={t("userModal.inputs.countryOfCitizenship.label")}
             content={userData.countryOfCitizenship}
             colors={colorModeColors}
+            dataTestId={"display-countryOfCitizenship"}
           />
           <DataDisplayField
             label={t("userModal.inputs.passportNumber.label")}
             content={userData.passportNumber}
             colors={colorModeColors}
+            dataTestId={"display-passportNumber"}
           />
           <DataDisplayField
             label={t("userModal.inputs.passportDateOfIssue.label")}
             content={userData.passportDateOfIssue}
             colors={colorModeColors}
+            dataTestId={"display-passportDateOfIssue"}
           />
           <DataDisplayField
             label={t("userModal.inputs.passportDateOfExpiry.label")}
             content={userData.passportDateOfExpiry}
             colors={colorModeColors}
+            dataTestId={"display-passportDateOfExpiry"}
           />
         </div>
         <div className="w-full flex items-center justify-center">

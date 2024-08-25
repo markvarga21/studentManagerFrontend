@@ -63,6 +63,7 @@ const Home = ({ user, colorModeColors }) => {
             <button
               className="pt-2 pb-2 pl-4 pr-4 bg-creme rounded-xl hover:cursor-pointer shadow-xl font-semibold"
               onClick={handleLoginClick}
+              data-testid={"welcome-login-button"}
             >
               {t("homePage.login")}
             </button>
@@ -74,6 +75,7 @@ const Home = ({ user, colorModeColors }) => {
                 color: colorModeColors.buttonText,
               }}
               onClick={handleSignUpClick}
+              data-testid={"welcome-register-button"}
             >
               {t("homePage.register")}
             </button>

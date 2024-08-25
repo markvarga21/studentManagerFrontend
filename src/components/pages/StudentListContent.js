@@ -256,6 +256,7 @@ const StudentListContent = ({
             id="title"
             className="pl-14 text-4xl font-inter font-bold select-none"
             style={{ color: colorModeColors.title }}
+            data-testid={"studentList-title"}
           >
             {t("studentsPage.title")}
           </div>
