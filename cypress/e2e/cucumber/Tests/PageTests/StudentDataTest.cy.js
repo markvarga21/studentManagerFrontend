@@ -33,6 +33,10 @@ When('I delete the student', () => {
     studentDataPage.deleteStudent();
 });
 
+And('I confirm the deletion', () => {
+    studentDataPage.confirmDeletion();
+});
+
 Then('I should not see any student in the list', () => {
     studentDataPage.verifyStudentDataPage();
 })

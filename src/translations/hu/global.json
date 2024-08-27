@@ -201,5 +201,11 @@
       "invalidData": "Érvénytelen adatok. Kérem javítsa a hibákat!",
       "extractData": "Az adatokat nem sikerült kinyerni az útlevélből!"
     }
+  },
+  "confirmation": {
+    "title": "Biztos benne?",
+    "text": "Biztos törölni szeretné ezt a hallgatót? A művelet nem visszavonható!",
+    "confirm": "Törlés",
+    "cancel": "Mégsem"
   }
 }

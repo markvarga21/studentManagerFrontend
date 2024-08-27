@@ -8,6 +8,7 @@ import EditIcon from "../icons/EditIcon";
 import DeleteIcon from "../icons/DeleteIcon";
 import Validity from "../util/Validity";
 import {useTranslation} from "react-i18next";
+import ConfirmationModal from "../modals/ConfirmationModal";
 
 const StudentData = ({
   colorModeColors,
@@ -116,6 +117,7 @@ const StudentData = ({
         },
       })
       .then((res) => {
+        setConfirmIsOpen(false);
         setUserData({
           id: "",
           firstName: "-",
@@ -137,12 +139,20 @@ const StudentData = ({
       })
       .catch((err) => console.error(err));
   };
+  const [confirmIsOpen, setConfirmIsOpen] = useState(false);
   return (
     <div
       id="studentData"
       className="flex flex-col h-full w-full justify-center items-start"
       style={{ backgroundColor: colorModeColors.bg }}
     >
+      {confirmIsOpen &&
+          <ConfirmationModal
+              confirmClick={deleteStudent}
+              closeClick={() => setConfirmIsOpen(false)}
+              colors={colorModeColors}
+          />
+      }
       <Toaster />
       {isModalActive && (
         <>
@@ -289,7 +299,7 @@ const StudentData = ({
           <button
             id="deleteStudentUserButton"
             className="w-1/3 xl:w-auto flex items-center justify-center gap-2 pt-2 pb-2 pl-4 pr-4 rounded-xl hover:cursor-pointer border-2 border-red-500"
-            onClick={deleteStudent}
+            onClick={() => setConfirmIsOpen(true)}
           >
             <DeleteIcon basic={true} />
             <span className="font-inter font-medium select-none 2xl:text-base xl:text-base md:text-sm text-red-500">

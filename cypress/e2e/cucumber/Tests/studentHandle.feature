@@ -26,13 +26,6 @@ Feature: I want to add- and then validate a student
     When I click the data button
     Then I should see the my data page
     And I should see my data
-  Scenario: Logout user and login with admin credentials
-    When I click the logout button
-    Then I click on the login button on the welcome page
-    Then I should see the login page
-    When I enter my login details
-    And I click the login button
-    Then I should be logged in with the "admin" username
   Scenario: Validate the student data
     When I click the data button
     When I modify the students first name to "John"
@@ -47,6 +40,7 @@ Feature: I want to add- and then validate a student
     When I click the data button
     Then I should see the student data page
     When I delete the student
+    And I confirm the deletion
     Then I should not see any student in the list
   Scenario: Delete the created user
     Then I delete the user

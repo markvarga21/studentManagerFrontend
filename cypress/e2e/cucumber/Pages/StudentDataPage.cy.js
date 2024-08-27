@@ -118,6 +118,12 @@ class StudentDataPage {
         return this;
     }
 
+    confirmDeletion() {
+        cy.get('[data-testid="confirmation-button"]')
+            .click({force: true});
+        return this;
+    }
+
 
 }
 

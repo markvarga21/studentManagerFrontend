@@ -604,6 +604,7 @@ const StudentListContent = ({
                         setIsEditActive={setIsEditActive}
                       />
                       <DeleteIcon
+                        allColors={colorModeColors}
                         color={colorModeColors.icon}
                         studentId={student.id}
                         API_URL={API_URL}
