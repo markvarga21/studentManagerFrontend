@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import Loading from "../util/Loading";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 const Report = ({ colorModeColors, API_URL }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -47,6 +47,12 @@ const Report = ({ colorModeColors, API_URL }) => {
         toast.success(t("toast.success.report"));
       })
       .catch((err) => {
+        setIsLoading(false);
+        setSubject("");
+        setDescription("");
+        document.getElementById("report-subject").value = "";
+        document.getElementById("report-description").value = "";
+        toast.error(t("reportPage.error"));
         console.error(err);
       });
   };
@@ -58,7 +64,7 @@ const Report = ({ colorModeColors, API_URL }) => {
       className="w-full h-full flex flex-col justify-center items-center pt-12 pb-56"
       style={{ backgroundColor: colorModeColors.bg }}
     >
-      {isLoading ? <Loading text={"Sending report"} /> : <></>}
+      {isLoading ? <Loading text={t("reportPage.loading")} /> : <></>}
       <Toaster />
       <div
         className="text-4xl font-inter font-bold select-none p-12 flex flex-col items-center gap-12 w-1/2 h-full"

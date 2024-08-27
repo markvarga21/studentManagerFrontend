@@ -67,7 +67,9 @@
     "title": "Report a problem",
     "subject": "Subject",
     "description": "Description",
-    "submit": "Submit"
+    "submit": "Submit",
+    "loading": "Sending report",
+    "error": "Failed to send report"
   },
   "loginPage": {
     "title": "Login",

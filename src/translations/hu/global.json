@@ -67,7 +67,9 @@
     "title": "Jelentsen egy problémát",
     "subject": "Tárgy",
     "description": "Leírás",
-    "submit": "Küldés"
+    "submit": "Küldés",
+    "loading": "Jelentés küldése",
+    "error": "Hiba történt a jelentés küldése közben"
   },
   "loginPage": {
     "title": "Bejelentkezés",
