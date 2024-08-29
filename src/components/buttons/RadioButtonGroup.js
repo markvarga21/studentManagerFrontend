@@ -26,11 +26,16 @@ const RadioButtonGroup = ({
   };
 
   useEffect(() => {
-    if (studentImages.passport !== null) {
-      setActualImage(URL.createObjectURL(studentImages.passport));
-    } else {
-      setActualImage("https://placehold.co/300.png?text=?");
-    }
+      if (studentImages.passport !== null) {
+          try {
+              setActualImage(URL.createObjectURL(studentImages.passport));
+          } catch (error) {
+              console.log(error);
+          }
+      } else {
+          setActualImage("https://placehold.co/300.png?text=?");
+      }
+
   }, [studentImages]);
 
   return (
