@@ -106,7 +106,7 @@ const StudentData = ({
   const [isModalActive, setIsModalActive] = useState(false);
 
   const deleteStudent = () => {
-    setDataIsLoaded(false);
+    setDataIsLoaded(true);
     if (userData.id === "") {
       return;
     }
