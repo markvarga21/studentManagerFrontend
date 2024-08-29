@@ -92,14 +92,17 @@ const StudentData = ({
                 setDataIsLoaded(true);
               })
               .catch((error) => {
+                setDataIsLoaded(true);
                 console.error(error);
               });
           })
           .catch((err) => {
+            setDataIsLoaded(true);
             console.error(err);
           });
       })
       .catch((error) => {
+        setDataIsLoaded(true);
         console.error(error);
       });
   }, [studentUserWasModified]);
@@ -235,8 +238,8 @@ const StudentData = ({
               dataTestId={"display-lastName"}
             />
           </FadeIn>
-          <div className="flex gap-6 items-center">
-            <FadeIn>
+          <div className="flex gap-6">
+            <FadeIn className="w-full">
               <DataDisplayField
                 label={t("userModal.inputs.dateOfBirth.label")}
                 content={userData.birthDate}
@@ -244,7 +247,7 @@ const StudentData = ({
                 dataTestId={"display-birthDate"}
               />
             </FadeIn>
-            <FadeIn>
+            <FadeIn className="w-full">
               <DataDisplayField
                 label={t("userModal.inputs.gender.label")}
                 content={userData.gender}
