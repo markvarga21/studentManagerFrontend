@@ -112,8 +112,8 @@
         "portrait": "Portré feltöltése"
       },
       "replace": {
-        "passport": "Útlevél módisítása",
-        "portrait": "Portré módisítása"
+        "passport": "Útlevél módosítása",
+        "portrait": "Portré módosítása"
       }
     },
     "submit": {
@@ -163,7 +163,8 @@
     "title": "Saját adatok",
     "add": "Hozzáadás",
     "edit": "Szerkesztés",
-    "delete": "Törlés"
+    "delete": "Törlés",
+    "loading": "Adatok betöltése"
   },
   "loading": {
     "savingData": "Adatok mentése",

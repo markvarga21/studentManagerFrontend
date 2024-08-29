@@ -155,14 +155,18 @@ const UserModal = ({
   const [closeWasClicked, setCloseWasClicked] = useState(1);
 
   useEffect(() => {
-    if (studentImages.passport !== null) {
-      setActualImage({
-        ...studentImages,
-        passport: URL.createObjectURL(studentImages.passport),
-      });
-      setActualImage(URL.createObjectURL(studentImages.passport));
-    } else {
-      setActualImage("https://placehold.co/300.png?text=?");
+    try {
+      if (studentImages.passport !== null) {
+        setActualImage({
+          ...studentImages,
+          passport: URL.createObjectURL(studentImages.passport),
+        });
+        setActualImage(URL.createObjectURL(studentImages.passport));
+      } else {
+        setActualImage("https://placehold.co/300.png?text=?");
+      }
+    } catch (error) {
+      console.error(error);
     }
   }, [passportWasChanged, closeWasClicked]);
 
