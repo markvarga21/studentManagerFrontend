@@ -148,7 +148,7 @@ const StudentData = ({
             className="flex flex-col h-full w-full justify-center items-start"
             style={{backgroundColor: colorModeColors.bg}}
         >
-            {!dataIsLoaded && <Loading text={t("myDataPage.loading")} /> }
+            {!dataIsLoaded && <Loading text={t("myDataPage.loading")}/>}
             {confirmIsOpen &&
                 <ConfirmationModal
                     confirmClick={deleteStudent}
@@ -313,7 +313,7 @@ const StudentData = ({
                     {userData.id === "" ? <PlusIcon/> : <EditIcon basic={true}/>}
 
                     <span className="font-inter font-semibold select-none">
-            {userData.id === "" ? t("myDataPage.add") : t("myDataPage.edit")}
+            {dataIsLoaded ? (userData.id === "" ? t("myDataPage.add") : t("myDataPage.edit")) : "..."}
           </span>
                 </div>
                 {userData.id !== "" && (
@@ -325,7 +325,7 @@ const StudentData = ({
                         <DeleteIcon basic={true}/>
                         <span
                             className="font-inter font-medium select-none 2xl:text-base xl:text-base md:text-sm text-red-500">
-              {t("myDataPage.delete")}
+              {dataIsLoaded ? t("myDataPage.delete") : "..."}
             </span>
                     </button>
                 )}
