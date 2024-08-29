@@ -163,7 +163,8 @@
     "title": "Saját adatok",
     "add": "Hozzáadás",
     "edit": "Szerkesztés",
-    "delete": "Törlés"
+    "delete": "Törlés",
+    "loading": "Adatok betöltése"
   },
   "loading": {
     "savingData": "Adatok mentése",

@@ -10,6 +10,7 @@ import Validity from "../util/Validity";
 import {useTranslation} from "react-i18next";
 import ConfirmationModal from "../modals/ConfirmationModal";
 import FadeIn from "react-fade-in";
+import Loading from "../util/Loading";
 
 const StudentData = ({
                          colorModeColors,
@@ -147,6 +148,7 @@ const StudentData = ({
             className="flex flex-col h-full w-full justify-center items-start"
             style={{backgroundColor: colorModeColors.bg}}
         >
+            {!dataIsLoaded && <Loading text={t("myDataPage.loading")} /> }
             {confirmIsOpen &&
                 <ConfirmationModal
                     confirmClick={deleteStudent}

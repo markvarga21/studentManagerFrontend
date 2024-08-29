@@ -163,7 +163,8 @@
     "title": "My data",
     "add": "Add",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "loading": "Loading data"
   },
   "loading": {
     "savingData": "Saving data",
