@@ -238,7 +238,7 @@ const StudentData = ({
               dataTestId={"display-lastName"}
             />
           </FadeIn>
-          <div className="flex gap-6">
+          <div className="flex gap-6 items-center">
             <FadeIn className="w-full">
               <DataDisplayField
                 label={t("userModal.inputs.dateOfBirth.label")}
@@ -330,7 +330,7 @@ const StudentData = ({
             className="w-1/3 xl:w-auto flex items-center justify-center gap-2 pt-2 pb-2 pl-4 pr-4 rounded-xl hover:cursor-pointer border-2 border-red-500"
             onClick={() => setConfirmIsOpen(true)}
           >
-            <DeleteIcon basic={true} />
+            <DeleteIcon basic={true} strokeWidth={"1.7"} />
             <span className="font-inter font-medium select-none 2xl:text-base xl:text-base md:text-sm text-red-500">
               {dataIsLoaded ? t("myDataPage.delete") : "..."}
             </span>
