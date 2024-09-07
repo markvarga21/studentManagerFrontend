@@ -147,3 +147,26 @@ option#gender {
 div#userModal {
   overflow-x: hidden;
 }
+
+input[type="radio"] {
+  display: none;
+}
+
+.filter-form .contain span:hover {
+  cursor: pointer;
+}
+
+.filter-form .contain span {
+  width: 1.25rem;
+  height: 1.25rem;
+  background-color: transparent;
+  border: 1px solid grey;
+  border-radius: 50%;
+}
+
+.filter-form input[type="radio"]:checked ~ span {
+  background-color: #e1b77a;
+  border: none;
+  outline: 1px solid #d19f55;
+  outline-offset: 2px;
+}

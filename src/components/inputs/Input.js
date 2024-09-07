@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const Input = ({
   colorModeColors,
@@ -8,8 +9,9 @@ const Input = ({
   onChange,
   errorFields,
   acceptReplacement,
-  testId
+  testId,
 }) => {
+  const [t, i18n] = useTranslation("global");
   const RED_HEX = "#F44336";
   return (
     <div className="w-full">
@@ -21,16 +23,16 @@ const Input = ({
           {label}
         </label>
         {errorFields[id].error && (
-          <div className="flex gap-3 items-center mb-1">
+          <div className="flex gap-3 items-center">
             <div
               className={`${id} hover:cursor-pointer underline`}
               onClick={acceptReplacement}
               style={{ color: colorModeColors.inputText }}
               data-testid={`accept-replacement-for-${id}`}
             >
-              Accept
+              {t("accept")}
             </div>
-            <div className="bg-creme pt-1 pb-1 pl-2 pr-2 rounded-lg font-semibold text-black">
+            <div className="bg-creme pt-1 pb-1 pl-2 pr-2 rounded-lg font-semibold text-black text-xs">
               {errorFields[id].replacement}
             </div>
           </div>
