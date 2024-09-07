@@ -141,7 +141,11 @@
         "placeholder": "New York"
       },
       "gender": {
-        "label": "Gender"
+        "label": "Gender",
+        "values": {
+          "male": "Male",
+          "female": "Female"
+        }
       },
       "countryOfCitizenship": {
         "label": "Country of Citizenship",
@@ -210,5 +214,30 @@
     "text": "Are you sure you want to delete this student? You won't be able to revert this!",
     "confirm": "Delete",
     "cancel": "Cancel"
+  },
+  "filterPanel": {
+    "buttonTitle": "Filter",
+    "title": "Filter students",
+    "date": {
+      "from": "from",
+      "to": "to"
+    },
+    "strictness": {
+      "contains": "Contains",
+      "exactly": "Exactly"
+    },
+    "buttons": {
+      "apply": "Apply",
+      "clear": "Clear"
+    },
+    "name": {
+      "label": "Name",
+      "placeholder": "John Doe"
+    },
+    "options": {
+      "country": "-- Select a country --",
+      "gender": "-- Select a gender --"
+    },
+    "accept": "Accept"
   }
 }

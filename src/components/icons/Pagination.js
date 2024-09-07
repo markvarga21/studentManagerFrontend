@@ -3,7 +3,7 @@ import LeftIcon from "./LeftIcon";
 import RightIcon from "./RightIcon";
 import PageNumber from "./PageNumber";
 import axios from "axios";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 const Pagination = ({
   numberOfPages,
@@ -26,7 +26,7 @@ const Pagination = ({
         },
       })
       .then((res) => {
-        setStudents(res.data.content);
+        setStudents(applyFilters(res.data.content));
       })
       .catch((err) => {
         if (err.response.status === 401) {
@@ -39,6 +39,51 @@ const Pagination = ({
       setActivePage(parseInt(e.target.id.split("-")[1]));
     }
   };
+
+  const applyFilters = (studentArray) => {
+    const filters = JSON.parse(localStorage.getItem("filter"));
+    if (!filters) {
+      return studentArray;
+    }
+    return studentArray.filter((s) => {
+      return (
+        (filters.name === "" ||
+          String(s.firstName + " " + s.lastName)
+            .toLowerCase()
+            .includes(filters.name.toLowerCase())) &&
+        (filters.passportNumber === "" ||
+          s.passportNumber.includes(filters.passportNumber)) &&
+        (filters.birthDate.from === "" ||
+          new Date(s.birthDate).getTime() >=
+            new Date(filters.birthDate.from).getTime()) &&
+        (filters.birthDate.to === "" ||
+          new Date(s.birthDate).getTime() <=
+            new Date(filters.birthDate.to).getTime()) &&
+        (filters.placeOfBirth === "" ||
+          s.placeOfBirth
+            .toLowerCase()
+            .includes(filters.placeOfBirth.toLowerCase())) &&
+        (filters.gender === "" || s.gender === filters.gender) &&
+        (filters.countryOfCitizenship === "" ||
+          s.countryOfCitizenship
+            .toLowerCase()
+            .includes(filters.countryOfCitizenship.toLowerCase())) &&
+        (filters.passportIssue.from === "" ||
+          new Date(s.passportIssue.from).getTime() >=
+            new Date(filters.passportIssueFrom).getTime()) &&
+        (filters.passportIssue.to === "" ||
+          new Date(s.passportIssue.to).getTime() <=
+            new Date(filters.passportIssueTo).getTime()) &&
+        (filters.passportExpiration.from === "" ||
+          new Date(s.passportExpiration.from).getTime() >=
+            new Date(filters.passportExpirationFrom).getTime()) &&
+        (filters.passportExpiration.to === "" ||
+          new Date(s.passportExpiration.to).getTime() <=
+            new Date(filters.passportExpirationTo).getTime())
+      );
+    });
+  };
+
   useEffect(() => {
     axios
       .get(

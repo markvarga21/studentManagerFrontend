@@ -12,7 +12,7 @@ import StudentData from "./components/pages/StudentData";
 import { useIdleTimer } from "react-idle-timer";
 import { jwtDecode } from "jwt-decode";
 import "./App.css";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 const App = () => {
   const LIGHT_MODE = {

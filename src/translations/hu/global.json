@@ -141,7 +141,11 @@
         "placeholder": "Budapest"
       },
       "gender": {
-        "label": "Nem"
+        "label": "Nem",
+        "values": {
+          "male": "Férfi",
+          "female": "Nő"
+        }
       },
       "countryOfCitizenship": {
         "label": "Állampolgárság országa",
@@ -210,5 +214,30 @@
     "text": "Biztos törölni szeretné ezt a hallgatót? A művelet nem visszavonható!",
     "confirm": "Törlés",
     "cancel": "Mégsem"
-  }
+  },
+  "filterPanel": {
+    "buttonTitle": "Szűrés",
+    "title": "Hallgatók szűrése",
+    "date": {
+      "from": "tól",
+      "to": "ig"
+    },
+    "strictness": {
+      "contains": "Tartalmazza",
+      "exactly": "Pontosan"
+    },
+    "buttons": {
+      "apply": "Alkalmaz",
+      "clear": "Törlés"
+    },
+    "name": {
+      "label": "Név",
+      "placeholder": "Gipsz Jakab"
+    },
+    "options": {
+      "country": "-- Válasszon ki egy országot --",
+      "gender": "-- Válasszon ki egy nemet --"
+    }
+  },
+  "accept": "Elfogadás"
 }

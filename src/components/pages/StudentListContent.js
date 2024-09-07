@@ -6,12 +6,14 @@ import EditIcon from "../icons/EditIcon";
 import DeleteIcon from "../icons/DeleteIcon";
 import Pagination from "../icons/Pagination";
 import axios from "axios";
-import ExportIcon from "../icons/ImportIcon";
+import ExportIcon from "../icons/ExportIcon";
 import UserModal from "../modals/UserModal";
 import toast from "react-hot-toast";
 import formatXml from "xml-formatter";
 import { useTranslation } from "react-i18next";
 import FadeIn from "react-fade-in";
+import FilterButton from "../buttons/FilterButton";
+import { useNavigate } from "react-router-dom";
 
 const StudentListContent = ({
   colorModeColors,
@@ -162,6 +164,8 @@ const StudentListContent = ({
 
   const [wasValidated, setWasValidated] = useState(1);
   const [editSubmitted, setEditSubmitted] = useState(1);
+  const [changed, setChanged] = useState(1);
+  const navigate = useNavigate();
   useEffect(() => {
     axios
       .get(`${API_URL}/students`, {
@@ -176,12 +180,58 @@ const StudentListContent = ({
           res.data.totalPages === 0 ? 1 : res.data.totalPages
         );
         setNumberOfPages(numberOfPages);
-        setStudents(res.data.content);
+        const studentData = res.data.content;
+        const filteredStudents = applyFilters(studentData);
+        setStudents(filteredStudents);
       })
       .catch((err) => {
         console.error(err);
       });
-  }, [deleted, isAddStudentActive, wasValidated, editSubmitted]);
+  }, [deleted, isAddStudentActive, wasValidated, editSubmitted, changed]);
+
+  const applyFilters = (studentArray) => {
+    const filters = JSON.parse(localStorage.getItem("filter"));
+    if (!filters) {
+      return studentArray;
+    }
+    return studentArray.filter((s) => {
+      return (
+        (filters.name === "" ||
+          String(s.firstName + " " + s.lastName)
+            .toLowerCase()
+            .includes(filters.name.toLowerCase())) &&
+        (filters.passportNumber === "" ||
+          s.passportNumber.includes(filters.passportNumber)) &&
+        (filters.birthDate.from === "" ||
+          new Date(s.birthDate).getTime() >=
+            new Date(filters.birthDate.from).getTime()) &&
+        (filters.birthDate.to === "" ||
+          new Date(s.birthDate).getTime() <=
+            new Date(filters.birthDate.to).getTime()) &&
+        (filters.placeOfBirth === "" ||
+          s.placeOfBirth
+            .toLowerCase()
+            .includes(filters.placeOfBirth.toLowerCase())) &&
+        (filters.gender === "" || s.gender === filters.gender) &&
+        (filters.countryOfCitizenship === "" ||
+          s.countryOfCitizenship
+            .toLowerCase()
+            .includes(filters.countryOfCitizenship.toLowerCase())) &&
+        (filters.passportIssue.from === "" ||
+          new Date(s.passportIssue.from).getTime() >=
+            new Date(filters.passportIssueFrom).getTime()) &&
+        (filters.passportIssue.to === "" ||
+          new Date(s.passportIssue.to).getTime() <=
+            new Date(filters.passportIssueTo).getTime()) &&
+        (filters.passportExpiration.from === "" ||
+          new Date(s.passportExpiration.from).getTime() >=
+            new Date(filters.passportExpirationFrom).getTime()) &&
+        (filters.passportExpiration.to === "" ||
+          new Date(s.passportExpiration.to).getTime() <=
+            new Date(filters.passportExpirationTo).getTime())
+      );
+    });
+  };
 
   const [searchCriteria, setSearchCriteria] = useState("");
   const handleSearchChange = () => {
@@ -370,7 +420,15 @@ const StudentListContent = ({
             {t("studentsPage.filterButtons.invalid")}
           </label>
         </div>
-        <div className="flex items-center justify-between pr-20">
+        <div className="flex items-center justify-between pr-20 gap-3">
+          <FilterButton
+            colors={colorModeColors}
+            students={students}
+            setStudents={setStudents}
+            changed={changed}
+            setChanged={setChanged}
+            API_URL={API_URL}
+          />
           <div className="relative">
             <div className="pl-5">
               <label htmlFor="table-search" className="sr-only">
@@ -558,7 +616,9 @@ const StudentListContent = ({
                       color: colorModeColors.tableContent,
                     }}
                   >
-                    {student.gender}
+                    {student.gender === "FEMALE"
+                      ? t("userModal.inputs.gender.values.female")
+                      : t("userModal.inputs.gender.values.male")}
                   </td>
                   <td
                     className="p-5 border-b-2 font-inter h-18 xl:text-sm 2xl:text-base"
