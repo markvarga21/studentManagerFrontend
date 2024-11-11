@@ -2,7 +2,7 @@ import React from "react";
 import ValidationIcon from "../icons/ValidationIcon";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 const ValidationButtons = ({
   colors,
@@ -54,14 +54,17 @@ const ValidationButtons = ({
                 toast.success(t("toast.success.manualValidation"));
               })
               .catch((setFacialValidationErr) => {
+                setWasValidated(-1 * wasValidated);
                 console.error(setFacialValidationErr);
               });
           })
           .catch((validateErr) => {
+            setWasValidated(-1 * wasValidated);
             console.error(validateErr);
           });
       })
       .catch((err) => {
+        setWasValidated(-1 * wasValidated);
         console.error(err);
       });
   };
