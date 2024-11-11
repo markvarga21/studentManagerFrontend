@@ -11,7 +11,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import Loading from "../util/Loading";
 import ValidationButtons from "../buttons/ValidationButtons";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 const UserModal = ({
   mode,
@@ -295,36 +295,41 @@ const UserModal = ({
           }`,
         },
       })
-        .then((res) => {
-          const studentWithoutUpdate = res.data;
-          const studentToUpdate = student;
-          delete studentToUpdate.valid;
-          delete studentWithoutUpdate.valid;
-          if (JSON.stringify(studentWithoutUpdate) === JSON.stringify(studentToUpdate)) {
-            toast.error(t("toast.error.updateWithNoModification"));
-          } else {
-            axios
-                .put(`${API_URL}/students/${studentId}`, student, {
-                  headers: {
-                    Authorization: `Bearer ${
-                        JSON.parse(localStorage.getItem("user")).token
-                    }`,
-                  },
-                })
-                .then((res) => {
-                  // setEditSubmitted(-1 * editSubmitted);
-                  toast.success(t("toast.success.student.update"));
-                  setStudentWasModified(-1 * studentWasModified);
-                  setStudentUserWasModified(-1 * studentUserWasModified);
-                  setIsModalActive(false);
-                  setWasValidated(-1 * wasValidated);
-                })
-                .catch((err) => {
-                  console.error(err);
-                });
-          }
-        })
-        .catch((err) => {console.error(err)});
+      .then((res) => {
+        const studentWithoutUpdate = res.data;
+        const studentToUpdate = student;
+        delete studentToUpdate.valid;
+        delete studentWithoutUpdate.valid;
+        if (
+          JSON.stringify(studentWithoutUpdate) ===
+          JSON.stringify(studentToUpdate)
+        ) {
+          toast.error(t("toast.error.updateWithNoModification"));
+        } else {
+          axios
+            .put(`${API_URL}/students/${studentId}`, student, {
+              headers: {
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("user")).token
+                }`,
+              },
+            })
+            .then((res) => {
+              // setEditSubmitted(-1 * editSubmitted);
+              toast.success(t("toast.success.student.update"));
+              setStudentWasModified(-1 * studentWasModified);
+              setStudentUserWasModified(-1 * studentUserWasModified);
+              setIsModalActive(false);
+              setWasValidated(-1 * wasValidated);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   const handleSaveClick = (e) => {
@@ -513,15 +518,21 @@ const UserModal = ({
             const roundedPercent = (data.percentage * 100).toFixed(2);
             const valid = data.isValid;
             if (valid) {
-              const message = `\u2705 ${t("facialValidation.validPreText")} ${roundedPercent}% ${t("facialValidation.similarityText")}!`;
+              const message = `\u2705 ${t(
+                "facialValidation.validPreText"
+              )} ${roundedPercent}% ${t("facialValidation.similarityText")}!`;
               setFacialValidity(message);
             } else {
-              const message = `\u274C ${t("facialValidation.invalidPreText")} ${roundedPercent}% ${t("facialValidation.similarityText")}!`;
+              const message = `\u274C ${t(
+                "facialValidation.invalidPreText"
+              )} ${roundedPercent}% ${t("facialValidation.similarityText")}!`;
               setFacialValidity(message);
             }
           })
           .catch((err) => {
-            setFacialValidity(`\u274C ${t("facialValidation.notYetValidated")}`);
+            setFacialValidity(
+              `\u274C ${t("facialValidation.notYetValidated")}`
+            );
           });
       })
       .catch((err) => {
@@ -607,6 +618,7 @@ const UserModal = ({
             .catch((err) => {
               console.error(err);
               setIsLoading(false);
+              setWasValidated(-1 * wasValidated);
             });
         } else {
           const correctStudent = autoRes.data.studentDto;
@@ -631,6 +643,7 @@ const UserModal = ({
       .catch((err) => {
         console.error(err);
         setIsLoading(false);
+        setWasValidated(-1 * wasValidated);
       });
   };
   const acceptReplacement = (e) => {
@@ -666,7 +679,9 @@ const UserModal = ({
           <span
             style={{ color: colorModeColors.title }}
             data-testid={"addData-title"}
-          >{modalTitle}</span>
+          >
+            {modalTitle}
+          </span>
           <CloseIcon
             color={colorModeColors.icon}
             handleClick={handleCloseClick}
@@ -736,7 +751,9 @@ const UserModal = ({
               id={"countryOfCitizenship"}
               label={t("userModal.inputs.countryOfCitizenship.label")}
               colorModeColors={colorModeColors}
-              placeholder={t("userModal.inputs.countryOfCitizenship.placeholder")}
+              placeholder={t(
+                "userModal.inputs.countryOfCitizenship.placeholder"
+              )}
               onChange={handleFormChange}
               errorFields={errorFields}
               acceptReplacement={acceptReplacement}
@@ -789,7 +806,10 @@ const UserModal = ({
               className="w-48 h-48 object-cover rounded-lg"
             />
             {isEditActive ? (
-              <div style={{ color: colorModeColors.inputText }} data-testid={"facial-validity"}>
+              <div
+                style={{ color: colorModeColors.inputText }}
+                data-testid={"facial-validity"}
+              >
                 {facialValidity}
               </div>
             ) : (
