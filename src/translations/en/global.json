@@ -10,7 +10,8 @@
     "adminDescription": "Thank you for choosing our Student manager manager application! Feel free to use all the capabilities of the app. Furthermore, if you encounter any system or service related problem, please send a reporting ticket on the report (flag) tab!",
     "userDescription": "Thank you for choosing our Student manager manager application! On the data tab you can submit-, edit-, and delete your data.",
     "login": "Login",
-    "register": "Sign up"
+    "register": "Sign up",
+    "welcomeMessage": "It seems like you were logged out, or you probably do not have an account yet. In order to use the application, please sign up, or log into your existing account!"
   },
   "studentsPage": {
     "title": "List of students",

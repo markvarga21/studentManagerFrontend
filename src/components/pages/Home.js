@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 const Home = ({ user, colorModeColors }) => {
   const navigate = useNavigate();
@@ -55,9 +55,7 @@ const Home = ({ user, colorModeColors }) => {
             className="w-2/3 text-center font-normal pt-4 text-lg"
             style={{ color: colorModeColors.tableContent }}
           >
-            It seems like you were logged out, or you probably do not have an
-            account yet. In order to use the application, please sign up, or log
-            into your existing account!
+            {t("homePage.welcomeMessage")}
           </div>
           <div className="flex gap-7">
             <button

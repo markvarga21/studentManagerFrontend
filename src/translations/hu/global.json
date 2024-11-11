@@ -10,7 +10,8 @@
     "adminDescription": "Köszönjük, hogy a Hallgató kezelő alkalmazásunkat választotta! Használja ki az alkalmazás összes funkcionalitását. Továbbá, ha bármilyen gondba, hibába futna bele a rendszer egy vagy több komponensével, kérem küldjön egy hibajelentést a megfelelő fülre (zászló) kattintva!",
     "userDescription": "Köszönjük, hogy a Hallgató kezelő alkalmazásunkat választotta! Az adatok fülön tudja adatait felvinni, módosítani, vagy törölni.",
     "login": "Bejelentkezés",
-    "register": "Regisztráció"
+    "register": "Regisztráció",
+    "welcomeMessage": "Úgy tűnik, hogy ki lett jelentkezve, vagy esetleg még nincs fiókja. Az alkalmazás használatához kérem regisztráljon, vagy jelentkezzen be, a már meglévő fiókjával!"
   },
   "studentsPage": {
     "title": "Hallgatók listája",
